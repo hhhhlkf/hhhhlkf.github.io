@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="φκι的博客">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://hhhhlkf.github.io//img/fantasy.png">
+    <meta property="twitter:image" content="https://hhhhlkf.github.io//img/fantasy.png" />
+    
+
+    
+    <meta name="title" content="JLU数据结构荣誉课——第六次上机实验" />
+    <meta property="og:title" content="JLU数据结构荣誉课——第六次上机实验" />
+    <meta property="twitter:title" content="JLU数据结构荣誉课——第六次上机实验" />
+    
+
+    
+    <meta name="description" content="第六次上机实验题解">
+    <meta property="og:description" content="第六次上机实验题解" />
+    <meta property="twitter:description" content="第六次上机实验题解" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>JLU数据结构荣誉课——第六次上机实验-李柯凡的博客 | LiKefan&#39;s Blog</title>
+
+    <link rel="canonical" href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E5%85%AD%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hugo-theme-cleanwhite.min.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+</head>
+
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">φκι的博客</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                    
+                    
+		    
+                        <li><a href="/top/books/">BOOKS</a></li>
+                    
+                        <li><a href="/top/archive/">ARCHIVE</a></li>
+                    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search"><i class="fa fa-search"></i></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('https://i.loli.net/2021/09/20/MuViF7bmDNQ2UeC.jpg')
+    }
+</style>
+
+<header class="intro-header" >
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
+                        
+                    </div>
+                    <h1>JLU数据结构荣誉课——第六次上机实验</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        
+                            Posted by 
+                            
+                                 φκι
+                             
+                            on 
+                            Monday, September 20, 2021
+                            
+                            
+                            
+                            
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>TOC</h2>
+                </header>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#jlu数据结构荣誉课第六次上机实验">JLU数据结构荣誉课——第六次上机实验</a>
+      <ul>
+        <li><a href="#7-1-高精度数加法-100-分">7-1 高精度数加法 (100 分)</a></li>
+        <li><a href="#7-2-二叉树加权距离-100-分">7-2 二叉树加权距离 (100 分)</a></li>
+        <li><a href="#7-3-修轻轨-100-分">7-3 修轻轨 (100 分)</a></li>
+        <li><a href="#7-4-数据结构设计i-100-分">7-4 数据结构设计I (100 分)</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                
+                <h1 id="jlu数据结构荣誉课第六次上机实验">JLU数据结构荣誉课——第六次上机实验</h1>
+<h2 id="7-1-高精度数加法-100-分">7-1 高精度数加法 (100 分)</h2>
+<p>高精度数是指大大超出了标准数据类型能表示的范围的数，例如10000位整数。很多计算问题的结果都很大，因此，高精度数极其重要。</p>
+<p>一般使用一个数组来存储高精度数的所有数位，数组中的每个元素存储该高精度数的1位数字或多位数字。 请尝试计算：N个高精度数的加和。这个任务对于在学习数据结构的你来说应该是小菜一碟。 。</p>
+<h3 id="输入格式">输入格式:</h3>
+<p>第1行，1个整数N，表示高精度整数的个数，(1≤N≤10000)。</p>
+<p>第2至N+1行，每行1个高精度整数x, x最多100位。</p>
+<h3 id="输出格式">输出格式:</h3>
+<p>1行,1个高精度整数，表示输入的N个高精度数的加和。</p>
+<h3 id="输入样例">输入样例:</h3>
+<p>在这里给出一组输入。例如</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">12345678910</span>
+<span style="color:#bd93f9">12345678910</span>
+<span style="color:#bd93f9">12345678910</span>
+</code></pre></div><p>输出样例:
+在这里给出相应的输出。例如</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">37037036730</span>
+</code></pre></div><p>![](<a href="https://img-blog.csdnimg.cn/2021061508464720.png#pic_right?x-oss-process=type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_7">https://img-blog.csdnimg.cn/2021061508464720.png#pic_right?x-oss-process=type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_7</a> =200x150)
+思路：高精度加法，通过字符数组形式输入，将数组倒置遍历相加，存入整型数组中，最后倒着输出结果。(本题目没有负数，可以放心按照正数处理。)我的代码为负数与正数均可处理。</p>
+<h3 id="代码如下">代码如下：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#8be9fd">char</span> num1[<span style="color:#bd93f9">101</span>];
+<span style="color:#8be9fd">char</span> num2[<span style="color:#bd93f9">101</span>];
+<span style="color:#8be9fd">int</span> num[<span style="color:#bd93f9">1000100</span>];
+<span style="color:#8be9fd">int</span> numm[<span style="color:#bd93f9">1000100</span>];
+<span style="color:#8be9fd">int</span> len1 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="color:#8be9fd">int</span> len2 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="color:#8be9fd">bool</span> flag <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">true</span>;
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Plus1</span>(<span style="color:#8be9fd">char</span><span style="color:#ff79c6">*</span>n)<span style="color:#6272a4">//对正数的相加
+</span><span style="color:#6272a4"></span>{
+	<span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+	<span style="color:#8be9fd">int</span> ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> strlen(n) <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">0</span>; i<span style="color:#ff79c6">--</span>, j<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> d <span style="color:#ff79c6">=</span> num[j] <span style="color:#ff79c6">+</span> (n[i] <span style="color:#ff79c6">-</span> <span style="color:#f1fa8c">&#39;0&#39;</span>) <span style="color:#ff79c6">+</span> ans;
+		<span style="color:#ff79c6">if</span> (d <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">10</span>)
+		{
+			ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+			num[j] <span style="color:#ff79c6">=</span> d <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">10</span>;
+		}
+		<span style="color:#ff79c6">else</span>
+		{
+			num[j] <span style="color:#ff79c6">=</span> d;
+			ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+		}
+	}
+	num[j] <span style="color:#ff79c6">+=</span> ans;
+	<span style="color:#ff79c6">while</span> (num[j]<span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">10</span>)
+	{
+		num[j] <span style="color:#ff79c6">-=</span> <span style="color:#bd93f9">10</span>;
+		num[<span style="color:#ff79c6">++</span>j]<span style="color:#ff79c6">++</span>;
+	}
+	len1 <span style="color:#ff79c6">=</span> max(len1, j);
+}
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Plus2</span>(<span style="color:#8be9fd">char</span><span style="color:#ff79c6">*</span>n)<span style="color:#6272a4">//对负数的相加
+</span><span style="color:#6272a4"></span>{
+	<span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+	<span style="color:#8be9fd">int</span> ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> strlen(n) <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&gt;=</span><span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">--</span>, j<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> d <span style="color:#ff79c6">=</span> numm[j] <span style="color:#ff79c6">+</span> (n[i] <span style="color:#ff79c6">-</span> <span style="color:#f1fa8c">&#39;0&#39;</span>) <span style="color:#ff79c6">+</span> ans;
+		<span style="color:#ff79c6">if</span> (d <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">10</span>)
+		{
+			ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+			numm[j] <span style="color:#ff79c6">=</span> d <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">10</span>;
+		}
+		<span style="color:#ff79c6">else</span>
+		{
+			numm[j] <span style="color:#ff79c6">=</span> d;
+			ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+		}
+	}
+	numm[j] <span style="color:#ff79c6">+=</span> ans;
+	<span style="color:#ff79c6">while</span> (numm[j] <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">10</span>)
+	{
+		numm[j]<span style="color:#ff79c6">-=</span> <span style="color:#bd93f9">10</span>;
+		numm[<span style="color:#ff79c6">++</span>j]<span style="color:#ff79c6">++</span>;
+	}
+	len2 <span style="color:#ff79c6">=</span> max(len2, j);
+}
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Minus</span>(<span style="color:#8be9fd">int</span><span style="color:#ff79c6">*</span>n1,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">*</span>n2,<span style="color:#8be9fd">int</span> len1,<span style="color:#8be9fd">int</span> len2)<span style="color:#6272a4">//大和减小和函数
+</span><span style="color:#6272a4"></span>{
+	<span style="color:#8be9fd">int</span> ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> len1; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> d <span style="color:#ff79c6">=</span> n1[i] <span style="color:#ff79c6">-</span> n2[i] <span style="color:#ff79c6">+</span> ans;
+		<span style="color:#ff79c6">if</span> (d <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">0</span>)
+		{
+			ans <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+			n1[i] <span style="color:#ff79c6">=</span> d <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">10</span>;
+		}
+		<span style="color:#ff79c6">else</span>
+		{
+			ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+			n1[i] <span style="color:#ff79c6">=</span> d;
+		}
+	}
+	<span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> len1;
+	<span style="color:#ff79c6">while</span> (n1[j] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+		j<span style="color:#ff79c6">--</span>;
+	<span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>flag)printf(<span style="color:#f1fa8c">&#34;-&#34;</span>);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> j; i <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">--</span>)
+	{
+		printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, n1[i]);
+	}
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> m;
+	scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m);
+	scanf(<span style="color:#f1fa8c">&#34;%s&#34;</span>, num2);
+	<span style="color:#ff79c6">if</span> (num2[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;-&#39;</span>)
+	{
+		Plus2(num2);
+	}
+	<span style="color:#ff79c6">else</span> Plus1(num2);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">++</span>)
+	{
+		memset(num1, <span style="color:#bd93f9">0</span>, <span style="color:#ff79c6">sizeof</span>(num1));
+		scanf(<span style="color:#f1fa8c">&#34;%s&#34;</span>, num1);
+		<span style="color:#ff79c6">if</span> (num1[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;-&#39;</span>)<span style="color:#6272a4">//判断用哪个加和
+</span><span style="color:#6272a4"></span>		{
+			Plus2(num1);
+		}
+		<span style="color:#ff79c6">else</span>
+		{
+			Plus1(num1);
+		}
+	}
+	<span style="color:#ff79c6">if</span> (len1 <span style="color:#ff79c6">&gt;</span> len2)
+	{
+		Minus(num, numm, len1, len2);
+	}<span style="color:#6272a4">//判断和的大小，来确定被加数和加数
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (len1 <span style="color:#ff79c6">&lt;</span> len2)
+	{
+		flag <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">false</span>;
+		Minus(numm, num, len2, len1);
+	}
+	<span style="color:#ff79c6">else</span>
+	{
+		<span style="color:#8be9fd">int</span> f <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> len1; i<span style="color:#ff79c6">++</span>)
+		{
+			<span style="color:#ff79c6">if</span> (num[i] <span style="color:#ff79c6">&gt;</span> numm[i]) {  Minus(num, numm, len1, len2); <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>; }
+			<span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (num[i] <span style="color:#ff79c6">&lt;</span> numm[i]) { flag <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">false</span>; Minus(numm, num, len2, len1); <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>; }
+		}
+	}
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>反思：<del>C++作业封装的不好，QAQ。</del></p>
+<h2 id="7-2-二叉树加权距离-100-分">7-2 二叉树加权距离 (100 分)</h2>
+<p>二叉树结点间的一种加权距离定义为：上行方向的变数×3 +下行方向的边数×2 。上行方向是指由结点向根的方向，下行方向是指与由根向叶结点方向。 给定一棵二叉树T及两个结点u和v，试求u到v的加权距离。</p>
+<h3 id="输入格式-1">输入格式:</h3>
+<p>第1行，1个整数N，表示二叉树的结点数，(1≤N≤100000)。</p>
+<p>随后若干行，每行两个整数a和b，用空格分隔，表示结点a到结点b有一条边，a、b是结点的编号，1≤a、b≤N；根结点编号为1，边从根向叶结点方向。</p>
+<p>最后1行，两个整数u和v，用空格分隔，表示所查询的两个结点的编号，1≤u、v≤N。</p>
+<h3 id="输出格式-1">输出格式:</h3>
+<p>1行,1个整数，表示查询的加权距离。</p>
+<h3 id="输入样例-1">输入样例:</h3>
+<p>在这里给出一组输入。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">5</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span>
+<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span>
+<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span>
+<span style="color:#bd93f9">3</span> <span style="color:#bd93f9">4</span>
+</code></pre></div><p>输出样例:
+在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">8</span>
+</code></pre></div><p>![](<a href="https://img-blog.csdnimg.cn/20210615090520590.png#pic_right?x-oss-process=shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70">https://img-blog.csdnimg.cn/20210615090520590.png#pic_right?x-oss-process=shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70</a> =200x150)
+思路：<code>lca</code>问题，<code>lca</code>问题的解决方法有很多，适应树，图的方法有各自的特色，本题由于是二叉树，因此题目简化，两者<code>lca</code>在树的寻根过程中，不会出现多个<code>pre</code>结点，因此采用<code>lca</code>最简单的方法：先<code>DFS</code>遍历求取深度，然后根据选取两点的深度来进行：当两者深度不一样时，需要让深度大的一点向上寻根，直到两者深度一样，然后开始同时向上寻找<code>father</code>结点，直到<code>father</code>节点相同，输出答案。</p>
+<h3 id="代码如下-1">代码如下：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>mp[<span style="color:#bd93f9">100001</span>];
+<span style="color:#8be9fd">int</span> visited[<span style="color:#bd93f9">100001</span>];
+<span style="color:#8be9fd">int</span> father[<span style="color:#bd93f9">100001</span>];
+<span style="color:#8be9fd">int</span> num <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">DFS</span>(<span style="color:#8be9fd">int</span> p, <span style="color:#8be9fd">int</span> top)
+{
+	<span style="color:#ff79c6">if</span> (visited[p] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+	{
+		visited[p] <span style="color:#ff79c6">=</span> top;<span style="color:#6272a4">//DFS过程中标记每一点的数组
+</span><span style="color:#6272a4"></span>		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> mp[p].size(); i<span style="color:#ff79c6">++</span>)
+		{
+			DFS(mp[p][i], top <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+		}
+	}
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> m;
+	scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> from, to;
+		scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>from, <span style="color:#ff79c6">&amp;</span>to);
+		mp[from].push_back(to);
+		father[to] <span style="color:#ff79c6">=</span> from;
+	}
+	DFS(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>);
+	<span style="color:#8be9fd">int</span> a, b;
+	scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>a, <span style="color:#ff79c6">&amp;</span>b);
+	<span style="color:#8be9fd">int</span> a1 <span style="color:#ff79c6">=</span> a; <span style="color:#8be9fd">int</span> b1 <span style="color:#ff79c6">=</span> b;
+	<span style="color:#ff79c6">if</span> (visited[b1] <span style="color:#ff79c6">&gt;</span> visited[a1])
+	{
+		<span style="color:#8be9fd">int</span> r <span style="color:#ff79c6">=</span> a1;
+		a1 <span style="color:#ff79c6">=</span> b1;
+		b1 <span style="color:#ff79c6">=</span> r;
+	}
+	<span style="color:#ff79c6">while</span> (visited[a1] <span style="color:#ff79c6">&gt;</span> visited[b1])
+	{
+		a1 <span style="color:#ff79c6">=</span> father[a1];
+	}
+		<span style="color:#ff79c6">while</span> (a1 <span style="color:#ff79c6">!=</span> b1)
+		{
+			a1 <span style="color:#ff79c6">=</span> father[a1];
+			b1 <span style="color:#ff79c6">=</span> father[b1];
+		}
+		printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, (visited[b] <span style="color:#ff79c6">-</span> visited[a1]) <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span><span style="color:#ff79c6">+</span> (visited[a] <span style="color:#ff79c6">-</span> visited[a1]) <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">3</span>);
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>反思：题目理解有问题，当时看到的时候，以为直接到达1(根节点)，还混了80分(就离谱)。</p>
+<h2 id="7-3-修轻轨-100-分">7-3 修轻轨 (100 分)</h2>
+<p>长春市有n个交通枢纽，计划在1号枢纽到n号枢纽之间修建一条轻轨。轻轨由多段隧道组成，候选隧道有m段。每段候选隧道只能由一个公司施工，施工天数对各家公司一致。有n家施工公司，每家公司同时最多只能修建一条候选隧道。所有公司可以同时开始施工。请评估：修建这条轻轨最少要多少天。。</p>
+<h3 id="输入格式-2">输入格式:</h3>
+<p>第1行，两个整数n和m，用空格分隔，分别表示交通枢纽的数量和候选隧道的数量，1 ≤ n ≤ 100000，1 ≤ m ≤ 200000。</p>
+<p>第2行到第m+1行，每行三个整数a、b、c，用空格分隔，表示枢纽a和枢纽b之间可以修建一条双向隧道，施工时间为c天，1 ≤ a, b ≤ n，1 ≤ c ≤ 1000000。</p>
+<h3 id="输出格式-2">输出格式:</h3>
+<p>输出一行，包含一个整数，表示最少施工天数。</p>
+<h3 id="输入样例-2">输入样例:</h3>
+<p>在这里给出一组输入。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span>
+<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">4</span>
+<span style="color:#bd93f9">3</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">7</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">2</span>
+<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span>
+<span style="color:#bd93f9">5</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span>
+</code></pre></div><p>输出样例:
+在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">6</span>
+</code></pre></div><p>![在这里插入图片描述](<a href="https://img-blog.csdnimg.cn/20210615091944997.png#pic_right?x-oss-process=shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70">https://img-blog.csdnimg.cn/20210615091944997.png#pic_right?x-oss-process=shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70</a> =200x150)
+思路：本题为最小生成树问题，但是不需要生成完全最小生成树，只需要在1点和n点连通时退出加边行为即可，由于最小生成树的算法每一步加完边后，最后一条边为最大值，因此只需要输出最后一条边的权值即为所求。推荐使用<code>kruskal</code>算法，但是注意并查集的优化，否则可能出现超时现象。
+注意：本题会出现非简单图的情况，即存在环形弧，比如1个城市，1条边，注意处理该类情况。</p>
+<h3 id="代码如下-2">代码如下：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;algorithm&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#ff79c6">typedef</span> <span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Edge</span>
+{
+	<span style="color:#8be9fd">int</span> from;
+	<span style="color:#8be9fd">int</span> to;
+	<span style="color:#8be9fd">int</span> value;
+	<span style="color:#8be9fd">bool</span> <span style="color:#ff79c6">operator</span> <span style="color:#ff79c6">&lt;</span> (<span style="color:#ff79c6">const</span> <span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Edge</span> <span style="color:#ff79c6">&amp;</span>a)<span style="color:#ff79c6">const</span>
+	{
+		<span style="color:#ff79c6">return</span> value <span style="color:#ff79c6">&lt;</span> a.value;
+	}
+}edge;
+edge Vertex[<span style="color:#bd93f9">200005</span>];
+<span style="color:#8be9fd">int</span> father[<span style="color:#bd93f9">200005</span>];
+<span style="color:#8be9fd">int</span> m;
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">find1</span>(<span style="color:#8be9fd">int</span> v)
+{
+	<span style="color:#ff79c6">if</span> (father[v] <span style="color:#ff79c6">==</span> v)
+		<span style="color:#ff79c6">return</span> v;
+	<span style="color:#ff79c6">return</span> find1(father[v]);
+}
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Union</span>(<span style="color:#8be9fd">int</span> x, <span style="color:#8be9fd">int</span> y)
+{
+	<span style="color:#8be9fd">int</span> fx <span style="color:#ff79c6">=</span> find1(x);
+	<span style="color:#8be9fd">int</span> fy <span style="color:#ff79c6">=</span> find1(y);
+	<span style="color:#ff79c6">if</span> (fx <span style="color:#ff79c6">!=</span> fy)
+    {
+       father[fy] <span style="color:#ff79c6">=</span> fx;
+       father[y]  <span style="color:#ff79c6">=</span> fx;
+    }
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> n;
+	scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m, <span style="color:#ff79c6">&amp;</span>n);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>Vertex[i].from,<span style="color:#ff79c6">&amp;</span>Vertex[i].to,<span style="color:#ff79c6">&amp;</span>Vertex[i].value);
+	}
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
+	{
+		father[i] <span style="color:#ff79c6">=</span> i;
+	}
+	sort(Vertex <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, Vertex <span style="color:#ff79c6">+</span> n <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+	<span style="color:#6272a4">//kruskal核心算法
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> from <span style="color:#ff79c6">=</span> Vertex[i].from;
+		<span style="color:#8be9fd">int</span> to <span style="color:#ff79c6">=</span> Vertex[i].to;
+		<span style="color:#ff79c6">if</span> (find1(from) <span style="color:#ff79c6">!=</span> find1(to))
+		{
+			Union(from, to);
+            <span style="color:#ff79c6">if</span>(find1(<span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">==</span> find1(m))
+		   {
+			printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, Vertex[i].value);
+			<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+		   }
+		}
+	}
+     <span style="color:#ff79c6">if</span>(find1(<span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">==</span> find1(m))
+     {
+			printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, Vertex[m].value);
+			<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+     }<span style="color:#6272a4">//环弧的判断，当然也可以在循环退出后统一输出。
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>反思：模板格式不对，在考试的时候，将to值和value值传进来时传反导致出错，还对了10分就离谱。</p>
+<h2 id="7-4-数据结构设计i-100-分">7-4 数据结构设计I (100 分)</h2>
+<p>小唐正在学习数据结构。他尝试应用数据结构理论处理数据。最近，他接到一个任务，要求维护一个动态数据表，并支持如下操作：</p>
+<p>插入操作（I）：从表的一端插入一个整数。</p>
+<p>删除操作（D）：从表的另一端删除一个整数。</p>
+<p>取反操作（R）：把当前表中的所有整数都变成相反数。</p>
+<p>取最大值操作（M）：取当前表中的最大值。</p>
+<p>如何高效实现这个动态数据结构呢？</p>
+<h3 id="输入格式-3">输入格式:</h3>
+<p>第1行，包含1个整数M，代表操作的个数， <code>2≤M≤1000000</code>。</p>
+<p>第2到M+1行，每行包含1个操作。每个操作以一个字符开头，可以是I、D、R、M。如果是I操作，格式如下：I x, x代表插入的整数，<code>-10000000≤x≤10000000</code>。</p>
+<h3 id="输出格式-3">输出格式:</h3>
+<p>若干行，每行1个整数，对应M操作的返回值。如果M和D操作时队列为空，忽略对应操作。</p>
+<h3 id="输入样例-3">输入样例:</h3>
+<p>在这里给出一组输入。例如：</p>
+<pre tabindex="0"><code>6
+I 6
+R
+I 2
+M
+D
+M
+</code></pre><h3 id="输出样例">输出样例:</h3>
+<p>在这里给出相应的输出。例如：</p>
+<pre tabindex="0"><code>2
+2
+</code></pre><p>![在这里插入图片描述](<a href="https://img-blog.csdnimg.cn/20210615093257107.png#pic_right?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70">https://img-blog.csdnimg.cn/20210615093257107.png#pic_right?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70</a> =200x150)
+做法：注意<code>mutliset</code>使用和数组标记。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;algorithm&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;set&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">10000001</span>];
+multiset<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>M;
+deque<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>Q;
+<span style="color:#8be9fd">int</span> flag <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> n;
+	scanf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, <span style="color:#ff79c6">&amp;</span>n);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">char</span> ch;
+		scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, <span style="color:#ff79c6">&amp;</span>ch);
+		<span style="color:#ff79c6">switch</span> (ch)
+		{
+		<span style="color:#ff79c6">case</span> <span style="color:#f1fa8c">&#39;I&#39;</span><span style="color:#ff79c6">:</span>
+		{
+			<span style="color:#8be9fd">int</span> num;
+			scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
+			Q.push_back(num<span style="color:#ff79c6">*</span>flag);
+			M.insert(num<span style="color:#ff79c6">*</span>flag);
+			<span style="color:#ff79c6">break</span>;
+		}
+		<span style="color:#ff79c6">case</span> <span style="color:#f1fa8c">&#39;D&#39;</span><span style="color:#ff79c6">:</span>
+		{
+			<span style="color:#ff79c6">if</span> (Q.size() <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
+			{
+				<span style="color:#8be9fd">int</span> a <span style="color:#ff79c6">=</span> Q.front();
+				multiset<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;::</span>iterator it <span style="color:#ff79c6">=</span> M.find(a);
+				M.erase(it);
+				Q.pop_front();<span style="color:#6272a4">//不能直接erase,否则会全部erase
+</span><span style="color:#6272a4"></span>			}
+			<span style="color:#ff79c6">break</span>;
+		}
+		<span style="color:#ff79c6">case</span> <span style="color:#f1fa8c">&#39;R&#39;</span><span style="color:#ff79c6">:</span>
+		{
+			<span style="color:#ff79c6">if</span> (flag <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span>)flag <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+			<span style="color:#ff79c6">else</span> flag <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+			<span style="color:#ff79c6">break</span>;
+		}
+		<span style="color:#ff79c6">case</span> <span style="color:#f1fa8c">&#39;M&#39;</span><span style="color:#ff79c6">:</span>
+		{
+			<span style="color:#ff79c6">if</span> (flag <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span>)
+			{
+				<span style="color:#ff79c6">if</span> (Q.size() <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
+				{
+					multiset<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;::</span>iterator it <span style="color:#ff79c6">=</span> M.end();
+					printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, <span style="color:#ff79c6">*</span>(<span style="color:#ff79c6">--</span>it));
+				}
+
+			}
+			<span style="color:#ff79c6">else</span>
+			{
+				<span style="color:#ff79c6">if</span> (Q.size() <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
+				printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, <span style="color:#ff79c6">*</span>M.begin()<span style="color:#ff79c6">*</span>flag);
+			}
+			<span style="color:#ff79c6">break</span>;
+		}
+		}
+		getchar();
+	}
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>注意：multiset的erase的使用方法，本体具体操作代码已经标注。</p>
+
+
+                
+
+                <hr>
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E4%B8%83%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/" data-toggle="tooltip" data-placement="top" title="JLU数据结构荣誉课——第七次上机实验">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://hbai.site/">Bai的博客</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href='' rel="alternate" type="application/rss+xml" title="φκι的博客" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fas fa-circle fa-stack-2x"></i>
+                               <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:153648356@qq.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    <li>
+                        <a target="_blank" href="/your%20wechat%20qr%20code%20image">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-weixin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/hhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/yourlinkedinid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://stackoverflow.com/users/yourstackoverflowid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+            
+                    
+                    
+                    
+            
+            
+            
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; φκι的博客 2021
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> by <a href="https://zhaohuabing.com">Huabing</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=zhaohuabing&repo=hugo-theme-cleanwhite&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function loadAsync(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        loadAsync("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    loadAsync("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>

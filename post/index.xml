@@ -6,11 +6,20 @@
     <description>Recent content in Posts on φκι的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Sep 2021 10:35:59 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 Sep 2021 10:32:34 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>模拟退火算法</title>
+      <link>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Mon, 20 Sep 2021 10:32:34 +0800</pubDate>
+      
+      <guid>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>JLU数据结构荣誉课  第五次上机实验</title>
       <link>https://hhhhlkf.github.io/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE-%E7%AC%AC%E4%BA%94%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/</link>
-      <pubDate>Mon, 20 Sep 2021 10:35:59 +0800</pubDate>
+      <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
       
       <guid>https://hhhhlkf.github.io/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE-%E7%AC%AC%E4%BA%94%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/</guid>
       <description>JLU数据结构荣誉课——第五次上机实验 7-1 图的深度优先搜索I (100 分) 无向图 G 有 n 个顶点和 m 条边。求图G的深度优先搜索树(森林)以及每个顶点的发现时间和完成时间。每个连通分量从编号最小的结点开始搜索，邻接顶点选择顺序遵循边的输入顺序。
@@ -26,12 +35,39 @@
     </item>
     
     <item>
-      <title>模拟退火算法</title>
-      <link>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</link>
-      <pubDate>Mon, 20 Sep 2021 10:32:34 +0800</pubDate>
+      <title>JLU数据结构荣誉课——第七次上机实验</title>
+      <link>https://hhhhlkf.github.io/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E4%B8%83%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/</link>
+      <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
       
-      <guid>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</guid>
-      <description></description>
+      <guid>https://hhhhlkf.github.io/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E4%B8%83%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/</guid>
+      <description>JLU数据结构荣誉课——第七次上机实验 一.7-1 序列调度 (100 分) 有一个N个数的序列A：1，2，……，N。有一个后进先出容器D，容器的容量为C。如果给出一个由1到N组成的序列，那么可否由A使用容器D的插入和删除操作得到。
+输入格式: 第1行，2个整数T和C，空格分隔，分别表示询问的组数和容器的容量，1≤T≤10，1≤C≤N。
+第2到T+1行，每行的第1个整数N，表示序列的元素数，1≤N≤10000。接下来N个整数，表示询问的序列。
+输出格式: T行。若第i组的序列能得到，第i行输出Yes；否则，第i行输出No,1≤i≤T。
+输入样例: 在这里给出一组输入。例如：
+2 2 5 1 2 5 4 3 4 1 3 2 4 输出样例: 在这里给出相应的输出。例如：
+No Yes 作者 谷方明 单位 吉林大学 代码长度限制 16 KB 时间限制 100 ms 内存限制 10 MB
+思路： 本题为模拟题，模拟栈的出入，先创建一个栈，循环输入给定序列的每一个元素，每输入一个数字，就从==未入过栈==的最小元素开始入栈，一直到当前数字入栈之后截至，然后弹出栈顶元素，当栈顶元素和当前元素不匹配时，flag置为false,然后等到输入完毕，输出判断结果。
+操作： 1.引入pre指针，记录未入栈的最小元素。在每次循环结束后，用当前输入元素pre=ans+1进行更新，在pre&amp;gt;之后的ans后，入栈将停止。 2.入栈判断问题：在本程序中遇到样例如：
+1 10000 1 10000 2 9999 3 9998 4 9997 5 9996 6 9995..... 在入栈不判断时，就会爆栈，导致段错误。
+代码如下： #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;using namespace std; int SS[10001]; int top = 0; int pre = 1; bool flag = true; int main() { int Size, n; scanf(&amp;#34;%d%d&amp;#34;, &amp;amp;n, &amp;amp;Size); for (int i = 1; i &amp;lt;= n; i++) { int num = 0; scanf(&amp;#34;%d&amp;#34;, &amp;amp;num); for (int j = 1; j &amp;lt;= num; j++) { int ans=0; scanf(&amp;#34;%d&amp;#34;, &amp;amp;ans); if(flag==true)//如果已经判断结束，就不再压栈，避免爆栈  for (int k = pre; k &amp;lt;= ans; k++) { SS[++top] = k; } if (top &amp;gt; Size)flag = false; if (SS[top] !</description>
+    </item>
+    
+    <item>
+      <title>JLU数据结构荣誉课——第六次上机实验</title>
+      <link>https://hhhhlkf.github.io/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E5%85%AD%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/</link>
+      <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://hhhhlkf.github.io/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E5%85%AD%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/</guid>
+      <description>JLU数据结构荣誉课——第六次上机实验 7-1 高精度数加法 (100 分) 高精度数是指大大超出了标准数据类型能表示的范围的数，例如10000位整数。很多计算问题的结果都很大，因此，高精度数极其重要。
+一般使用一个数组来存储高精度数的所有数位，数组中的每个元素存储该高精度数的1位数字或多位数字。 请尝试计算：N个高精度数的加和。这个任务对于在学习数据结构的你来说应该是小菜一碟。 。
+输入格式: 第1行，1个整数N，表示高精度整数的个数，(1≤N≤10000)。
+第2至N+1行，每行1个高精度整数x, x最多100位。
+输出格式: 1行,1个高精度整数，表示输入的N个高精度数的加和。
+输入样例: 在这里给出一组输入。例如
+3 12345678910 12345678910 12345678910 输出样例: 在这里给出相应的输出。例如
+37037036730 ![](https://img-blog.csdnimg.cn/2021061508464720.png#pic_right?x-oss-process=type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_7 =200x150) 思路：高精度加法，通过字符数组形式输入，将数组倒置遍历相加，存入整型数组中，最后倒着输出结果。(本题目没有负数，可以放心按照正数处理。)我的代码为负数与正数均可处理。
+代码如下： //#pragma warning(disable:4996) #include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;iostream&amp;gt;#include&amp;lt;queue&amp;gt;#include&amp;lt;vector&amp;gt;using namespace std; char num1[101]; char num2[101]; int num[1000100]; int numm[1000100]; int len1 = 0; int len2 = 0; bool flag = true; void Plus1(char*n)//对正数的相加 { int j = 1; int ans = 0; for (int i = strlen(n) - 1; i &amp;gt;= 0; i--, j++) { int d = num[j] + (n[i] - &amp;#39;0&amp;#39;) + ans; if (d &amp;gt;= 10) { ans = 1; num[j] = d % 10; } else { num[j] = d; ans = 0; } } num[j] += ans; while (num[j]&amp;gt;= 10) { num[j] -= 10; num[++j]++; } len1 = max(len1, j); } void Plus2(char*n)//对负数的相加 { int j = 1; int ans = 0; for (int i = strlen(n) - 1; i &amp;gt;=1; i--, j++) { int d = numm[j] + (n[i] - &amp;#39;0&amp;#39;) + ans; if (d &amp;gt;= 10) { ans = 1; numm[j] = d % 10; } else { numm[j] = d; ans = 0; } } numm[j] += ans; while (numm[j] &amp;gt;= 10) { numm[j]-= 10; numm[++j]++; } len2 = max(len2, j); } void Minus(int*n1,int*n2,int len1,int len2)//大和减小和函数 { int ans = 0; for (int i = 1; i &amp;lt;= len1; i++) { int d = n1[i] - n2[i] + ans; if (d &amp;lt; 0) { ans = -1; n1[i] = d + 10; } else { ans = 0; n1[i] = d; } } int j = len1; while (n1[j] == 0) j--; if (!</description>
     </item>
     
   </channel>

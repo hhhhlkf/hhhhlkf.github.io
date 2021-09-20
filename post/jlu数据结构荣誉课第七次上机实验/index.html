@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="φκι的博客">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://hhhhlkf.github.io//img/fantasy.png">
+    <meta property="twitter:image" content="https://hhhhlkf.github.io//img/fantasy.png" />
+    
+
+    
+    <meta name="title" content="JLU数据结构荣誉课——第七次上机实验" />
+    <meta property="og:title" content="JLU数据结构荣誉课——第七次上机实验" />
+    <meta property="twitter:title" content="JLU数据结构荣誉课——第七次上机实验" />
+    
+
+    
+    <meta name="description" content="第七次上机实验题解">
+    <meta property="og:description" content="第七次上机实验题解" />
+    <meta property="twitter:description" content="第七次上机实验题解" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>JLU数据结构荣誉课——第七次上机实验-李柯凡的博客 | LiKefan&#39;s Blog</title>
+
+    <link rel="canonical" href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E4%B8%83%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hugo-theme-cleanwhite.min.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+</head>
+
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">φκι的博客</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                    
+                    
+		    
+                        <li><a href="/top/books/">BOOKS</a></li>
+                    
+                        <li><a href="/top/archive/">ARCHIVE</a></li>
+                    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search"><i class="fa fa-search"></i></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('https://i.loli.net/2021/09/20/sQS3zJoA5cbkLU9.jpg')
+    }
+</style>
+
+<header class="intro-header" >
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
+                        
+                    </div>
+                    <h1>JLU数据结构荣誉课——第七次上机实验</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        
+                            Posted by 
+                            
+                                 φκι
+                             
+                            on 
+                            Monday, September 20, 2021
+                            
+                            
+                            
+                            
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>TOC</h2>
+                </header>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#jlu数据结构荣誉课第七次上机实验">JLU数据结构荣誉课——第七次上机实验</a>
+      <ul>
+        <li><a href="#一7-1-序列调度-100-分">一.7-1 序列调度 (100 分)</a></li>
+        <li><a href="#7-2-最大最小差-100-分">7-2 最大最小差 (100 分)</a></li>
+        <li><a href="#7-3-二叉树最短路径长度-100-分">7-3 二叉树最短路径长度 (100 分)</a></li>
+        <li><a href="#7-4-方案计数-100-分">7-4 方案计数 (100 分)</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                
+                <h1 id="jlu数据结构荣誉课第七次上机实验">JLU数据结构荣誉课——第七次上机实验</h1>
+<h2 id="一7-1-序列调度-100-分">一.7-1 序列调度 (100 分)</h2>
+<p>有一个N个数的序列A：1，2，……，N。有一个后进先出容器D，容器的容量为C。如果给出一个由1到N组成的序列，那么可否由A使用容器D的插入和删除操作得到。</p>
+<h3 id="输入格式">输入格式:</h3>
+<p>第1行，2个整数T和C，空格分隔，分别表示询问的组数和容器的容量，<code>1≤T≤10</code>，<code>1≤C≤N</code>。</p>
+<p>第2到T+1行，每行的第1个整数N，表示序列的元素数，<code>1≤N≤10000</code>。接下来N个整数，表示询问的序列。</p>
+<h3 id="输出格式">输出格式:</h3>
+<p>T行。若第i组的序列能得到，第i行输出Yes；否则，第i行输出No,<code>1≤i≤T</code>。</p>
+<h3 id="输入样例">输入样例:</h3>
+<p>在这里给出一组输入。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span>
+<span style="color:#bd93f9">5</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span>
+</code></pre></div><h3 id="输出样例">输出样例:</h3>
+<p>在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">No
+Yes
+</code></pre></div><p><!-- raw HTML omitted -->作者 谷方明
+单位 吉林大学
+代码长度限制 16 KB
+时间限制 100 ms
+内存限制 10 MB</p>
+<h3 id="思路">思路：</h3>
+<p>本题为模拟题，模拟栈的出入，先创建一个栈，循环输入给定序列的每一个元素，每输入一个数字，就从==未入过栈==的最小元素开始入栈，一直到当前数字入栈之后截至，然后弹出栈顶元素，当栈顶元素和当前元素不匹配时，flag置为false,然后等到输入完毕，输出判断结果。</p>
+<h5 id="操作">操作：</h5>
+<p><!-- raw HTML omitted -->1.引入pre指针，记录未入栈的最小元素。在每次循环结束后，用当前输入元素pre=ans+1进行更新，在pre&gt;之后的ans后，入栈将停止。
+<!-- raw HTML omitted -->2.入栈判断问题：在本程序中遇到样例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">10000</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">10000</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">9999</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">9998</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">9997</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">9996</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">9995.</span>....
+</code></pre></div><p><!-- raw HTML omitted -->在入栈不判断时，就会爆栈，导致段错误。</p>
+<h5 id="代码如下">代码如下：</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#8be9fd">int</span> SS[<span style="color:#bd93f9">10001</span>];
+<span style="color:#8be9fd">int</span> top <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="color:#8be9fd">int</span> pre <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+<span style="color:#8be9fd">bool</span> flag <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">true</span>;
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> Size, n;
+	scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n, <span style="color:#ff79c6">&amp;</span>Size);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> num <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
+		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; j <span style="color:#ff79c6">&lt;=</span> num; j<span style="color:#ff79c6">++</span>)
+		{
+			<span style="color:#8be9fd">int</span> ans<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+			scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>ans);
+            <span style="color:#ff79c6">if</span>(flag<span style="color:#ff79c6">==</span><span style="color:#8be9fd;font-style:italic">true</span>)<span style="color:#6272a4">//如果已经判断结束，就不再压栈，避免爆栈
+</span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> pre; k <span style="color:#ff79c6">&lt;=</span> ans; k<span style="color:#ff79c6">++</span>)
+			{
+				SS[<span style="color:#ff79c6">++</span>top] <span style="color:#ff79c6">=</span> k;
+			}
+			<span style="color:#ff79c6">if</span> (top <span style="color:#ff79c6">&gt;</span> Size)flag <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">false</span>;
+			<span style="color:#ff79c6">if</span> (SS[top] <span style="color:#ff79c6">!=</span> ans)flag <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">false</span>;
+			<span style="color:#ff79c6">if</span> (top <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span>)top<span style="color:#ff79c6">--</span>;
+			pre <span style="color:#ff79c6">=</span> ans <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+		}
+		<span style="color:#ff79c6">if</span> (flag)printf(<span style="color:#f1fa8c">&#34;Yes</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>);
+		<span style="color:#ff79c6">else</span> printf(<span style="color:#f1fa8c">&#34;No</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>);
+		flag <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">true</span>;top <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;pre <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+	}
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>反思：爆栈问题，用stack内存超限也有可能是这个原因。</p>
+<h2 id="7-2-最大最小差-100-分">7-2 最大最小差 (100 分)</h2>
+<p>对n 个正整数，进行如下操作：每一次删去其中两个数 a 和 b，然后加入一个新数：a*b+1，如此下去直到 只剩下一个数。所有按这种操作方式最后得到的数中，最大的为max，最小的为min，计算max-min。</p>
+<h3 id="输入格式-1">输入格式:</h3>
+<p>第1行：n，数列元素的个数，<code>1&lt;=n&lt;=16</code>。</p>
+<p>第2行：n 个用空格隔开的数x，<code>x&lt;=10</code>。</p>
+<h3 id="输出格式-1">输出格式:</h3>
+<p>1行，所求max-min。</p>
+<h3 id="输入样例-1">输入样例:</h3>
+<p>在这里给出一组输入。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">3</span>
+</code></pre></div><p>输出样例:
+在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">2</span>
+</code></pre></div><p><!-- raw HTML omitted -->作者 谷方明
+单位 吉林大学
+代码长度限制 16 KB
+时间限制 100 ms
+内存限制 64 MB</p>
+<p>思路：哈夫曼树的模拟,采用双堆。</p>
+<h3 id="代码如下-1">代码如下：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;string&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+priority_queue<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>, vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>, greater<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&gt;</span>Q;
+priority_queue<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>Q1;
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> n;
+	scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> ans;
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>ans);
+		Q1.push(ans);
+		Q.push(ans);
+	}
+	<span style="color:#ff79c6">while</span> (Q.size()<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">1</span>)
+	{
+		<span style="color:#8be9fd">int</span> ans1 <span style="color:#ff79c6">=</span> Q.top();
+		Q.pop();
+		<span style="color:#8be9fd">int</span> ans2 <span style="color:#ff79c6">=</span> Q.top();
+		Q.pop();
+		Q.push(ans1<span style="color:#ff79c6">*</span>ans2 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+		ans1 <span style="color:#ff79c6">=</span> Q1.top();
+		Q1.pop();
+		ans2 <span style="color:#ff79c6">=</span> Q1.top();
+		Q1.pop();
+		Q1.push(ans1<span style="color:#ff79c6">*</span>ans2 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+	}
+	printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, Q.top() <span style="color:#ff79c6">-</span> Q1.top());
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><h3 id="代码2">代码2：</h3>
+<p>采用sort排序：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;algorithm&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+priority_queue<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span>, vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span><span style="color:#ff79c6">&gt;</span>, greater<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span><span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&gt;</span>Q;
+<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> a[<span style="color:#bd93f9">10001</span>];
+<span style="color:#8be9fd">bool</span> <span style="color:#50fa7b">cmp</span>(<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> <span style="color:#ff79c6">&amp;</span>a,<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> <span style="color:#ff79c6">&amp;</span>b)
+{
+	<span style="color:#ff79c6">return</span> a <span style="color:#ff79c6">&gt;</span> b;
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> n;
+	scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%lld&#34;</span>, <span style="color:#ff79c6">&amp;</span>a[i]);
+		Q.push(a[i]);
+	}
+	sort(a <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, a <span style="color:#ff79c6">+</span> n <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>,cmp);
+	<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+	<span style="color:#ff79c6">while</span> (Q.size() <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">1</span>)
+	{
+		<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ans1 <span style="color:#ff79c6">=</span> Q.top();
+		Q.pop();
+		<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ans2 <span style="color:#ff79c6">=</span> Q.top();
+		Q.pop();
+		Q.push(ans1<span style="color:#ff79c6">*</span>ans2 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+		a[<span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">=</span> a[i<span style="color:#ff79c6">++</span>] <span style="color:#ff79c6">*</span> a[<span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+	}
+	printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, Q.top()<span style="color:#ff79c6">-</span> a[<span style="color:#bd93f9">1</span>]);
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>反思：使用sort内存降低，但是时间略有增加。</p>
+<h2 id="7-3-二叉树最短路径长度-100-分">7-3 二叉树最短路径长度 (100 分)</h2>
+<p>给定一棵二叉树T，每个结点赋一个权值。计算从根结点到所有结点的最短路径长度。路径长度定义为：路径上的每个顶点的权值和。</p>
+<h3 id="输入格式-2">输入格式:</h3>
+<p>第1行，1个整数n，表示二叉树T的结点数，结点编号1..n，1≤n≤20000。</p>
+<p>第2行，n个整数，空格分隔，表示T的先根序列，序列中结点用编号表示。</p>
+<p>第3行，n个整数，空格分隔，表示T的中根序列，序列中结点用编号表示。</p>
+<p>第4行，n个整数Wi，空格分隔，表示T中结点的权值，-10000≤Wi≤10000，1≤i≤n。</p>
+<h3 id="输出格式-2">输出格式:</h3>
+<p>1行，n个整数，表示根结点到其它所有结点的最短路径长度。</p>
+<h3 id="输入样例-2">输入样例:</h3>
+<p>在这里给出一组输入。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">4</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">1</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+</code></pre></div><h3 id="输出样例-1">输出样例:</h3>
+<p>在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">3</span>
+</code></pre></div><p><!-- raw HTML omitted -->作者 谷方明
+单位 吉林大学
+代码长度限制 16 KB
+时间限制 1000 ms
+内存限制 10MB</p>
+<h5 id="思路-1">思路：</h5>
+<p>本题最大的难点是递归建树，在确定子树范围的时候要注意.
+建树:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#8be9fd">void</span> make_tree(<span style="color:#8be9fd">int</span> pr1, <span style="color:#8be9fd">int</span> la1,<span style="color:#8be9fd">int</span> pr2,<span style="color:#8be9fd">int</span> la2,<span style="color:#8be9fd">int</span> root)
+<span style="color:#6272a4">//pr1对应先根序列的第一个元素，la1对应宪根序列的最后一个元素
+</span><span style="color:#6272a4">//pr1对应中根序列的第一个元素，la1对应中根序列的最后一个元素
+</span><span style="color:#6272a4">//root为根结点的下边标
+</span></code></pre></div><h3 id="代码如下-2">代码如下：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#8be9fd">int</span> pre[<span style="color:#bd93f9">20005</span>];
+<span style="color:#8be9fd">int</span> mid[<span style="color:#bd93f9">20005</span>];
+<span style="color:#8be9fd">int</span> value[<span style="color:#bd93f9">20005</span>];
+vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>mp[<span style="color:#bd93f9">100001</span>];
+<span style="color:#8be9fd">int</span> visited[<span style="color:#bd93f9">20005</span>];
+<span style="color:#8be9fd">int</span> n;
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">make_tree</span>(<span style="color:#8be9fd">int</span> pr1, <span style="color:#8be9fd">int</span> la1,<span style="color:#8be9fd">int</span> pr2,<span style="color:#8be9fd">int</span> la2,<span style="color:#8be9fd">int</span> root)
+{
+	<span style="color:#ff79c6">if</span> (pr1 <span style="color:#ff79c6">&gt;</span> la1<span style="color:#ff79c6">||</span>pr2<span style="color:#ff79c6">&gt;</span>la2)<span style="color:#ff79c6">return</span>;
+	<span style="color:#ff79c6">else</span>
+	{
+		<span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> pre[pr1];
+		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> pr2; i <span style="color:#ff79c6">&lt;=</span> la2; i<span style="color:#ff79c6">++</span>)
+		{
+			<span style="color:#ff79c6">if</span> (mid[i] <span style="color:#ff79c6">==</span> k)
+			{
+				k <span style="color:#ff79c6">=</span> i ; <span style="color:#ff79c6">break</span>;
+			}
+		}
+		mp[mid[root]].push_back(mid[k]);<span style="color:#6272a4">//将结点连到对应的根上
+</span><span style="color:#6272a4"></span>		make_tree(pr1<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>,pr1<span style="color:#ff79c6">+</span>k<span style="color:#ff79c6">-</span>pr2,pr2,k<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>,k);<span style="color:#6272a4">//非常关键，根据中根的
+</span><span style="color:#6272a4"></span>		<span style="color:#6272a4">//位置确定左右子树的建树范围
+</span><span style="color:#6272a4"></span>		make_tree(pr1<span style="color:#ff79c6">+</span>k<span style="color:#ff79c6">-</span>pr2<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>, la1, k <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, la2, k);<span style="color:#6272a4">//非常关键
+</span><span style="color:#6272a4"></span>	}
+}
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">DFS</span>(<span style="color:#8be9fd">int</span> v)
+{
+	<span style="color:#ff79c6">if</span> (visited[v])<span style="color:#ff79c6">return</span>;
+	<span style="color:#ff79c6">else</span>
+	{
+		visited[v] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> mp[v].size(); i<span style="color:#ff79c6">++</span>)
+		{
+			<span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> mp[v][i];
+			value[k] <span style="color:#ff79c6">=</span> value[v] <span style="color:#ff79c6">+</span> value[k];
+			DFS(k);
+		}
+	}
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+
+	scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>pre[i]);
+	}
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>mid[i]);
+	}
+	make_tree(<span style="color:#bd93f9">1</span>,n,<span style="color:#bd93f9">1</span>,n,<span style="color:#bd93f9">0</span>);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>value[i]);
+	}
+	DFS(pre[<span style="color:#bd93f9">1</span>]);<span style="color:#6272a4">//深搜更新value
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">++</span>)
+	{
+		printf(<span style="color:#f1fa8c">&#34;%d &#34;</span>, value[i]);
+	}
+	printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, value[n]);
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>反思：在处理区间长度的时候处理的不好，导致拿不到分数。</p>
+<h2 id="7-4-方案计数-100-分">7-4 方案计数 (100 分)</h2>
+<p>组装一个产品需要 n 个零件。生产每个零件都需花费一定的时间。零件的生产可以并行进行。有些零件的生产有先后关系，只有一个零件的之前的所有零件都生产完毕，才能开始生产这个零件。如何合理安排工序，才能在最少的时间内完成所有零件的生产。在保证最少时间情况下，关键方案有多少种，关键方案是指从生产开始时间到结束时间的一个零件生产序列，序列中相邻两个零件的关系属于事先给出的零件间先后关系的集合，序列中的每一个零件的生产都不能延期。</p>
+<h3 id="输入格式-3">输入格式:</h3>
+<p>第1行，2个整数n和m，用空格分隔，分别表示零件数和关系数，零件编号1..n，1≤n≤10000, 0≤m≤100000 。</p>
+<p>第2行，n个整数Ti，用空格分隔，表示零件i的生产时间，1≤i≤n，1≤Ti≤100 。</p>
+<p>第3到m+2行，每行两个整数i和j，用空格分隔，表示零件i要在零件j之前生产。</p>
+<h3 id="输出格式-3">输出格式:</h3>
+<p>第1行，1个整数，完成生产的最少时间。</p>
+<p>第2行，1个整数，关键方案数，最多100位。</p>
+<p>如果生产不能完成，只输出1行，包含1个整数0.</p>
+<h3 id="输入样例-3">输入样例:</h3>
+<p>在这里给出一组输入。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">4</span> <span style="color:#bd93f9">4</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">1</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span>
+<span style="color:#bd93f9">3</span> <span style="color:#bd93f9">4</span>
+</code></pre></div><h3 id="输出样例-2">输出样例:</h3>
+<p>在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">4</span>
+<span style="color:#bd93f9">2</span>
+</code></pre></div><p>本题即为拓排序的改变，并加入了高精度加法运算，比较综合，但是思路明确。</p>
+<ol>
+<li>首先对于最短时间的求解，就是关键路径的前半部分(求每个事件最早发生时间)，可以并入拓扑排序一起求解，在求解最早发生时间过程中，我们可以一并求出到每个点的关键方案数。假设每次更新最早发生时间的过程中，当前<code>p-&gt;VerAdj</code>时间为最大值，最大值意味着当<code>ve[i]+cost[p]</code>比该值小时，<code>i</code>就作为<code>p-&gt;VerAdj</code>之前的关键方案，当<code>ve[i]+cost[p]&gt;ve[p-&gt;VerAdj]</code>的时候，在更新最早发生时间的同时，将<code>p-&gt;VerAdj</code>的关键方案数变为<code>i</code>点的关键方案数(即改变最大假设值)；当<code>ve[i]+cost[p]=ve[p-&gt;VerAdj]</code>时，将<code>i</code>点的关键方案数加和到<code>p-&gt;VerAdj</code>上(即以当前最大假设值为基准)。</li>
+<li>现在我们剖析关键方案数在本题中到底怎么数。
+==我们首先引入虚汇点，将点权转化为边权==
+以样例为例：</li>
+</ol>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph LR
+A((1))-- 1 --&gt; B((2))
+A --1--&gt; C((3))
+B --2--&gt; D((4))
+C--2 --&gt; D
+D--1--&gt;E(虚结点5)
+</code></pre><p>然后分别计算每个点的最早发生时间为(按下标排列，下同):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">3</span>,<span style="color:#bd93f9">4</span>
+</code></pre></div><p>计算得，与每一点最早开始时间相同的路径条数(即该点方案数)为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">2</span>
+</code></pre></div><p>后继点的方案数由所有前继点符合关键方案条件加和得到。
+再举一个极端的例子</p>
+<pre tabindex="0"><code class="language-mermaid" data-lang="mermaid">graph LR
+A((1)) --1--&gt;F(虚结点)
+B((2))--2--&gt;F
+C((3))--2--&gt;F
+ D((4))--2--&gt;F
+ E((5))--1--&gt;F
+</code></pre><p>在该例子中，存在五个点，零条边，由刚才的定义得到，关键方案数为三条，不能去刻意的排列组合。</p>
+<h3 id="代码如下-3">代码如下：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;stack&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdlib&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#8be9fd">int</span> ru[<span style="color:#bd93f9">10001</span>];<span style="color:#6272a4">//计算入度，拓扑排序使用
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> chu[<span style="color:#bd93f9">10001</span>];<span style="color:#6272a4">//计算出度，建立虚汇点使用
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> value[<span style="color:#bd93f9">10001</span>];<span style="color:#6272a4">//每一点的时间值
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span>  weight[<span style="color:#bd93f9">10005</span>];<span style="color:#6272a4">//每一点最早开始时间
+</span><span style="color:#6272a4"></span>vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>mp[<span style="color:#bd93f9">10005</span>];
+queue<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>Q;<span style="color:#6272a4">//拓扑排序使用
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> NUM[<span style="color:#bd93f9">10005</span>][<span style="color:#bd93f9">105</span>];<span style="color:#6272a4">//关键方案数，取代整数类型
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> len[<span style="color:#bd93f9">10005</span>];<span style="color:#6272a4">//对应每个NUM的长度，方便计算
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> n, m;
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">BIP</span>(<span style="color:#8be9fd">int</span> u, <span style="color:#8be9fd">int</span> v)
+{
+	<span style="color:#8be9fd">int</span> M <span style="color:#ff79c6">=</span> max(len[u], len[v]);
+	<span style="color:#8be9fd">int</span> ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> M; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> (ans <span style="color:#ff79c6">+</span> NUM[v][i] <span style="color:#ff79c6">+</span> NUM[u][i]);
+		<span style="color:#ff79c6">if</span> (k <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">10</span>)
+		{
+			ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+			NUM[u][i] <span style="color:#ff79c6">=</span> k <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">10</span>;
+		}
+		<span style="color:#ff79c6">else</span>
+		{
+			ans <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+			NUM[u][i] <span style="color:#ff79c6">=</span> k;
+		}
+	}
+	<span style="color:#ff79c6">if</span> (ans <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span>) { NUM[u][M <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; len[u] <span style="color:#ff79c6">=</span> M <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>; }
+	<span style="color:#ff79c6">else</span> len[u] <span style="color:#ff79c6">=</span> M;
+}
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">TopOrder</span>()
+{
+	<span style="color:#8be9fd">int</span> n1 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">!</span>Q.empty())
+	{
+		<span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> Q.front();Q.pop();
+		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> mp[k].size(); i<span style="color:#ff79c6">++</span>)
+		{
+			<span style="color:#8be9fd">int</span> p <span style="color:#ff79c6">=</span> mp[k][i];
+			<span style="color:#ff79c6">if</span> (weight[k] <span style="color:#ff79c6">+</span> value[k] <span style="color:#ff79c6">&gt;</span> weight[p])
+			{
+				weight[p] <span style="color:#ff79c6">=</span> weight[k] <span style="color:#ff79c6">+</span> value[k];
+				memset(NUM[p], <span style="color:#bd93f9">0</span>, <span style="color:#ff79c6">sizeof</span>(NUM[p]));<span style="color:#6272a4">//更新假设操作
+</span><span style="color:#6272a4"></span>				len[p] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+				BIP(p, k);<span style="color:#6272a4">//重置NUM[p]之后与NUM[k]加和
+</span><span style="color:#6272a4"></span>			}
+			<span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (weight[k] <span style="color:#ff79c6">+</span> value[k] <span style="color:#ff79c6">==</span> weight[p])BIP(p, k);<span style="color:#6272a4">//加和
+</span><span style="color:#6272a4"></span>			<span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>(<span style="color:#ff79c6">--</span>ru[p]))Q.push(p);
+		}
+		n1<span style="color:#ff79c6">++</span>;
+	}<span style="color:#6272a4">//现在n+1个点的weight为最大值，条数和集中在NUM[n+1]上
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">if</span> (n1 <span style="color:#ff79c6">!=</span> n) { printf(<span style="color:#f1fa8c">&#34;0&#34;</span>); exit(<span style="color:#bd93f9">0</span>); }
+	<span style="color:#ff79c6">else</span>
+		printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, weight[n <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>]);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> len[n <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>]; i <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">--</span>)
+		printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, NUM[n <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>][i]);
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n, <span style="color:#ff79c6">&amp;</span>m);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>value[i]);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> from, to;
+		scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>from, <span style="color:#ff79c6">&amp;</span>to);
+		mp[from].push_back(to);
+		ru[to]<span style="color:#ff79c6">++</span>; chu[from]<span style="color:#ff79c6">++</span>;
+	}
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#ff79c6">if</span> (ru[i] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+		{
+			Q.push(i);
+			NUM[i][<span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;<span style="color:#6272a4">//给入度为零的边的方案数赋值成1，作为起始方案值。
+</span><span style="color:#6272a4"></span>			len[i] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; 
+		}
+		<span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>chu[i])
+			mp[i].push_back(n <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+	}
+	TopOrder();
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>反思:<del>题目感觉给的定义有些许问题</del>，可能是我理解错不到位🤣。</p>
+<p>やっと終わった！！</p>
+
+
+                
+
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E5%85%AD%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/" data-toggle="tooltip" data-placement="top" title="JLU数据结构荣誉课——第六次上机实验">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE-%E7%AC%AC%E4%BA%94%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/" data-toggle="tooltip" data-placement="top" title="JLU数据结构荣誉课  第五次上机实验">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://hbai.site/">Bai的博客</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href='' rel="alternate" type="application/rss+xml" title="φκι的博客" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fas fa-circle fa-stack-2x"></i>
+                               <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:153648356@qq.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    <li>
+                        <a target="_blank" href="/your%20wechat%20qr%20code%20image">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-weixin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/hhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/yourlinkedinid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://stackoverflow.com/users/yourstackoverflowid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+            
+                    
+                    
+                    
+            
+            
+            
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; φκι的博客 2021
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> by <a href="https://zhaohuabing.com">Huabing</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=zhaohuabing&repo=hugo-theme-cleanwhite&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function loadAsync(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        loadAsync("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    loadAsync("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>
