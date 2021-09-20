@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on φκι的博客</title>
-    <link>https://hhhhlkf.github.io/post/</link>
-    <description>Recent content in Posts on φκι的博客</description>
+    <title>数据结构题解 on φκι的博客</title>
+    <link>https://hhhhlkf.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3/</link>
+    <description>Recent content in 数据结构题解 on φκι的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://hhhhlkf.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://hhhhlkf.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>JLU数据结构荣誉课  第五次上机实验</title>
       <link>https://hhhhlkf.github.io/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE-%E7%AC%AC%E4%BA%94%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/</link>
@@ -42,15 +42,6 @@ No Yes 作者 谷方明 单位 吉林大学 代码长度限制 16 KB 时间限�
 操作： 1.引入pre指针，记录未入栈的最小元素。在每次循环结束后，用当前输入元素pre=ans+1进行更新，在pre&amp;gt;之后的ans后，入栈将停止。 2.入栈判断问题：在本程序中遇到样例如：
 1 10000 1 10000 2 9999 3 9998 4 9997 5 9996 6 9995..... 在入栈不判断时，就会爆栈，导致段错误。
 代码如下： #include&amp;lt;iostream&amp;gt;#include&amp;lt;cstdio&amp;gt;#include&amp;lt;cstring&amp;gt;using namespace std; int SS[10001]; int top = 0; int pre = 1; bool flag = true; int main() { int Size, n; scanf(&amp;#34;%d%d&amp;#34;, &amp;amp;n, &amp;amp;Size); for (int i = 1; i &amp;lt;= n; i++) { int num = 0; scanf(&amp;#34;%d&amp;#34;, &amp;amp;num); for (int j = 1; j &amp;lt;= num; j++) { int ans=0; scanf(&amp;#34;%d&amp;#34;, &amp;amp;ans); if(flag==true)//如果已经判断结束，就不再压栈，避免爆栈  for (int k = pre; k &amp;lt;= ans; k++) { SS[++top] = k; } if (top &amp;gt; Size)flag = false; if (SS[top] !</description>
-    </item>
-    
-    <item>
-      <title>模拟退火算法</title>
-      <link>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</link>
-      <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</guid>
-      <description>啥都没有就是玩</description>
     </item>
     
   </channel>
