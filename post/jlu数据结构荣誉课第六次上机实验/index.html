@@ -239,7 +239,10 @@
 </code></pre></div><p>输出样例:
 在这里给出相应的输出。例如</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">37037036730</span>
-</code></pre></div><p>![](<a href="https://img-blog.csdnimg.cn/2021061508464720.png#pic_right?x-oss-process=type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_7">https://img-blog.csdnimg.cn/2021061508464720.png#pic_right?x-oss-process=type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_7</a> =200x150)
+</code></pre></div><p>        
+    <a>
+        <img src="https://img-blog.csdnimg.cn/2021061508464720.png" alt="gufangming1" width="200" height="150">
+    </a>
 思路：高精度加法，通过字符数组形式输入，将数组倒置遍历相加，存入整型数组中，最后倒着输出结果。(本题目没有负数，可以放心按照正数处理。)我的代码为负数与正数均可处理。</p>
 <h3 id="代码如下">代码如下：</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
@@ -397,7 +400,11 @@
 </code></pre></div><p>输出样例:
 在这里给出相应的输出。例如：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">8</span>
-</code></pre></div><p>![](<a href="https://img-blog.csdnimg.cn/20210615090520590.png#pic_right?x-oss-process=shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70">https://img-blog.csdnimg.cn/20210615090520590.png#pic_right?x-oss-process=shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70</a> =200x150)
+</code></pre></div><p>    
+ <a>
+        <img src="https://img-blog.csdnimg.cn/20210615090520590.png" alt="gufangming1" width="200" height="150">
+    </a>
+
 思路：<code>lca</code>问题，<code>lca</code>问题的解决方法有很多，适应树，图的方法有各自的特色，本题由于是二叉树，因此题目简化，两者<code>lca</code>在树的寻根过程中，不会出现多个<code>pre</code>结点，因此采用<code>lca</code>最简单的方法：先<code>DFS</code>遍历求取深度，然后根据选取两点的深度来进行：当两者深度不一样时，需要让深度大的一点向上寻根，直到两者深度一样，然后开始同时向上寻找<code>father</code>结点，直到<code>father</code>节点相同，输出答案。</p>
 <h3 id="代码如下-1">代码如下：</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
@@ -475,7 +482,10 @@ vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</sp
 </code></pre></div><p>输出样例:
 在这里给出相应的输出。例如：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">6</span>
-</code></pre></div><p>![在这里插入图片描述](<a href="https://img-blog.csdnimg.cn/20210615091944997.png#pic_right?x-oss-process=shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70">https://img-blog.csdnimg.cn/20210615091944997.png#pic_right?x-oss-process=shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70</a> =200x150)
+</code></pre></div><p>        
+    <a>
+        <img src="https://img-blog.csdnimg.cn/20210615091944997.png" alt="gufangming1" width="200" height="150">
+    </a>
 思路：本题为最小生成树问题，但是不需要生成完全最小生成树，只需要在1点和n点连通时退出加边行为即可，由于最小生成树的算法每一步加完边后，最后一条边为最大值，因此只需要输出最后一条边的权值即为所求。推荐使用<code>kruskal</code>算法，但是注意并查集的优化，否则可能出现超时现象。
 注意：本题会出现非简单图的情况，即存在环形弧，比如1个城市，1条边，注意处理该类情况。</p>
 <h3 id="代码如下-2">代码如下：</h3>
@@ -577,7 +587,10 @@ M
 <p>在这里给出相应的输出。例如：</p>
 <pre tabindex="0"><code>2
 2
-</code></pre><p>![在这里插入图片描述](<a href="https://img-blog.csdnimg.cn/20210615093257107.png#pic_right?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70">https://img-blog.csdnimg.cn/20210615093257107.png#pic_right?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzU2MjA4NDc4,size_16,color_FFFFFF,t_70</a> =200x150)
+</code></pre><p>
+    <a>
+        <img src="https://img-blog.csdnimg.cn/20210615093257107.png" alt="gufangming1" width="200" height="150">
+</a>
 做法：注意<code>mutliset</code>使用和数组标记。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
 </span><span style="color:#6272a4"></span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
