@@ -34,7 +34,7 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>JLU数据结构荣誉课——第六次上机实验-李柯凡的博客 | LiKefan&#39;s Blog</title>
+    <title>JLU数据结构荣誉课——第六次上机实验-LKF的博客 | LiKefan&#39;s Blog</title>
 
     <link rel="canonical" href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E5%85%AD%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/">
 
@@ -96,6 +96,14 @@
                         <a href="/">Home</a>
                     </li>
                     
+                        
+                        <li>
+                            <a href="/categories/note">note</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3">数据结构题解</a>
+                        </li>
                         
                     
                     
@@ -239,11 +247,7 @@
 </code></pre></div><p>输出样例:
 在这里给出相应的输出。例如</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">37037036730</span>
-</code></pre></div><p>        
-    <a>
-        <img src="https://img-blog.csdnimg.cn/2021061508464720.png" alt="gufangming1" width="200" height="150">
-    </a>
-思路：高精度加法，通过字符数组形式输入，将数组倒置遍历相加，存入整型数组中，最后倒着输出结果。(本题目没有负数，可以放心按照正数处理。)我的代码为负数与正数均可处理。</p>
+</code></pre></div><p>思路：高精度加法，通过字符数组形式输入，将数组倒置遍历相加，存入整型数组中，最后倒着输出结果。(本题目没有负数，可以放心按照正数处理。)我的代码为负数与正数均可处理。</p>
 <h3 id="代码如下">代码如下：</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
 </span><span style="color:#6272a4"></span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
@@ -400,12 +404,7 @@
 </code></pre></div><p>输出样例:
 在这里给出相应的输出。例如：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">8</span>
-</code></pre></div><p>    
- <a>
-        <img src="https://img-blog.csdnimg.cn/20210615090520590.png" alt="gufangming1" width="200" height="150">
-    </a>
-
-思路：<code>lca</code>问题，<code>lca</code>问题的解决方法有很多，适应树，图的方法有各自的特色，本题由于是二叉树，因此题目简化，两者<code>lca</code>在树的寻根过程中，不会出现多个<code>pre</code>结点，因此采用<code>lca</code>最简单的方法：先<code>DFS</code>遍历求取深度，然后根据选取两点的深度来进行：当两者深度不一样时，需要让深度大的一点向上寻根，直到两者深度一样，然后开始同时向上寻找<code>father</code>结点，直到<code>father</code>节点相同，输出答案。</p>
+</code></pre></div><p>思路：<code>lca</code>问题，<code>lca</code>问题的解决方法有很多，适应树，图的方法有各自的特色，本题由于是二叉树，因此题目简化，两者<code>lca</code>在树的寻根过程中，不会出现多个<code>pre</code>结点，因此采用<code>lca</code>最简单的方法：先<code>DFS</code>遍历求取深度，然后根据选取两点的深度来进行：当两者深度不一样时，需要让深度大的一点向上寻根，直到两者深度一样，然后开始同时向上寻找<code>father</code>结点，直到<code>father</code>节点相同，输出答案。</p>
 <h3 id="代码如下-1">代码如下：</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
 </span><span style="color:#6272a4"></span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
@@ -482,11 +481,7 @@ vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</sp
 </code></pre></div><p>输出样例:
 在这里给出相应的输出。例如：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">6</span>
-</code></pre></div><p>        
-    <a>
-        <img src="https://img-blog.csdnimg.cn/20210615091944997.png" alt="gufangming1" width="200" height="150">
-    </a>
-思路：本题为最小生成树问题，但是不需要生成完全最小生成树，只需要在1点和n点连通时退出加边行为即可，由于最小生成树的算法每一步加完边后，最后一条边为最大值，因此只需要输出最后一条边的权值即为所求。推荐使用<code>kruskal</code>算法，但是注意并查集的优化，否则可能出现超时现象。
+</code></pre></div><p>思路：本题为最小生成树问题，但是不需要生成完全最小生成树，只需要在1点和n点连通时退出加边行为即可，由于最小生成树的算法每一步加完边后，最后一条边为最大值，因此只需要输出最后一条边的权值即为所求。推荐使用<code>kruskal</code>算法，但是注意并查集的优化，否则可能出现超时现象。
 注意：本题会出现非简单图的情况，即存在环形弧，比如1个城市，1条边，注意处理该类情况。</p>
 <h3 id="代码如下-2">代码如下：</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
@@ -587,11 +582,7 @@ M
 <p>在这里给出相应的输出。例如：</p>
 <pre tabindex="0"><code>2
 2
-</code></pre><p>
-    <a>
-        <img src="https://img-blog.csdnimg.cn/20210615093257107.png" alt="gufangming1" width="200" height="150">
-</a>
-做法：注意<code>mutliset</code>使用和数组标记。</p>
+</code></pre><p>做法：注意<code>mutliset</code>使用和数组标记。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//#pragma warning(disable:4996)
 </span><span style="color:#6272a4"></span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
 </span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
@@ -671,9 +662,14 @@ deque<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</spa
                 <hr>
                 <ul class="pager">
                     
+                    <li class="previous">
+                        <a href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E5%9B%9B%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/" data-toggle="tooltip" data-placement="top" title="JLU数据结构荣誉课——第四次上机实验">&larr;
+                            Previous Post</a>
+                    </li>
+                    
                     
                     <li class="next">
-                        <a href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E4%B8%83%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/" data-toggle="tooltip" data-placement="top" title="JLU数据结构荣誉课——第七次上机实验">Next
+                        <a href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E4%BA%8C%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/" data-toggle="tooltip" data-placement="top" title="JLU数据结构荣誉课——第二次上机实验">Next
                             Post &rarr;</a>
                     </li>
                     
@@ -697,6 +693,14 @@ deque<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</spa
                     <hr class="hidden-sm hidden-xs">
                     <h5><a href="/tags/">FEATURED TAGS</a></h5>
                     <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
                         
                         
                     </div>

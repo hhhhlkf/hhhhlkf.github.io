@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="φκι的博客">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://hhhhlkf.github.io//img/fantasy.png">
+    <meta property="twitter:image" content="https://hhhhlkf.github.io//img/fantasy.png" />
+    
+
+    
+    <meta name="title" content="JLU数据结构荣誉课——第一次上机实验" />
+    <meta property="og:title" content="JLU数据结构荣誉课——第一次上机实验" />
+    <meta property="twitter:title" content="JLU数据结构荣誉课——第一次上机实验" />
+    
+
+    
+    <meta name="description" content="第一次上机实验题解">
+    <meta property="og:description" content="第一次上机实验题解" />
+    <meta property="twitter:description" content="第一次上机实验题解" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>JLU数据结构荣誉课——第一次上机实验-LKF的博客 | LiKefan&#39;s Blog</title>
+
+    <link rel="canonical" href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hugo-theme-cleanwhite.min.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+</head>
+
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">φκι的博客</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/note">note</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3">数据结构题解</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/books/">BOOKS</a></li>
+                    
+                        <li><a href="/top/archive/">ARCHIVE</a></li>
+                    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search"><i class="fa fa-search"></i></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('https://i.loli.net/2021/09/20/TW8Cmf7EIFZhYnp.jpg')
+    }
+</style>
+
+<header class="intro-header" >
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
+                        
+                    </div>
+                    <h1>JLU数据结构荣誉课——第一次上机实验</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        
+                            Posted by 
+                            
+                                 φκι
+                             
+                            on 
+                            Monday, September 20, 2021
+                            
+                            
+                            
+                            
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>TOC</h2>
+                </header>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#jlu数据结构荣誉课第一次上机实验">JLU数据结构荣誉课——第一次上机实验</a>
+      <ul>
+        <li><a href="#一71重复计数">一、7—1重复计数</a></li>
+        <li><a href="#二7-2报数游戏">二、7-2报数游戏</a></li>
+        <li><a href="#三7-3-算术表达式计算">三、7-3 算术表达式计算</a></li>
+        <li><a href="#四7-4-最喜爱的序列">四、7-4 最喜爱的序列</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                
+                <h1 id="jlu数据结构荣誉课第一次上机实验">JLU数据结构荣誉课——第一次上机实验</h1>
+<h2 id="一71重复计数">一、7—1重复计数</h2>
+<p>在一个有限的正整数序列中，有些数会多次重复出现。请你统计每个数的出现次数， 然后按数字在序列中第一次出现的位置顺序输出数及其次数。</p>
+<p>
+  <img src="https://img-blog.csdnimg.cn/20210516194544274.png" alt="image">
+
+</p>
+<p>输入格式: 第1行，1个整数N，表示整数的个数，<code>(1≤N≤50000)</code>。</p>
+<p>第2行，N个正整数，每个整数x 都满足 <code>1 ≤ x ≤2000000000</code>。</p>
+<p>输出格式: 若干行，每行两个用一个空格隔开的数，第一个是数列中出现的数，第二个是该数在序列中出现的次数。 输入样例:</p>
+<p>在这里给出一组输入。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">12</span>
+<span style="color:#bd93f9">8</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">8</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">11</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">8</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">13</span> <span style="color:#bd93f9">13</span>
+</code></pre></div><p>输出样例:</p>
+<p>在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">8</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">1</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">13</span> <span style="color:#bd93f9">2</span>
+</code></pre></div><p>方法：</p>
+<p>这里直接推荐使用<code>C++STL</code>库中的map容器，数据在map容器中存储结构是红黑树，其操作函数中<code>find``count</code>在查找过程中均为<code>O(nlogn)</code> 不超出这道题的时间限制，且退化性不强，下面是代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;map&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">50010</span>];
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+    <span style="color:#8be9fd">int</span> n;
+    cin<span style="color:#ff79c6">&gt;&gt;</span>n;
+    map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>m;<span style="color:#6272a4">//定义map容器，key值为所给数字值，value值为所给计数值
+</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> count1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+    <span style="color:#8be9fd">int</span> n1;
+    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;i<span style="color:#ff79c6">&lt;</span>n;i<span style="color:#ff79c6">++</span>)
+    {
+        cin<span style="color:#ff79c6">&gt;&gt;</span>n1;
+        map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;::</span>iterator pos<span style="color:#ff79c6">=</span>m.find(n1);
+        <span style="color:#ff79c6">if</span>(pos<span style="color:#ff79c6">!=</span>m.end())<span style="color:#6272a4">//没有该数字
+</span><span style="color:#6272a4"></span>        {
+            pos<span style="color:#ff79c6">-&gt;</span>second<span style="color:#ff79c6">++</span>;
+        }
+        <span style="color:#ff79c6">else</span>
+        {
+            m.insert(pair<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>(n1,<span style="color:#bd93f9">1</span>));
+            a[count1<span style="color:#ff79c6">++</span>]<span style="color:#ff79c6">=</span>n1;
+        }
+    }
+    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;i<span style="color:#ff79c6">&lt;</span>count1;i<span style="color:#ff79c6">++</span>)
+    {
+        map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;::</span>iterator p0<span style="color:#ff79c6">=</span>m.find(a[i]);<span style="color:#6272a4">//查找为O(nlogn)
+</span><span style="color:#6272a4"></span>        cout<span style="color:#ff79c6">&lt;&lt;</span>a[i]<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span><span style="color:#ff79c6">&lt;&lt;</span> (<span style="color:#ff79c6">*</span>p0).second ;
+        <span style="color:#ff79c6">if</span>(i<span style="color:#ff79c6">!=</span>count1<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
+            cout<span style="color:#ff79c6">&lt;&lt;</span>endl;
+    }
+    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+
+<span style="color:#6272a4">//本题目没有使用时间复杂度较低的扫描和打印就通过了.
+</span></code></pre></div><p>评价：没有像许多同学一样，开了数组存<code>value</code>,直接存到second中不香么。</p>
+<h2 id="二7-2报数游戏">二、7-2报数游戏</h2>
+<p>
+  <img src="https://img-blog.csdnimg.cn/20210516203958460.png" alt="image">
+
+</p>
+<p>n个人围成一圈，从1开始依次编号，做报数游戏。 现指定从第1个人开始报数，报数到第m个人时，该人出圈，然后从其下一个人重新开始报数，仍是报数到第m个人出圈，如此重复下去，直到所有人都出圈。 总人数不足m时将循环报数。请输出所有人出圈的顺序。</p>
+<p>输入格式: 一行，两个整数n和m。n表示游戏的人数，m表示报数出圈的数字，<code>1≤n≤50000，1≤m≤100</code>.</p>
+<p>输出格式: 一行，<code>n</code>个用空格分隔的整数，表示所有人出圈的顺序</p>
+<p>输入样例: 在这里给出一组输入。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span>
+</code></pre></div><p>输出样例: 在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">3</span>
+</code></pre></div><p>分析：约瑟夫问题，我认为这类题用循环链表实现最为直观，每次报数报到m-1个时，跳出循环，删去节点。具体代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Node</span>
+{
+    <span style="color:#8be9fd">int</span> n;
+    Node<span style="color:#ff79c6">*</span>next;
+};
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+    <span style="color:#8be9fd">int</span> m,n;
+    cin<span style="color:#ff79c6">&gt;&gt;</span>m<span style="color:#ff79c6">&gt;&gt;</span>n;
+    <span style="color:#8be9fd">int</span> num<span style="color:#ff79c6">=</span>m;
+    Node<span style="color:#ff79c6">*</span>p<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;
+    Node<span style="color:#ff79c6">*</span>p1<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;
+    Node<span style="color:#ff79c6">*</span>head<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>,<span style="color:#ff79c6">*</span>rear<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;<span style="color:#6272a4">//用尾插法
+</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">while</span>(num<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
+    {
+        p<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> Node;
+        p<span style="color:#ff79c6">-&gt;</span>n<span style="color:#ff79c6">=</span>m<span style="color:#ff79c6">-</span>num<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+        p<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;
+        <span style="color:#ff79c6">if</span>(head<span style="color:#ff79c6">==</span><span style="color:#8be9fd;font-style:italic">NULL</span>)
+            head<span style="color:#ff79c6">=</span>rear<span style="color:#ff79c6">=</span>p;
+        <span style="color:#ff79c6">else</span>
+        {
+            rear<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span>p;
+            rear<span style="color:#ff79c6">=</span>p;
+        }
+        num<span style="color:#ff79c6">--</span>;
+    }<span style="color:#6272a4">//建立链表
+</span><span style="color:#6272a4"></span>    rear<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span>head;
+    p<span style="color:#ff79c6">=</span>head;
+    p1<span style="color:#ff79c6">=</span>rear;
+    <span style="color:#ff79c6">while</span>(p<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">!=</span>p)
+    {
+        <span style="color:#8be9fd">int</span> num1<span style="color:#ff79c6">=</span>n<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+        <span style="color:#ff79c6">while</span>(num1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
+        {
+            p1<span style="color:#ff79c6">=</span>p;
+            <span style="color:#6272a4">//cout&lt;&lt;p-&gt;n;
+</span><span style="color:#6272a4"></span>            p<span style="color:#ff79c6">=</span>p<span style="color:#ff79c6">-&gt;</span>next;
+            num1<span style="color:#ff79c6">--</span>;
+        }
+        cout<span style="color:#ff79c6">&lt;&lt;</span>p<span style="color:#ff79c6">-&gt;</span>n<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span>;
+        p1<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span>p<span style="color:#ff79c6">-&gt;</span>next;
+        <span style="color:#ff79c6">delete</span> p;
+        p<span style="color:#ff79c6">=</span>p1<span style="color:#ff79c6">-&gt;</span>next;<span style="color:#6272a4">//删除操作
+</span><span style="color:#6272a4"></span>    }
+    cout <span style="color:#ff79c6">&lt;&lt;</span>p<span style="color:#ff79c6">-&gt;</span>n;
+    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>建议：这里建议使用<code>静态链表</code>，空间缩小的同时，操作和书写较为方便。</p>
+<h2 id="三7-3-算术表达式计算">三、7-3 算术表达式计算</h2>
+<p>任务: 计算算术表达式的值。 算术表达式按中缀给出，以=号结束，包括+,-,/四种运算和(、)分隔符。运算数的范围是非负整数，没有正负符号，小于等于109 。</p>
+<p>
+  <img src="https://img-blog.csdnimg.cn/20210516204536286.png" alt="image">
+
+</p>
+<p>计算过程中,如果出现除数为0的情况,表达式的结果为”NaN” ; 如果中间结果超出32位有符号整型范围,仍按整型计算，不必特殊处理。 输入保证表达式正确。</p>
+<p>思路：使用了双栈结构，典型的大模拟，麻烦不好调，但是冗长的代码，依旧可以写的很优美。用一个栈存储符号，用另一个栈存储数据，根据优先级进行评判出栈入栈顺序。</p>
+<p>注意：这道题的测试点给的非常刁钻，注意空廓号，和单括号的处理，以及多种符号的评判。</p>
+<p>代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;stack&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdlib&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#8be9fd">bool</span> <span style="color:#50fa7b">level</span>(<span style="color:#8be9fd">char</span> <span style="color:#ff79c6">&amp;</span>ch1,<span style="color:#8be9fd">char</span> <span style="color:#ff79c6">&amp;</span>ch2);<span style="color:#6272a4">//比较优先级函数
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">givelevel</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> ch);<span style="color:#6272a4">//评级函数
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">calculate</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num1,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num2,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> operator_ch);<span style="color:#6272a4">//计算函数
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">bool</span> <span style="color:#50fa7b">checklevel</span>(<span style="color:#8be9fd">int</span> n1,<span style="color:#8be9fd">int</span> n2);<span style="color:#6272a4">//显示等级函数
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">do_calculate</span>();<span style="color:#6272a4">//单步计算函数
+</span><span style="color:#6272a4"></span>stack<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">char</span><span style="color:#ff79c6">&gt;</span>Cstack;<span style="color:#6272a4">//符号栈
+</span><span style="color:#6272a4"></span>stack<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>Istack;<span style="color:#6272a4">//数字栈
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+
+    <span style="color:#8be9fd">char</span> ch;
+    <span style="color:#8be9fd">int</span> num1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+    cin<span style="color:#ff79c6">&gt;&gt;</span>ch;
+    <span style="color:#ff79c6">while</span>(<span style="color:#bd93f9">1</span>)
+    {
+        <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">&gt;=</span><span style="color:#f1fa8c">&#39;0&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>ch<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;9&#39;</span>)
+        {
+            <span style="color:#ff79c6">while</span>(ch<span style="color:#ff79c6">&gt;=</span><span style="color:#f1fa8c">&#39;0&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>ch<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;9&#39;</span>)
+            {
+                num1<span style="color:#ff79c6">=</span>num1<span style="color:#ff79c6">*</span><span style="color:#bd93f9">10</span><span style="color:#ff79c6">+</span>(ch<span style="color:#ff79c6">-</span><span style="color:#f1fa8c">&#39;0&#39;</span>);
+                cin<span style="color:#ff79c6">&gt;&gt;</span>ch;
+            }
+        Istack.push(num1);
+        num1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+        }
+        <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">!=</span><span style="color:#f1fa8c">&#39;=&#39;</span>)
+        {
+            <span style="color:#ff79c6">if</span>(Cstack.empty())
+            {
+                 Cstack.push(ch);
+            }
+            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;)&#39;</span>)
+            {
+                <span style="color:#ff79c6">while</span>(Cstack.top()<span style="color:#ff79c6">!=</span><span style="color:#f1fa8c">&#39;(&#39;</span>)
+                {
+                    do_calculate();
+                }
+                Cstack.pop();
+            }
+            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;(&#39;</span><span style="color:#ff79c6">||</span>
+            checklevel(givelevel(ch),givelevel(Cstack.top())))
+            {
+                Cstack.push(ch);
+            }
+            <span style="color:#ff79c6">else</span>
+            {
+                <span style="color:#ff79c6">while</span>(<span style="color:#ff79c6">!</span>Cstack.empty()<span style="color:#ff79c6">&amp;&amp;</span>
+                (<span style="color:#ff79c6">!</span>checklevel(givelevel(ch),givelevel(Cstack.top()))))
+                      {
+                          do_calculate();
+                      }
+                      Cstack.push(ch);
+            }
+        }
+        <span style="color:#ff79c6">else</span>
+        {
+            <span style="color:#ff79c6">while</span>(<span style="color:#ff79c6">!</span>Cstack.empty())
+            {
+                 do_calculate();
+            }
+            <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>Istack.empty())
+            cout <span style="color:#ff79c6">&lt;&lt;</span> Istack.top();
+            <span style="color:#ff79c6">else</span>
+            cout<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#39;0&#39;</span>;
+            <span style="color:#ff79c6">break</span>;
+        }
+        cin<span style="color:#ff79c6">&gt;&gt;</span>ch;
+    }
+    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+<span style="color:#8be9fd">bool</span> <span style="color:#50fa7b">checklevel</span>(<span style="color:#8be9fd">int</span> n1,<span style="color:#8be9fd">int</span> n2)
+{
+    <span style="color:#ff79c6">if</span>(n1<span style="color:#ff79c6">&gt;</span>n2)
+        <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">true</span>;
+    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">false</span>;
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">givelevel</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> ch)
+{
+    <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;*&#39;</span><span style="color:#ff79c6">||</span>ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;/&#39;</span>)
+        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">2</span>;
+    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;+&#39;</span><span style="color:#ff79c6">||</span>ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;-&#39;</span>)
+        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">1</span>;
+        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">calculate</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num1,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num2,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> operator_ch)
+{
+    <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;*&#39;</span>)
+        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">*</span>num2;
+    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;/&#39;</span>)
+        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">/</span>num2;
+    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;+&#39;</span>)
+        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">+</span>num2;
+    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;-&#39;</span>)
+        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">-</span>num2;
+    <span style="color:#ff79c6">else</span>
+        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+}
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">do_calculate</span>()
+{
+    <span style="color:#8be9fd">char</span> ch1<span style="color:#ff79c6">=</span>Cstack.top();
+    Cstack.pop();
+    <span style="color:#8be9fd">int</span> num1<span style="color:#ff79c6">=</span>Istack.top();
+    Istack.pop();
+    <span style="color:#8be9fd">int</span> num2<span style="color:#ff79c6">=</span>Istack.top();
+    Istack.pop();
+    <span style="color:#ff79c6">if</span>(num1<span style="color:#ff79c6">==</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">&amp;&amp;</span>ch1<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;/&#39;</span>)
+    {
+        cout <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#f1fa8c">&#34;NaN&#34;</span><span style="color:#ff79c6">&lt;&lt;</span>endl;
+        exit(<span style="color:#bd93f9">0</span>);
+    }
+    <span style="color:#ff79c6">else</span>
+    Istack.push(calculate(num2,num1,ch1));
+}
+</code></pre></div><h2 id="四7-4-最喜爱的序列">四、7-4 最喜爱的序列</h2>
+<p>小唐这段时间在研究序列。拿来N个整数的序列，他给序列中的每个整数都赋予一个喜爱值。喜爱值也是整数，有正有负，越大表明越喜欢。他想知道，如何从序列中连续取最多m个数，他获得喜爱值最大。<code>1≤N≤500000，1≤m≤N</code>。 输入格式: 第一行是两个整数<code>N,m</code>。分别代表序列中数的个数以及能取的最多个数。</p>
+<p>
+  <img src="https://img-blog.csdnimg.cn/20210516205348714.png" alt="image">
+
+</p>
+<p>第二行用空格隔开的N个整数，第i个整数Li代表他对第i个数的喜爱值。<code>│Li│≤1000</code></p>
+<p>输出格式: 一行，三个数，表示获得最大喜爱值，及第一个取最大喜爱值的区间。</p>
+<p>输入样例: 在这里给出一组输入。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+</code></pre></div><p>输出样例: 在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">9</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+</code></pre></div><p>思路：一开始一看没时间了，直接暴力了，不出所料，给了60，<del>哎，要是我看错了题多好😂🤣</del>,仔细一想，并看到大佬们的做法，豁然开朗，不就是单调队列+前缀和么，维护一个前缀和序列，维护一个给定区间，让队列保持递增，即最前者所代表前缀和在给定区间最小。</p>
+<p>单调队列部分：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">while(head&lt;rear&amp;&amp;sum[i]&lt;sum[que[rear-1]])rear--;
+que[++rear]=i;
+while(que[head]&lt;i-m+1&amp;&amp;head&lt;rear)head++;
+</code></pre></div><p>代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdlib&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#8be9fd">int</span> ans[<span style="color:#bd93f9">500010</span>];
+<span style="color:#8be9fd">int</span> sum[<span style="color:#bd93f9">500010</span>];
+<span style="color:#8be9fd">int</span> que[<span style="color:#bd93f9">500010</span>];
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+    <span style="color:#8be9fd">int</span> N,m;
+    cin<span style="color:#ff79c6">&gt;&gt;</span>N<span style="color:#ff79c6">&gt;&gt;</span>m;
+<span style="color:#ff79c6">for</span>(<span style="color:#ff79c6">register</span> <span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;i<span style="color:#ff79c6">&lt;</span>N;i<span style="color:#ff79c6">++</span>)
+{
+    cin<span style="color:#ff79c6">&gt;&gt;</span>ans[i];
+    sum[i]<span style="color:#ff79c6">=</span>sum[i<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">+</span>ans[i];
+}
+<span style="color:#8be9fd">int</span> score[<span style="color:#bd93f9">3</span>]<span style="color:#ff79c6">=</span>{<span style="color:#bd93f9">0</span>};
+score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>sum[<span style="color:#bd93f9">0</span>];
+<span style="color:#8be9fd">int</span> head<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>,rear<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;</span>N;i<span style="color:#ff79c6">++</span>)
+{
+    <span style="color:#ff79c6">if</span>(score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">&lt;</span>sum[i]<span style="color:#ff79c6">-</span>sum[que[head]])
+    {
+         score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>sum[i]<span style="color:#ff79c6">-</span>sum[que[head]];
+         score[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">=</span>que[head]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+         score[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">=</span>i;
+    }<span style="color:#6272a4">//每次判断存储最大差值。
+</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">while</span>(head<span style="color:#ff79c6">&lt;</span>rear<span style="color:#ff79c6">&amp;&amp;</span>sum[i]<span style="color:#ff79c6">&lt;</span>sum[que[rear<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]])rear<span style="color:#ff79c6">--</span>;
+    que[<span style="color:#ff79c6">++</span>rear]<span style="color:#ff79c6">=</span>i;
+    <span style="color:#ff79c6">while</span>(que[head]<span style="color:#ff79c6">&lt;</span>i<span style="color:#ff79c6">-</span>m<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&amp;&amp;</span>head<span style="color:#ff79c6">&lt;</span>rear)head<span style="color:#ff79c6">++</span>;
+}
+cout<span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span><span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span><span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><h3 id="还是太菜继续努力qwq">还是太菜，继续努力qwq。</h3>
+
+
+                
+
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E4%B8%83%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/" data-toggle="tooltip" data-placement="top" title="JLU数据结构荣誉课——第七次上机实验">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE-%E7%AC%AC%E4%BA%94%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/" data-toggle="tooltip" data-placement="top" title="JLU数据结构荣誉课  第五次上机实验">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment"></div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://hbai.site/">Bai的博客</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                   
+                   <li>
+                       <a href='' rel="alternate" type="application/rss+xml" title="φκι的博客" >
+                           <span class="fa-stack fa-lg">
+                               <i class="fas fa-circle fa-stack-2x"></i>
+                               <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+                           </span>
+                       </a>
+                   </li>
+                   
+                    
+                    <li>
+                        <a href="mailto:153648356@qq.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+
+                    
+                    
+                    
+
+                    
+
+		    
+                    
+                    <li>
+                        <a target="_blank" href="/your%20wechat%20qr%20code%20image">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-weixin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/hhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.linkedin.com/in/yourlinkedinid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+		    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://stackoverflow.com/users/yourstackoverflowid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+            
+                    
+                    
+                    
+            
+            
+            
+                </ul>
+		<p class="copyright text-muted">
+                    Copyright &copy; φκι的博客 2021
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> by <a href="https://zhaohuabing.com">Huabing</a> |
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="100px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=zhaohuabing&repo=hugo-theme-cleanwhite&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function loadAsync(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if($('#tag_cloud').length !== 0){
+        loadAsync("/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    loadAsync("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on φκι的博客</title>
-    <link>https://hhhhlkf.github.io/post/</link>
-    <description>Recent content in Posts on φκι的博客</description>
+    <title>数据结构题解 on φκι的博客</title>
+    <link>https://hhhhlkf.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3/</link>
+    <description>Recent content in 数据结构题解 on φκι的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://hhhhlkf.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://hhhhlkf.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>JLU数据结构荣誉课  第五次上机实验</title>
       <link>https://hhhhlkf.github.io/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE-%E7%AC%AC%E4%BA%94%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/</link>
@@ -127,15 +127,6 @@ f(n) = f(n-1)*11/10，f[1]=10. 通项从左向右计算，*和/分别表示整�
 2 作者 谷方明 单位 吉林大学 代码长度限制 16 KB 时间限制 200 ms 内存限制 10 MB
 思路：利用并查集，最后统计并查集个数，及father数组中存的值依旧为零的元素，得到答案。
 #include&amp;lt;cstdio&amp;gt;using namespace std; int father[100001]; int find(int v) { if (father[v] == 0) return v; else return find(father[v]); } void Union(int x,int y) { int fx = find(x); int fy = find(y); if (fx !</description>
-    </item>
-    
-    <item>
-      <title>模拟退火算法</title>
-      <link>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</link>
-      <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</guid>
-      <description>啥都没有就是玩</description>
     </item>
     
   </channel>
