@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on φκι的博客</title>
+    <link>https://hhhhlkf.github.io/post/</link>
+    <description>Recent content in Posts on φκι的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 20 Sep 2021 10:35:59 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>JLU数据结构荣誉课  第五次上机实验</title>
+      <link>https://hhhhlkf.github.io/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE-%E7%AC%AC%E4%BA%94%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/</link>
+      <pubDate>Mon, 20 Sep 2021 10:35:59 +0800</pubDate>
+      
+      <guid>https://hhhhlkf.github.io/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE-%E7%AC%AC%E4%BA%94%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/</guid>
+      <description>JLU数据结构荣誉课——第五次上机实验 7-1 图的深度优先搜索I (100 分) 无向图 G 有 n 个顶点和 m 条边。求图G的深度优先搜索树(森林)以及每个顶点的发现时间和完成时间。每个连通分量从编号最小的结点开始搜索，邻接顶点选择顺序遵循边的输入顺序。
+在搜索过程中，第一次遇到一个结点，称该结点被发现；一个结点的所有邻接结点都搜索完，该结点的搜索被完成。深度优先搜索维护一个时钟，时钟从0开始计数，结点被搜索发现或完成时，时钟计数增1，然后为当前结点盖上时间戳。一个结点被搜索发现和完成的时间戳分别称为该结点的发现时间和完成时间。
+输入格式: 第1行，2个整数n和m，用空格分隔，分别表示顶点数和边数， 1≤n≤50000， 1≤m≤100000.
+第2到m+1行，每行两个整数u和v，用空格分隔，表示顶点u到顶点v有一条边，u和v是顶点编号，1≤u,v≤n.
+输出格式: 第1到n行，每行两个整数di和fi，用空格分隔，表示第i个顶点的发现时间和完成时间1≤i≤n 。
+第n+1行，1个整数 k ，表示图的深度优先搜索树(森林)的边数。
+第n+2到n+k+1行，每行两个整数u和v,表示深度优先搜索树(森林)的一条边&amp;lt;u,v&amp;gt;，边的输出顺序按 v 结点编号从小到大。 作者 : 谷方明 单位: 吉林大学 代码长度限制:16 KB 时间限制:200 ms 内存限制:10 MB
+输入样例: 在这里给出一组输入。例如：
+6 5 1 3 1 2 2 3 4 5 5 6 输出样例: 在这里给出相应的输出。例如：
+1 6 3 4 2 5 7 12 8 11 9 10 4 3 2 1 3 4 5 5 6 思路：==题目要看懂==。 1.</description>
+    </item>
+    
+    <item>
+      <title>模拟退火算法</title>
+      <link>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Mon, 20 Sep 2021 10:32:34 +0800</pubDate>
+      
+      <guid>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
