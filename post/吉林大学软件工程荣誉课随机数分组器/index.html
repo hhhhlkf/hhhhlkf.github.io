@@ -242,6 +242,7 @@
                 <nav id="TableOfContents"></nav>
 
 
+
                 <div class="random-group">
                     <div id="app">{{ message }}
                     </div>
@@ -397,20 +398,23 @@
                                             m.set(newPoint, Math.ceil(size / numSper.value));
                                         }
                                     }
-                                    console.log(m);
+                                    // console.log(m);
                                     count.value = 0;
+                                    // console.log(name);
+                                    let length = divideGroup.length;
                                     if (divideGroup.size != 0) {
-                                        divideGroup.splice(0, numAll.value);
-                                        name.splice(0, numAll.value);
+                                        divideGroup.splice(0, length);
+                                        name.splice(0, length);
                                     }
+                                    // console.log(name);
                                     m.forEach(function (value, key) {
                                         name.push(key);
                                         divideGroup.push(value);
                                         count.value++;
                                     });
-                                    console.log(name);
+                                    // console.log(name);
                                     flag.value = true;
-
+                                    // console.log("numAll:" + numAll.value);
 
                                 }
                                 return {
@@ -430,7 +434,6 @@
                         app1.mount("#rbk");
                     </script>
                 </div>
-
 
                 <hr>
                 <ul class="pager">
