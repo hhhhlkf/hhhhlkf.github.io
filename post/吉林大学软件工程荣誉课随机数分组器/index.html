@@ -55,11 +55,7 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
 
 
-    <script src="https://unpkg.com/vue@3"></script>
-    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
-    <script src="//unpkg.com/element-plus"></script>
-    <script type="text/javascript" src="/random.js"></script>
-    <script type="text/javascript" src="/mersenne-twister.js"></script>
+
 
 
 
@@ -82,7 +78,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
-
+    <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <script src="//unpkg.com/element-plus"></script>
+    <script type="text/javascript" src="/js/random.js"></script>
+    <script type="text/javascript" src="/js/mersenne-twister.js"></script>
 </head>
 
 
@@ -261,8 +261,8 @@
                         </div>
                         <div id='infinite'>
                             <el-scrollbar v-if="flag" height="38ch">
-                                <p v-for="index in count" :key="index" class="scrollbar-demo-item">{{ name[index]
-                                    }}号同学分到了{{divideGroup[index]}}组</p>
+                                <p v-for="index in count" :key="index" class="scrollbar-demo-item">{{ name[index-1]
+                                    }}号同学分到了{{divideGroup[index-1]}}组</p>
                             </el-scrollbar>
 
                         </div>
