@@ -346,6 +346,7 @@
             app.use(ElementPlus);
             app.mount('#app');
             const app1 = createApp({
+                delimiters: ["[[", "]]"],
                 setup() {
                     const numAll = ref(1);
                     const numSper = ref(1);
