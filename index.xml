@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Linexus的博客</title>
+    <title>Linexus blog</title>
     <link>https://hhhhlkf.github.io/</link>
-    <description>Recent content on Linexus的博客</description>
+    <description>Recent content on Linexus blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 07 Jan 2023 09:28:55 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/index.xml" rel="self" type="application/rss+xml" />
