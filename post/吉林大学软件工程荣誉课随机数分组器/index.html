@@ -52,6 +52,14 @@
     
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
 
+
+  
+    <script src="//unpkg.com/element-plus"></script>
+    <script type="text/javascript" src="/js/random.js"></script>
+    <script type="text/javascript" src="/js/mersenne-twister.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <script src="//unpkg.com/element-plus"></script>
     
     
 
@@ -222,8 +230,197 @@
                 <nav id="TableOfContents"></nav>
                 
                 <div>
-    <iframe src="../random-group.html" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" loading="lazy">
-    </iframe>
+    
+    <div class="random-group">
+        <div id="app">${ message }
+        </div>
+        <div id="rbk">
+            <div class='input-num'>
+                <span>请输入总共人数：</span>
+                <el-input-number v-model="numAll" :min="1" :max="210000000" @change="handleChangeAll" size="large" />
+            </div>
+            <div class='input-num'>
+                <span>请输入每组人数：</span>
+                <el-input-number v-model="numSper" :min="1" :max="210000000" @change="handleChangeSper" size="large" />
+            </div>
+            <div id="start-button">
+                <el-button id="start" @click="getStart">随机分组开始</el-button>
+            </div>
+            <div id='infinite'>
+                <el-scrollbar v-if="flag" height="38ch">
+                    <p v-for="index in count" :key="index" class="scrollbar-demo-item">${ name[index-1]
+                        }$号同学分到了${divideGroup[index-1]}组</p>
+                </el-scrollbar>
+
+            </div>
+        </div>
+        <style>
+            #app {
+                text-align: center;
+                font-family: -apple-system, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", STHeiti, "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun, sans-serif;
+                line-height: 1.1;
+                font-weight: 700;
+                font-size: 36px;
+            }
+
+            #rbk {
+                height: 64ch;
+                width: 80ch;
+                margin: 0 auto;
+                border: 2px solid #282A36;
+                border-radius: 2ch;
+            }
+
+            .input-num {
+                font-family: -apple-system, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", STHeiti, "Microsoft YaHei", "Microsoft JhengHei", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "WenQuanYi Micro Hei", SimSun, sans-serif;
+                line-height: 1.7;
+                line-height: 1.1;
+                font-weight: 700;
+                margin: 20px auto;
+                width: 30ch;
+                font-size: 24px;
+            }
+
+            .el-input-number__increase:hover {
+                --el-color-primary: #4F66ED;
+            }
+
+            .infinite-list {
+                height: 300px;
+                padding: 0;
+                margin: 0;
+                list-style: none;
+            }
+
+            .scrollbar-demo-item {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 50px;
+                background: #d3daff;
+                margin: 10px;
+                color: #4F66ED;
+                border-radius: 5px;
+            }
+
+            .infinite-list .infinite-list-item+.list-item {
+                margin-top: 10px;
+            }
+
+            #start-button {
+                margin: 0 auto;
+                width: 15ch;
+            }
+
+            #infinite {
+                 
+                margin: 15px auto;
+            }
+
+            #start {
+                width: 15ch;
+            }
+
+            .el-button:focus,
+            .el-button:hover {
+                --el-button-hover-text-color: #4F66ED;
+                --el-button-hover-bg-color: #b4bfff;
+                --el-button-hover-border-color: #4F66ED;
+                --el-button-active-border-color: #4F66ED;
+            }
+        </style>
+
+        <script type="text/javascript">
+            const { createApp, ref, reactive } = Vue
+            const App = {
+                delimiters: ['${', '}'],
+                
+                setup(props) {
+                    let message = "数据发生器";
+                    return {
+                        message
+                    }
+                }
+            };
+            const app = Vue.createApp(App);
+            app.use(ElementPlus);
+            app.mount('#app');
+            const app1 = createApp({
+                setup() {
+                    const numAll = ref(1);
+                    const numSper = ref(1);
+                    const count = ref(1);
+                    const flag = ref(false);
+                    
+                    let divideGroup = reactive([]);
+                    let name = reactive([]);
+                    const handleChangeAll = (value) => {
+                        flag.value = false;
+                        if (value < numSper.value) {
+                            numSper.value = value;
+                        }
+                    }
+                    const handleChangeSper = (value) => {
+                        
+                        
+                        flag.value = false;
+                        setTimeout(() => {
+                            if (value > numAll.value)
+                                numSper.value = numAll.value;
+                        }, 5);
+                    }
+                    const getStart = () => {
+                        
+                        random.primNum(numAll.value);
+                        const m = new Map();
+                        while (numAll.value % numSper.value != 0) {
+                            numSper.value--;
+                        }
+                        let group = numAll.value / numSper.value;
+                        let size = m.size;
+                        while (m.size != numAll.value) {
+                            let newPoint = Math.floor((Math.abs(random.normal(0, 1) * 19260817))) % numAll.value + 1;
+                            if (!m.has(newPoint)) {
+                                size++;
+                                m.set(newPoint, Math.ceil(size / numSper.value));
+                            }
+                        }
+                        
+                        count.value = 0;
+                        
+                        let length = divideGroup.length;
+                        if (divideGroup.size != 0) {
+                            divideGroup.splice(0, length);
+                            name.splice(0, length);
+                        }
+                        
+                        m.forEach(function (value, key) {
+                            name.push(key);
+                            divideGroup.push(value);
+                            count.value++;
+                        });
+                        
+                        flag.value = true;
+                        
+
+                    }
+                    return {
+                        numAll,
+                        numSper,
+                        handleChangeAll,
+                        handleChangeSper,
+                        count,
+                        flag,
+                        getStart,
+                        divideGroup,
+                        name
+                    }
+                }
+            });
+            app1.use(ElementPlus);
+            app1.mount("#rbk");
+        </script>
+    </div>
 </div>
 
 
