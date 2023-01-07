@@ -13,7 +13,7 @@
       <pubDate>Sun, 11 Sep 2022 00:00:00 +0000</pubDate>
       
       <guid>https://hhhhlkf.github.io/post/%E5%90%89%E6%9E%97%E5%A4%A7%E5%AD%A6%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E8%8D%A3%E8%AA%89%E8%AF%BE%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%88%86%E7%BB%84%E5%99%A8/</guid>
-      <description>${ message }请输入总共人数：请输入每组人数：随机分组开始${ name[index-1]}$号同学分到了${divideGroup[index-1]}组
+      <description>${ message }请输入总共人数：请输入每组人数：随机分组开始${name[index-1]}号同学分到了${divideGroup[index-1]}组
 #app {text-align: center;font-family: -apple-system, &#34;Helvetica Neue&#34;, Arial, &#34;PingFang SC&#34;, &#34;Hiragino Sans GB&#34;, STHeiti, &#34;Microsoft YaHei&#34;, &#34;Microsoft JhengHei&#34;, &#34;Source Han Sans SC&#34;, &#34;Noto Sans CJK SC&#34;, &#34;Source Han Sans CN&#34;, &#34;Noto Sans SC&#34;, &#34;Source Han Sans TC&#34;, &#34;Noto Sans CJK TC&#34;, &#34;WenQuanYi Micro Hei&#34;, SimSun, sans-serif;line-height: 1.1;font-weight: 700;font-size: 36px;}#rbk {height: 64ch;width: 80ch;margin: 0 auto;border: 2px solid #282A36;border-radius: 2ch;}.</description>
     </item>
     
