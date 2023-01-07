@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    <meta property="og:site_name" content="Linexus的博客">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://hhhhlkf.github.io//img/fantasy.png">
+    <meta property="twitter:image" content="https://hhhhlkf.github.io//img/fantasy.png" />
+    
+
+    
+    <meta name="title" content="JLU数据结构荣誉课——第五次上机实验" />
+    <meta property="og:title" content="JLU数据结构荣誉课——第五次上机实验" />
+    <meta property="twitter:title" content="JLU数据结构荣誉课——第五次上机实验" />
+    
+
+    
+    <meta name="description" content="第五次上机实验题解">
+    <meta property="og:description" content="第五次上机实验题解" />
+    <meta property="twitter:description" content="第五次上机实验题解" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>JLU数据结构荣誉课——第五次上机实验-LKF的博客 | Linexus&#39;s Blog</title>
+
+    <link rel="canonical" href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E4%BA%94%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    <link rel="stylesheet" href="/css/hugo-theme-cleanwhite.min.css">
+
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+
+  
+    <script src="//unpkg.com/element-plus"></script>
+    <script type="text/javascript" src="/js/random.js"></script>
+    <script type="text/javascript" src="/js/mersenne-twister.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <script src="//unpkg.com/element-plus"></script>
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+    
+
+
+</head>
+
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Linexus的博客</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/music">music</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/categories/post">post</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/books/">BOOKS</a></li>
+                    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+                        <li><a href="/top/photos/">PHOTOS</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="/search"><i class="fa fa-search"></i></a>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('https://i.loli.net/2021/09/30/VPTDoEmuZRQyfNe.jpg')
+    }
+</style>
+
+<header class="intro-header" >
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
+                        
+                    </div>
+                    <h1>JLU数据结构荣誉课——第五次上机实验</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        
+                            Posted by 
+                            
+                                 φκι
+                             
+                            on 
+                            Monday, September 20, 2021
+                            
+                            
+                            
+                            
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <header>
+                    <h2>TOC</h2>
+                </header>
+                <nav id="TableOfContents">
+  <ul>
+    <li><a href="#jlu数据结构荣誉课第五次上机实验">JLU数据结构荣誉课——第五次上机实验</a>
+      <ul>
+        <li><a href="#7-1-图的深度优先搜索i-100-分">7-1 图的深度优先搜索I (100 分)</a></li>
+        <li><a href="#7-2-圆-100-分">7-2 圆 (100 分)</a></li>
+        <li><a href="#7-3-供电-100-分">7-3 供电 (100 分)</a></li>
+        <li><a href="#7-4-发红包-100-分">7-4 发红包 (100 分)</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                
+                <h1 id="jlu数据结构荣誉课第五次上机实验">JLU数据结构荣誉课——第五次上机实验</h1>
+<h2 id="7-1-图的深度优先搜索i-100-分">7-1 图的深度优先搜索I (100 分)</h2>
+<p>无向图 G 有 n 个顶点和 m 条边。求图G的深度优先搜索树(森林)以及每个顶点的发现时间和完成时间。每个连通分量从编号最小的结点开始搜索，邻接顶点选择顺序遵循边的输入顺序。</p>
+<p>在搜索过程中，第一次遇到一个结点，称该结点被发现；一个结点的所有邻接结点都搜索完，该结点的搜索被完成。深度优先搜索维护一个时钟，时钟从0开始计数，结点被搜索发现或完成时，时钟计数增1，然后为当前结点盖上时间戳。一个结点被搜索发现和完成的时间戳分别称为该结点的发现时间和完成时间。</p>
+<h3 id="输入格式">输入格式:</h3>
+<p>第1行，2个整数n和m，用空格分隔，分别表示顶点数和边数， 1≤n≤50000， 1≤m≤100000.</p>
+<p>第2到m+1行，每行两个整数u和v，用空格分隔，表示顶点u到顶点v有一条边，u和v是顶点编号，1≤u,v≤n.</p>
+<h3 id="输出格式">输出格式:</h3>
+<p>第1到n行，每行两个整数di和fi，用空格分隔，表示第i个顶点的发现时间和完成时间1≤i≤n 。</p>
+<p>第n+1行，1个整数 k ，表示图的深度优先搜索树(森林)的边数。</p>
+<p>第n+2到n+k+1行，每行两个整数u和v,表示深度优先搜索树(森林)的一条边&lt;u,v&gt;，边的输出顺序按 v 结点编号从小到大。 <br>
+<kbd>作者 :  谷方明
+单位:  吉林大学
+代码长度限制:16 KB
+时间限制:200 ms
+内存限制:10 MB</p>
+<h3 id="输入样例">输入样例:</h3>
+<p>在这里给出一组输入。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">6</span> <span style="color:#bd93f9">5</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span>
+<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span>
+<span style="color:#bd93f9">5</span> <span style="color:#bd93f9">6</span>
+</code></pre></div><h3 id="输出样例">输出样例:</h3>
+<p>在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">6</span>
+<span style="color:#bd93f9">3</span> <span style="color:#bd93f9">4</span>
+<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">5</span>
+<span style="color:#bd93f9">7</span> <span style="color:#bd93f9">12</span>
+<span style="color:#bd93f9">8</span> <span style="color:#bd93f9">11</span>
+<span style="color:#bd93f9">9</span> <span style="color:#bd93f9">10</span>
+<span style="color:#bd93f9">4</span>
+<span style="color:#bd93f9">3</span> <span style="color:#bd93f9">2</span>
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span>
+<span style="color:#bd93f9">5</span> <span style="color:#bd93f9">6</span>
+</code></pre></div><p>思路：==题目要看懂==。
+1.每个连通分量要从最小的边开始：开循环从i=1开始DFS;
+2.在搜索过程中，第一次遇到一个结点，称该结点被发现；一个结点的所有邻接结点都搜索完，该结点的搜索被完成：就是在进入DFS后另开始时间戳dfn[v]为++top，在该点DFS完全结束后令Last[v]=++top，最后统一输出就行。
+3.第n+2到n+k+1行，每行两个整数u和v,表示深度优先搜索树(森林)的一条边&lt;u,v&gt;，边的输出顺序按 v 结点编号从小到大：利用sort函数将结构体数组排序，重载比较符号。</p>
+<h3 id="代码如下">代码如下：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;stack&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;algorithm&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>mp[<span style="color:#bd93f9">100001</span>];
+<span style="color:#8be9fd">int</span> visited[<span style="color:#bd93f9">100001</span>];
+<span style="color:#8be9fd">int</span> dfn[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//开始时间戳
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> Last[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//结束时间戳
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> top <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;<span style="color:#6272a4">//时间戳计数器
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> top1 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;<span style="color:#6272a4">//边数计数器，与e数组配套
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">edge</span>
+{
+	<span style="color:#8be9fd">int</span> u;
+	<span style="color:#8be9fd">int</span> v;
+	<span style="color:#8be9fd">bool</span> <span style="color:#ff79c6">operator</span><span style="color:#ff79c6">&lt;</span>(<span style="color:#ff79c6">const</span> <span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">edge</span><span style="color:#ff79c6">&amp;</span>a)<span style="color:#ff79c6">const</span>
+	{
+		<span style="color:#ff79c6">return</span> v <span style="color:#ff79c6">&lt;</span> a.v;
+	}
+}e[<span style="color:#bd93f9">100001</span>];
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">DFS</span>(<span style="color:#8be9fd">int</span> v)
+{
+	<span style="color:#ff79c6">if</span> (visited[v])<span style="color:#ff79c6">return</span>;
+	<span style="color:#ff79c6">else</span>
+	{
+		visited[v] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+		dfn[v] <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">++</span>top;<span style="color:#6272a4">//开始时间戳
+</span><span style="color:#6272a4"></span>		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> mp[v].size(); i<span style="color:#ff79c6">++</span>)
+		{
+			<span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> mp[v][i];
+			<span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>visited[k])
+			{
+				e[<span style="color:#ff79c6">++</span>top1].u <span style="color:#ff79c6">=</span> v;
+				e[top1].v <span style="color:#ff79c6">=</span> k;<span style="color:#6272a4">//存到边数组以供最后边的输出
+</span><span style="color:#6272a4"></span>				DFS(k);
+			}	
+		}
+		Last[v] <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">++</span>top;<span style="color:#6272a4">//结束时间戳
+</span><span style="color:#6272a4"></span>	}
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> m, n;
+	scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m, <span style="color:#ff79c6">&amp;</span>n);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> from, to;
+		scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>from, <span style="color:#ff79c6">&amp;</span>to);
+		mp[from].push_back(to);
+		mp[to].push_back(from);
+	}<span style="color:#6272a4">//建图
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
+		DFS(i);<span style="color:#6272a4">//循环DFS
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
+	{
+		printf(<span style="color:#f1fa8c">&#34;%d %d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, dfn[i], Last[i]);
+	}<span style="color:#6272a4">//打印时间戳
+</span><span style="color:#6272a4"></span>	printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, top1);
+	sort(e <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, e <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">+</span> top1);<span style="color:#6272a4">//后边排序
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> top1; i<span style="color:#ff79c6">++</span>)
+	{
+		printf(<span style="color:#f1fa8c">&#34;%d %d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, e[i].u, e[i].v);
+	}
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p><del>反思：我觉得这题难点在读题。</del></p>
+<h2 id="7-2-圆-100-分">7-2 圆 (100 分)</h2>
+<p>二维平面上有n 个圆。请统计：这些圆形成的不同的块的数目。</p>
+<p>圆形成的块定义如下：
+（1）一个圆是一个块；
+（2）若两个块有公共部分（含相切），则这两个块形成一个新的块，否则还是两个不同的块。</p>
+<h3 id="输入格式-1">输入格式:</h3>
+<p>第1行包括一个整数n，表示圆的数目，<code>n&lt;=8000</code>。</p>
+<p>第2到n+1行，每行3 个用空格隔开的数x，y，r。（x，y）是圆心坐标，r 是半径。所有的坐标及半径都是不大于30000 的非负整数。</p>
+<h3 id="输出格式-1">输出格式:</h3>
+<p>1个整数，表示形成的块的数目。</p>
+<h3 id="输入样例-1">输入样例:</h3>
+<p>在这里给出一组输入。例如：</p>
+<pre tabindex="0"><code>2
+0 0 1
+1 0 2
+</code></pre><h3 id="输出样例-1">输出样例:</h3>
+<p>在这里给出相应的输出。例如：</p>
+<pre tabindex="0"><code>1
+</code></pre><p><kbd>作者：谷方明
+单位：吉林大学
+代码长度限制：16 KB
+时间限制：500 ms
+内存限制：5 MB</p>
+<p>思路：并查集为最优解，每输入一个⚪就和前面的⚪判断是否相交或者相切，如果father不同，就Union两者，这时不能break，因为每个⚪可以和多个⚪相交，而将多个块连成一个块。</p>
+<h3 id="代码如下-1">代码如下：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;algorithm&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">circle</span>
+{
+	<span style="color:#8be9fd">int</span> x;
+	<span style="color:#8be9fd">int</span> y;
+	<span style="color:#8be9fd">int</span> r;
+}c[<span style="color:#bd93f9">10000</span>];
+vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>mp[<span style="color:#bd93f9">10000</span>];
+<span style="color:#8be9fd">int</span> father[<span style="color:#bd93f9">10000</span>];
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">find</span>(<span style="color:#8be9fd">int</span> v)
+{
+	<span style="color:#ff79c6">if</span> (father[v] <span style="color:#ff79c6">==</span> v)
+		<span style="color:#ff79c6">return</span> v;
+	<span style="color:#ff79c6">else</span>
+		<span style="color:#ff79c6">return</span> find(father[v]);
+}<span style="color:#6272a4">//找代表元
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Union</span>(<span style="color:#8be9fd">int</span> x,<span style="color:#8be9fd">int</span> y)
+{
+	<span style="color:#8be9fd">int</span> fx <span style="color:#ff79c6">=</span> find(x);
+	<span style="color:#8be9fd">int</span> fy <span style="color:#ff79c6">=</span> find(y);
+	<span style="color:#ff79c6">if</span> (fx <span style="color:#ff79c6">!=</span> fy)
+    {
+       father[fx] <span style="color:#ff79c6">=</span> fy;
+    }
+}<span style="color:#6272a4">//合并算法
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> m;
+	scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m);
+	scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>c[<span style="color:#bd93f9">1</span>].x, <span style="color:#ff79c6">&amp;</span>c[<span style="color:#bd93f9">1</span>].y, <span style="color:#ff79c6">&amp;</span>c[<span style="color:#bd93f9">1</span>].r);
+	father[<span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>c[i].x, <span style="color:#ff79c6">&amp;</span>c[i].y, <span style="color:#ff79c6">&amp;</span>c[i].r);
+		father[i] <span style="color:#ff79c6">=</span> i;
+		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> i<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>; j <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">1</span>; j<span style="color:#ff79c6">--</span>)
+		{
+			<span style="color:#ff79c6">if</span> ((<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span>)(c[i].r <span style="color:#ff79c6">+</span> c[j].r)<span style="color:#ff79c6">*</span>(c[i].r <span style="color:#ff79c6">+</span> c[j].r) <span style="color:#ff79c6">&gt;=</span>
+			 (<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span>)((c[i].x <span style="color:#ff79c6">-</span> c[j].x)<span style="color:#ff79c6">*</span>(c[i].x <span style="color:#ff79c6">-</span> c[j].x) <span style="color:#ff79c6">+</span> 
+			 (c[i].y <span style="color:#ff79c6">-</span> c[j].y)<span style="color:#ff79c6">*</span>(c[i].y <span style="color:#ff79c6">-</span> c[j].y)))<span style="color:#6272a4">//这里要强制类型转换要不然某个10的样例点过不去。
+</span><span style="color:#6272a4"></span>			{
+				Union(j, i);
+			}
+		}
+	}<span style="color:#6272a4">//一边循环一边插入判断。
+</span><span style="color:#6272a4"></span>	<span style="color:#8be9fd">int</span> count1 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#ff79c6">if</span> (father[i] <span style="color:#ff79c6">==</span> i)count1<span style="color:#ff79c6">++</span>;
+	}
+	printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, count1);
+		<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>反思：注意long long。</p>
+<h2 id="7-3-供电-100-分">7-3 供电 (100 分)</h2>
+<p>要给N个地区供电。每个地区或者建一个供电站，或者修一条线道连接到其它有电的地区。试确定给N个地区都供上电的最小费用。</p>
+<h3 id="输入格式-2">输入格式:</h3>
+<p>第1行，两个个整数 N 和 M , 用空格分隔，分别表示地区数和修线路的方案数，<code>1≤N≤10000</code>，<code>0≤M≤50000</code>。</p>
+<p>第2行，包含N个用空格分隔的整数P[i]，表示在第i个地区建一个供电站的代价，<code>1 ≤P[i]≤ 100,000</code>，<code>1≤i≤N</code> 。</p>
+<p>接下来M行，每行3个整数a、b和c，用空格分隔，表示在地区a和b之间修一条线路的代价为c，<code>1 ≤ c ≤ 100,000</code>，<code>1≤a,b≤N</code> 。</p>
+<h3 id="输出格式-2">输出格式:</h3>
+<p>一行，包含一个整数， 表示所求最小代价。</p>
+<p>输入样例:
+在这里给出一组输入。例如：</p>
+<pre tabindex="0"><code>4 6
+5 4 4 3
+1 2 2
+1 3 2
+1 4 2
+2 3 3
+2 4 3
+3 4 4
+</code></pre><h3 id="输出样例-2">输出样例:</h3>
+<p>在这里给出相应的输出。例如：</p>
+<pre tabindex="0"><code>9
+</code></pre><p><kbd>作者：谷方明
+单位：吉林大学
+代码长度限制：16 KB
+时间限制：500 ms
+内存限制：10 MB</p>
+<p>思路：本题很显然是一道最小生成树问题，但是即存在边权又存在点权，所以我们要将n个点的点权都转换成边权，然后再采用最小生成树的算法来得到支撑子树，然后将每条边权相加(仅需要遍历)，得到结果。建议使用prim的堆优化或者是kruskal算法，反正我的非堆优化Prim算法O(n^2^)没有过。🙃</p>
+<h4 id="代码如下-2">代码如下：</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#6272a4">//用的是kruskal算法，建立边表。
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;algorithm&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#ff79c6">typedef</span> <span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Edge</span>
+{
+	<span style="color:#8be9fd">int</span> from;
+	<span style="color:#8be9fd">int</span> to;
+	<span style="color:#8be9fd">int</span> value;
+	<span style="color:#8be9fd">bool</span> <span style="color:#ff79c6">operator</span> <span style="color:#ff79c6">&lt;</span> (<span style="color:#ff79c6">const</span> <span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Edge</span> <span style="color:#ff79c6">&amp;</span>a)<span style="color:#ff79c6">const</span>
+	{
+		<span style="color:#ff79c6">return</span> value <span style="color:#ff79c6">&lt;</span> a.value;
+	}<span style="color:#6272a4">//重载比较函数，因为要对边进行排序。
+</span><span style="color:#6272a4"></span>}edge;
+edge Vertex[<span style="color:#bd93f9">100001</span>];
+<span style="color:#8be9fd">int</span> father[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//用到并查集
+</span><span style="color:#6272a4"></span>edge TE[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//存最小生成树的边，其实可以开成数组，
+</span><span style="color:#6272a4">//我写的模板原本是这样写的
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> top <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;<span style="color:#6272a4">//TE配套的计数器
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">find1</span>(<span style="color:#8be9fd">int</span> v)
+{
+	<span style="color:#ff79c6">if</span> (father[v] <span style="color:#ff79c6">==</span> v)
+		<span style="color:#ff79c6">return</span> v;
+	<span style="color:#ff79c6">return</span> find1(father[v]);
+}<span style="color:#6272a4">//寻找代表元
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Union</span>(<span style="color:#8be9fd">int</span> x, <span style="color:#8be9fd">int</span> y)
+{
+	<span style="color:#8be9fd">int</span> fx <span style="color:#ff79c6">=</span> find1(x);
+	<span style="color:#8be9fd">int</span> fy <span style="color:#ff79c6">=</span> find1(y);
+	<span style="color:#ff79c6">if</span> (fx <span style="color:#ff79c6">!=</span> fy)
+		father[fy] <span style="color:#ff79c6">=</span> fx;
+}<span style="color:#6272a4">//合并
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> m, n;
+	scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m, <span style="color:#ff79c6">&amp;</span>n);
+	<span style="color:#6272a4">//建表
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>Vertex[i].value);
+		Vertex[i].from <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+		Vertex[i].to <span style="color:#ff79c6">=</span> i;
+	}<span style="color:#6272a4">//将虚结点的边放到边表里面
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> m<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n<span style="color:#ff79c6">+</span>m; i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>Vertex[i].from, 
+		<span style="color:#ff79c6">&amp;</span>Vertex[i].to, <span style="color:#ff79c6">&amp;</span>Vertex[i].value);
+	}<span style="color:#6272a4">//将正常边放到边表里面
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
+	{
+		father[i] <span style="color:#ff79c6">=</span> i;
+	}
+	<span style="color:#6272a4">//kruskal核心算法
+</span><span style="color:#6272a4"></span>	sort(Vertex <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, Vertex<span style="color:#ff79c6">+</span>n<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">+</span>m);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n<span style="color:#ff79c6">+</span>m; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> from <span style="color:#ff79c6">=</span> Vertex[i].from;
+		<span style="color:#8be9fd">int</span> to <span style="color:#ff79c6">=</span> Vertex[i].to;
+		<span style="color:#ff79c6">if</span> (find1(from) <span style="color:#ff79c6">!=</span> find1(to))
+		{
+			TE[<span style="color:#ff79c6">++</span>top] <span style="color:#ff79c6">=</span> Vertex[i];<span style="color:#6272a4">//找到合适的边，然后记到TE边表中
+</span><span style="color:#6272a4"></span>			Union(from, to);<span style="color:#6272a4">//合并
+</span><span style="color:#6272a4"></span>		}
+	}<span style="color:#6272a4">//就这么一点点
+</span><span style="color:#6272a4"></span>	<span style="color:#8be9fd">int</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> top; i<span style="color:#ff79c6">++</span>)
+	{
+		sum <span style="color:#ff79c6">+=</span> TE[i].value;
+	}
+	printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, sum);
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>下面是Prim算法非堆优化(70分的)，也是书上二维码的模板的改编:</p>
+<h4 id="代码如下-3">代码如下：</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;stack&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Edge</span>
+{
+	<span style="color:#8be9fd">int</span> VerAdj;
+	Edge<span style="color:#ff79c6">*</span> link;
+	<span style="color:#8be9fd">int</span> value;
+};
+<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Vertex</span>
+{
+	<span style="color:#8be9fd">int</span> VerName;
+	Edge <span style="color:#ff79c6">*</span>adjacement;
+};
+<span style="color:#ff79c6">class</span> <span style="color:#50fa7b">Graph_list</span>
+{
+<span style="color:#ff79c6">private</span><span style="color:#ff79c6">:</span>
+	Vertex<span style="color:#ff79c6">*</span> head;
+	<span style="color:#8be9fd">int</span> graphsize;
+<span style="color:#ff79c6">public</span><span style="color:#ff79c6">:</span>
+	Graph_list();
+	<span style="color:#ff79c6">~</span>Graph_list();
+	<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Prim</span>();
+	<span style="color:#8be9fd">int</span> visited[<span style="color:#bd93f9">100001</span>];
+	<span style="color:#8be9fd">int</span> vex[<span style="color:#bd93f9">100001</span>];
+	<span style="color:#8be9fd">int</span> Lowcost[<span style="color:#bd93f9">100001</span>];
+	<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> MAX <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2100000000</span>;
+};
+Graph_list G;<span style="color:#6272a4">//创建对象
+</span><span style="color:#6272a4"></span>Graph_list<span style="color:#ff79c6">::</span>Graph_list()<span style="color:#6272a4">//图为有向图邻接表示法，无向图就把注释去掉
+</span><span style="color:#6272a4"></span>{
+	head <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Vertex[<span style="color:#bd93f9">10001</span>];
+	<span style="color:#8be9fd">int</span> from, to, weight;
+	<span style="color:#8be9fd">int</span> e;
+	scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>graphsize);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize; i<span style="color:#ff79c6">++</span>)
+	{
+		head[i].VerName <span style="color:#ff79c6">=</span> i;
+		head[i].adjacement <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+	}
+	cin <span style="color:#ff79c6">&gt;&gt;</span> e;
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize; i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>weight);
+		to <span style="color:#ff79c6">=</span> i;
+		from <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+		Edge<span style="color:#ff79c6">*</span>p <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Edge;
+		p<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+		p<span style="color:#ff79c6">-&gt;</span>VerAdj <span style="color:#ff79c6">=</span> to;
+		p<span style="color:#ff79c6">-&gt;</span>value <span style="color:#ff79c6">=</span> weight;
+		Edge<span style="color:#ff79c6">*</span>p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Edge;
+		p1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+		p1<span style="color:#ff79c6">-&gt;</span>VerAdj <span style="color:#ff79c6">=</span> from;
+		p1<span style="color:#ff79c6">-&gt;</span>value <span style="color:#ff79c6">=</span> weight;
+		Edge<span style="color:#ff79c6">*</span>q1 <span style="color:#ff79c6">=</span> head[from].adjacement;
+		Edge<span style="color:#ff79c6">*</span>q2 <span style="color:#ff79c6">=</span> head[to].adjacement;
+		<span style="color:#ff79c6">if</span> (q1 <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+		{
+			head[from].adjacement <span style="color:#ff79c6">=</span> p;
+		}
+		<span style="color:#ff79c6">else</span>
+		{
+			<span style="color:#ff79c6">while</span> (q1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+			{
+				q1 <span style="color:#ff79c6">=</span> q1<span style="color:#ff79c6">-&gt;</span>link;
+			}
+			q1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> p;
+		}
+		<span style="color:#ff79c6">if</span> (q2 <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+			head[to].adjacement <span style="color:#ff79c6">=</span> p1;
+		<span style="color:#ff79c6">else</span>
+		{
+			<span style="color:#ff79c6">while</span> (q2<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+				q2 <span style="color:#ff79c6">=</span> q2<span style="color:#ff79c6">-&gt;</span>link;
+			q2<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> p1;
+		}
+	}<span style="color:#6272a4">//这是虚结点的录入
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> e; i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>from,  <span style="color:#ff79c6">&amp;</span>to,<span style="color:#ff79c6">&amp;</span>weight);
+		Edge<span style="color:#ff79c6">*</span>p <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Edge;
+		p<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+		p<span style="color:#ff79c6">-&gt;</span>VerAdj <span style="color:#ff79c6">=</span> to;
+		p<span style="color:#ff79c6">-&gt;</span>value <span style="color:#ff79c6">=</span> weight;
+		Edge<span style="color:#ff79c6">*</span>p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Edge;
+		p1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+		p1<span style="color:#ff79c6">-&gt;</span>VerAdj <span style="color:#ff79c6">=</span> from;
+		p1<span style="color:#ff79c6">-&gt;</span>value <span style="color:#ff79c6">=</span> weight;
+		Edge<span style="color:#ff79c6">*</span>q1 <span style="color:#ff79c6">=</span> head[from].adjacement;
+		Edge<span style="color:#ff79c6">*</span>q2 <span style="color:#ff79c6">=</span> head[to].adjacement;
+		<span style="color:#ff79c6">if</span> (q1 <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+		{
+			head[from].adjacement <span style="color:#ff79c6">=</span> p;
+		}
+		<span style="color:#ff79c6">else</span>
+		{
+			<span style="color:#ff79c6">while</span> (q1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+			{
+				q1 <span style="color:#ff79c6">=</span> q1<span style="color:#ff79c6">-&gt;</span>link;
+			}
+			q1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> p;
+		}
+		<span style="color:#ff79c6">if</span> (q2 <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+			head[to].adjacement <span style="color:#ff79c6">=</span> p1;
+		<span style="color:#ff79c6">else</span>
+		{
+			<span style="color:#ff79c6">while</span> (q2<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+				q2 <span style="color:#ff79c6">=</span> q2<span style="color:#ff79c6">-&gt;</span>link;
+			q2<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> p1;
+		}
+	}<span style="color:#6272a4">//这是实结点的录入
+</span><span style="color:#6272a4"></span>}
+Graph_list<span style="color:#ff79c6">::~</span>Graph_list()
+{
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize; i<span style="color:#ff79c6">++</span>)
+	{
+		Edge<span style="color:#ff79c6">*</span>p <span style="color:#ff79c6">=</span> head[i].adjacement;
+		<span style="color:#ff79c6">while</span> (p <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+		{
+			head[i].adjacement <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>link;
+			<span style="color:#ff79c6">delete</span> p;
+			p <span style="color:#ff79c6">=</span> head[i].adjacement;
+		}
+	}
+	<span style="color:#ff79c6">delete</span>[] head;
+}<span style="color:#6272a4">//析构~
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> Graph_list<span style="color:#ff79c6">::</span>Prim()
+{
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize; i<span style="color:#ff79c6">++</span>)
+	{
+		Lowcost[i] <span style="color:#ff79c6">=</span> MAX;
+		vex[i] <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+		visited[i] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	}
+	visited[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; Lowcost[<span style="color:#bd93f9">0</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	Edge<span style="color:#ff79c6">*</span>p <span style="color:#ff79c6">=</span> head[<span style="color:#bd93f9">0</span>].adjacement;
+	<span style="color:#ff79c6">for</span> (; p; p <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>link)
+	{
+		Lowcost[p<span style="color:#ff79c6">-&gt;</span>VerAdj] <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>value;
+		vex[p<span style="color:#ff79c6">-&gt;</span>VerAdj] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+	}
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; j <span style="color:#ff79c6">&lt;</span> graphsize; j<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> MIN <span style="color:#ff79c6">=</span> MAX; <span style="color:#8be9fd">int</span> u <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize; i<span style="color:#ff79c6">++</span>)
+		{
+			<span style="color:#ff79c6">if</span> (Lowcost[i] <span style="color:#ff79c6">&lt;</span> MIN<span style="color:#ff79c6">&amp;&amp;</span>visited[i] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>) 
+			{ MIN <span style="color:#ff79c6">=</span> Lowcost[i]; u <span style="color:#ff79c6">=</span> i; }
+		}
+		visited[u] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+		p <span style="color:#ff79c6">=</span> head[u].adjacement;
+		<span style="color:#ff79c6">for</span> (; p; p <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>link)
+		{
+			<span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>VerAdj;
+			<span style="color:#ff79c6">if</span> (Lowcost[k] <span style="color:#ff79c6">&gt;</span> p<span style="color:#ff79c6">-&gt;</span>value<span style="color:#ff79c6">&amp;&amp;</span>visited[k] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+			{
+				vex[k] <span style="color:#ff79c6">=</span> u; Lowcost[k] <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>value;
+			}
+		}
+	}
+	<span style="color:#8be9fd">int</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize; i<span style="color:#ff79c6">++</span>)
+	{
+		sum <span style="color:#ff79c6">+=</span> Lowcost[i];
+	}
+	printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, sum);
+}<span style="color:#6272a4">//prim算法
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	G.Prim();
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>反思：kruskal太香了😋。</p>
+<h2 id="7-4-发红包-100-分">7-4 发红包 (100 分)</h2>
+<p>新年到了，公司要给员工发红包。员工们会比较获得的红包，有些员工会有钱数的要求，例如，c1的红包钱数要比c2的多。每个员工的红包钱数至少要发888元，这是一个幸运数字。</p>
+<p>公司想满足所有员工的要求，同时也要花钱最少，请你帮助计算。</p>
+<h3 id="输入格式-3">输入格式:</h3>
+<p>第1行，两个整数n和m(n&lt;=10000,m&lt;=20000)，用空格分隔，分别代表员工数和要求数。</p>
+<p>接下来m行，每行两个整数c1和c2，用空格分隔，表示员工c1的红包钱数要比c2多，员工的编号1~n 。</p>
+<h3 id="输出格式-3">输出格式:</h3>
+<p>一个整数，表示公司发的最少钱数。如果公司不能满足所有员工的需求，输出-1.</p>
+<h3 id="输入样例-2">输入样例:</h3>
+<p>在这里给出一组输入。例如：</p>
+<pre tabindex="0"><code> 2 1 
+ 1 2
+</code></pre><h3 id="输出样例-3">输出样例:</h3>
+<p>在这里给出相应的输出。例如：</p>
+<pre tabindex="0"><code>1777
+</code></pre><p>思路：本题为典型拓扑排序题目，按照奖金大小来建立AOE网，然后不用管出度，在有环的条件下输出-1。
+方法：
+1.判断有环：可以在遍历过程中判断点的入队次数，如果没有都入队，那么就是有环。
+2.更新员工的红包金额：在每一次更新中要确保取当原金额和规定比某人多的金额+1哪个数字大，将红包钱数赋予该最大值。</p>
+<h4 id="代码如下-4">代码如下：</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;stack&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;algorithm&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#8be9fd">int</span> Red_Envelope[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//红包钱数
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> ru[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//入度记录数
+</span><span style="color:#6272a4"></span>vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>mp[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//邻接链表
+</span><span style="color:#6272a4"></span>queue<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>Q;<span style="color:#6272a4">//TopOrder使用的队列
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;<span style="color:#6272a4">//钱数总和
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">TopOrder</span>(<span style="color:#8be9fd">int</span> N)
+{
+	<span style="color:#8be9fd">int</span> n <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">!</span>Q.empty())
+	{
+		<span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> Q.front();
+		Q.pop();
+		n<span style="color:#ff79c6">++</span>;
+		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> mp[k].size(); i<span style="color:#ff79c6">++</span>)
+		{
+			<span style="color:#8be9fd">int</span> q <span style="color:#ff79c6">=</span> mp[k][i];
+			Red_Envelope[q] <span style="color:#ff79c6">=</span> 
+			max(Red_Envelope[q],Red_Envelope[k] <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+			<span style="color:#6272a4">//容易出错
+</span><span style="color:#6272a4"></span>			<span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">--</span>ru[q] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+			{
+				Q.push(q);
+				sum <span style="color:#ff79c6">+=</span> Red_Envelope[q];
+			}
+		}
+	}
+	<span style="color:#ff79c6">if</span> (n <span style="color:#ff79c6">==</span> N)
+		printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, sum);
+	<span style="color:#ff79c6">else</span> printf(<span style="color:#f1fa8c">&#34;-1&#34;</span>);
+}<span style="color:#6272a4">//拓扑排序
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	<span style="color:#8be9fd">int</span> m, n;
+	scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m, <span style="color:#ff79c6">&amp;</span>n);
+	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> from, to;
+		scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>from, <span style="color:#ff79c6">&amp;</span>to);
+		mp[from].push_back(to);
+		ru[to]<span style="color:#ff79c6">++</span>;
+	}<span style="color:#6272a4">//建图，有向图
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#ff79c6">if</span> (ru[i] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+		 { Q.push(i); Red_Envelope[i] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">888</span>; sum <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">888</span>; }
+		 <span style="color:#6272a4">//拓扑排序预备
+</span><span style="color:#6272a4"></span>	}
+	<span style="color:#ff79c6">if</span> (Q.size() <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+	{
+		printf(<span style="color:#f1fa8c">&#34;-1&#34;</span>); <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+	}<span style="color:#6272a4">//如果直接遇到环
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">else</span>
+		TopOrder(m);<span style="color:#6272a4">//拓扑排序
+</span><span style="color:#6272a4"></span>	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+</code></pre></div><p>反思：要注意更新红包钱数时的操作。(已经标注)</p>
+
+
+                
+
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E5%85%AD%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/" data-toggle="tooltip" data-placement="top" title="JLU数据结构荣誉课——第六次上机实验">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/jlu%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E8%8D%A3%E8%AA%89%E8%AF%BE%E7%AC%AC%E4%BA%8C%E6%AC%A1%E4%B8%8A%E6%9C%BA%E5%AE%9E%E9%AA%8C/" data-toggle="tooltip" data-placement="top" title="JLU数据结构荣誉课——第二次上机实验">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+<div id="disqus-comment">
+    
+    <script src="https://giscus.app/client.js"
+        data-repo="hhhhlkf/comment"
+        data-repo-id="R_kgDOH-fgGQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOH-fgGc4CRXvh"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+        
+    </script>
+    
+</div>
+
+
+
+            </div>
+            
+            <div class="
+                col-lg-11 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        <a href="/tags/music" title="music">
+                            music
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1" title="数学建模">
+                            数学建模
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B" title="软件工程">
+                            软件工程
+                        </a>
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://hbai.site/">Bai的博客</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <script src="https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.js"></script>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+                    <li>
+                        <a href="mailto:likefan2002@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/hhhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-zhihu fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="/img/erweima.png">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-weixin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/hhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://gitee.com/linexus">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-git fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://stackoverflow.com/users/yourstackoverflowid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="img/qqpay.jpg">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-qq fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://blog.csdn.net/qq_56208478?spm=1000.2115.3001.5343">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-blogger fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Linexus的博客 2023
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
+                        href="https://hhhhlkf.github.io">Linexus</a> |
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"
+                        height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=hhhhlkf&repo=hhhhlkf.github.io&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function loadAsync(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+<script>
+    
+    if ($('#tag_cloud').length !== 0) {
+        loadAsync("/js/jquery.tagcloud.js", function () {
+            $.fn.tagcloud.defaults = {
+                
+                color: { start: '#bbbbee', end: '#0085a1' },
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    loadAsync("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+<script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+</script>
+
+
+
+
+
+
+
+
+
+
+<script>
+    
+    var _baId = 'b6cbc3cbead2c9e01d34c11c0c66f764';
+
+    
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
+<div id="sakana-widget-right"></div>
+<div id="sakana-widget-left"></div>
+<script>
+    function initSakanaWidget() {
+        new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
+        
+        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
+    }
+</script>
+<script async onload="initSakanaWidget()"
+    src="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.js"></script>
+<style>
+    #sakana-widget-right {
+        position: fixed;
+        right: 40px;
+        bottom: 24px;
+        z-index: 4;
+
+    }
+
+    #sakana-widget-left {
+        position: fixed;
+        left: 30px;
+        bottom: 24px;
+    }
+</style>
+
+
+
+
+</body>
+</html>
