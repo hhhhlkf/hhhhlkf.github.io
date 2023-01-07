@@ -232,7 +232,7 @@
                 
     
     <div class="random-group">
-        <div id="app">${ message }
+        <div id="app">[[message]]
         </div>
         <div id="rbk">
             <div class='input-num'>
@@ -248,8 +248,8 @@
             </div>
             <div id='infinite'>
                 <el-scrollbar v-if="flag" height="38ch">
-                    <p v-for="index in count" :key="index" class="scrollbar-demo-item">${name[index-1]}
-                        号同学分到了${divideGroup[index-1]}组</p>
+                    <p v-for="index in count" :key="index" class="scrollbar-demo-item">[[ name[index-1] ]]
+                        号同学分到了 [[ divideGroup[index-1] ]]组</p>
                 </el-scrollbar>
 
             </div>
@@ -333,7 +333,7 @@
         <script type="text/javascript">
             const { createApp, ref, reactive } = Vue
             const App = {
-                delimiters: ['${', '}'],
+                delimiters: ["[[", "]]"],
                 
                 setup(props) {
                     let message = "数据发生器";
