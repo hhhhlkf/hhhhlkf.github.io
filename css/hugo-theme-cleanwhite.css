@@ -1,16 +1,29 @@
-(min-width:1200px){
+@media (min-width:1700px){
+    .container {
+        width: 1650px;
+    }
+    .sidebar-container .short-about .list-inline>li{
+        font-size:15px
+    }
+}
+@media (max-width:1700px){
+    .sidebar-container .short-about .list-inline>li{
+        font-size:13px
+    }
+}
+@media (min-width:1200px){
     .post-container,.sidebar-container{
         padding-right:5%
     }
 }
 @media (min-width:768px){
-    .post-container{
+    .post-container,.sidebar-container{
         padding-right:5%
     }
 }
 .sidebar-container{
     color:#bfbfbf;
-    font-size:14px
+    font-size:15px
 }
 .sidebar-container h5{
     color:gray;
@@ -43,12 +56,13 @@
     margin-bottom:20px
 }
 .sidebar-container .short-about .list-inline>li{
-    padding-left:0
+    padding-left:0;
+    margin-right:-15px
 }
 body{
     font-family:-apple-system,"Helvetica Neue",Arial,"PingFang SC","Hiragino Sans GB",STHeiti,"Microsoft YaHei","Microsoft JhengHei","Source Han Sans SC","Noto Sans CJK SC","Source Han Sans CN","Noto Sans SC","Source Han Sans TC","Noto Sans CJK TC","WenQuanYi Micro Hei",SimSun,sans-serif;
     line-height:1.7;
-    font-size:16px;
+    font-size:17px;
     color:#404040;
     overflow-x:hidden
 }
@@ -142,7 +156,7 @@ pre code{
     margin-top:5px
 }
 .post-container h6{
-    font-size:16px;
+    font-size:17px;
     font-weight:600;
     color:gray
 }
@@ -476,7 +490,7 @@ pre code{
 .post-preview>.post-meta>a, .post-preview>.post-meta{
     font-family:Lora,'Times New Roman',serif;
     color:gray;
-    font-size:16px;
+    font-size:17px;
     font-style:italic;
     margin-top:0
 }
@@ -492,7 +506,7 @@ pre code{
         margin-bottom:10px
     }
     .post-preview>a>.post-subtitle{
-        font-size:16px
+        font-size:17px
     }
     .post-preview .post-meta{
         font-size:18px
@@ -508,7 +522,7 @@ pre code{
 }
 @media only screen and (min-width:768px){
     .post-content-preview{
-        font-size:14px
+        font-size:15px
     }
 }
 .section-heading{
@@ -535,7 +549,7 @@ footer .list-inline{
     padding:0
 }
 footer .copyright{
-    font-size:14px;
+    font-size:15px;
     text-align:center;
     margin-bottom:0
 }
@@ -605,7 +619,7 @@ form .row:first-child .floating-label-form-group{
     padding:15px 25px
 }
 .btn-lg{
-    font-size:16px;
+    font-size:17px;
     padding:25px 35px
 }
 .btn-default:hover,.btn-default:focus{
@@ -679,7 +693,7 @@ body{
     padding:0 10px;
     color:#fff;
     line-height:24px;
-    font-size:12px;
+    font-size:14px;
     text-decoration:none;
     margin:0 1px;
     margin-bottom:6px
@@ -755,7 +769,7 @@ body{
     position:relative
 }
 .one-tag-list .post-preview>a .post-title{
-    font-size:16px;
+    font-size:17px;
     font-weight:500;
     margin-top:20px
 }
@@ -883,3 +897,96 @@ body{
 .page-fullscreen footer .copyright a:hover{
     color:#ddd
 }
+
+.catalog-container {
+    padding: 0px;
+  }
+  .side-catalog {
+    display: block;
+    overflow: auto;
+    height: 100%;
+    padding-bottom: 40px;
+    width: 195px;
+  }
+  .side-catalog.fixed {
+    position: fixed;
+    top: -21px;
+  }
+  .side-catalog.fold .catalog-toggle::before {
+    content: "+";
+  }
+  .side-catalog.fold .catalog-body {
+    display: none;
+  }
+  .side-catalog .catalog-toggle::before {
+    content: "−";
+    position: relative;
+    margin-right: 5px;
+    bottom: 1px;
+  }
+  .side-catalog .catalog-body {
+    position: relative;
+    list-style: none;
+    height: auto;
+    overflow: hidden;
+    padding-left: 0px;
+    padding-right: 5px;
+    text-indent: 0;
+  }
+  .side-catalog .catalog-body li {
+    position: relative;
+    list-style: none;
+  }
+  .side-catalog .catalog-body li a {
+    padding-left: 10px;
+    max-width: 180px;
+    display: inline-block;
+    vertical-align: middle;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    text-decoration: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .side-catalog .catalog-body .h1_nav {
+    margin-left: 0;
+    font-size: 13px;
+    font-weight: bold;
+  }
+  .side-catalog .catalog-body .h2_nav {
+    margin-left: 6px;
+    font-size: 13px;
+    font-weight: bold;
+  }
+  .side-catalog .catalog-body .h3_nav {
+    margin-left: 12px;
+    font-size: 13px;
+    font-weight: bold;
+  }
+  .side-catalog .catalog-body .h4_nav {
+    margin-left: 18px;
+    font-size: 12px;
+  }
+  .side-catalog .catalog-body .h4_nav a {
+    max-width: 170px;
+  }
+  .side-catalog .catalog-body .h5_nav .h6_nav {
+    margin-left: 18px;
+    font-size: 12px;
+  }
+  .side-catalog .catalog-body .h5_nav .h6_nav a {
+    max-width: 170px;
+  }
+  .side-catalog .catalog-body .active {
+    border-radius: 4px;
+    background-color: #f5f5f5;
+  }
+  .side-catalog .catalog-body .active a {
+    color: #0085a1 !important;
+  }
+  @media (max-width: 1200px) {
+    .side-catalog {
+      display: none;
+    }
+  }

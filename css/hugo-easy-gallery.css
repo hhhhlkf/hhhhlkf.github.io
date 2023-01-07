@@ -157,3 +157,8 @@ figcaption p {
     margin: auto; /* override style in theme */
 }
 
+:root {
+    --nav-width: 1380px;
+    --article-width: 650px;
+    --toc-width: 300px;
+}
