@@ -2,7 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://hhhhlkf.github.io/</loc>
+    <lastmod>2023-01-07T09:28:55+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/top/photos/</loc>
+    <lastmod>2023-01-07T09:28:55+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/top/</loc>
+    <lastmod>2023-01-07T09:28:55+08:00</lastmod>
+  </url><url>
     <loc>https://hhhhlkf.github.io/categories/</loc>
+    <lastmod>2022-09-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/categories/post/</loc>
     <lastmod>2022-09-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://hhhhlkf.github.io/post/</loc>
@@ -11,22 +23,13 @@
     <loc>https://hhhhlkf.github.io/tags/</loc>
     <lastmod>2022-09-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://hhhhlkf.github.io/</loc>
-    <lastmod>2022-09-11T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://hhhhlkf.github.io/post/%E5%90%89%E6%9E%97%E5%A4%A7%E5%AD%A6%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E8%8D%A3%E8%AA%89%E8%AF%BE%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%88%86%E7%BB%84%E5%99%A8/</loc>
     <lastmod>2022-09-11T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://hhhhlkf.github.io/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</loc>
     <lastmod>2022-09-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://hhhhlkf.github.io/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</loc>
-    <lastmod>2022-09-11T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://hhhhlkf.github.io/top/books/</loc>
-    <lastmod>2021-09-20T15:06:24+08:00</lastmod>
-  </url><url>
-    <loc>https://hhhhlkf.github.io/top/</loc>
     <lastmod>2021-09-20T15:06:24+08:00</lastmod>
   </url><url>
     <loc>https://hhhhlkf.github.io/top/archive/</loc>
@@ -59,9 +62,6 @@
     <loc>https://hhhhlkf.github.io/categories/music/</loc>
     <lastmod>2021-09-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://hhhhlkf.github.io/categories/note/</loc>
-    <lastmod>2021-09-20T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://hhhhlkf.github.io/post/nzk/</loc>
     <lastmod>2021-09-20T00:00:00+00:00</lastmod>
   </url><url>
@@ -69,9 +69,6 @@
     <lastmod>2021-09-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://hhhhlkf.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3/</loc>
-    <lastmod>2021-09-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://hhhhlkf.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3/</loc>
     <lastmod>2021-09-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://hhhhlkf.github.io/post/%E6%A8%A1%E6%8B%9F%E9%80%80%E7%81%AB%E7%AE%97%E6%B3%95/</loc>

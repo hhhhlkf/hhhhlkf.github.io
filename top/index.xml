@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tops on φκι的博客</title>
+    <title>Tops on Linexus的博客</title>
     <link>https://hhhhlkf.github.io/top/</link>
-    <description>Recent content in Tops on φκι的博客</description>
+    <description>Recent content in Tops on Linexus的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Sep 2021 15:06:24 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/top/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 07 Jan 2023 09:28:55 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/top/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Photos</title>
+      <link>https://hhhhlkf.github.io/top/photos/</link>
+      <pubDate>Sat, 07 Jan 2023 09:28:55 +0800</pubDate>
+      
+      <guid>https://hhhhlkf.github.io/top/photos/</guid>
+      <description>精美图片 Green mon
+Fantasy
+Light tower
+Xingxuan
+</description>
+    </item>
+    
     <item>
       <title>Books</title>
       <link>https://hhhhlkf.github.io/top/books/</link>
@@ -31,7 +44,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://hhhhlkf.github.io/top/about/</guid>
-      <description>LiKefan is a JLUer,graduated from Zhengzhou Foreign Language School.</description>
+      <description>LiKefan is a JLUer,from software collage.</description>
     </item>
     
   </channel>

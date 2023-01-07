@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on φκι的博客</title>
+    <title>Categories on Linexus的博客</title>
     <link>https://hhhhlkf.github.io/categories/</link>
-    <description>Recent content in Categories on φκι的博客</description>
+    <description>Recent content in Categories on Linexus的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 11 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://hhhhlkf.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>软件工程</title>
-      <link>https://hhhhlkf.github.io/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</link>
+      <title>Post</title>
+      <link>https://hhhhlkf.github.io/categories/post/</link>
       <pubDate>Sun, 11 Sep 2022 00:00:00 +0000</pubDate>
       
-      <guid>https://hhhhlkf.github.io/categories/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/</guid>
+      <guid>https://hhhhlkf.github.io/categories/post/</guid>
       <description></description>
     </item>
     
@@ -22,24 +22,6 @@
       <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
       
       <guid>https://hhhhlkf.github.io/categories/music/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Note</title>
-      <link>https://hhhhlkf.github.io/categories/note/</link>
-      <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://hhhhlkf.github.io/categories/note/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>数据结构题解</title>
-      <link>https://hhhhlkf.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3/</link>
-      <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://hhhhlkf.github.io/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3/</guid>
       <description></description>
     </item>
     

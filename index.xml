@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>φκι的博客</title>
+    <title>Linexus的博客</title>
     <link>https://hhhhlkf.github.io/</link>
-    <description>Recent content on φκι的博客</description>
+    <description>Recent content on Linexus的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://hhhhlkf.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 07 Jan 2023 09:28:55 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Photos</title>
+      <link>https://hhhhlkf.github.io/top/photos/</link>
+      <pubDate>Sat, 07 Jan 2023 09:28:55 +0800</pubDate>
+      
+      <guid>https://hhhhlkf.github.io/top/photos/</guid>
+      <description>精美图片 Green mon
+Fantasy
+Light tower
+Xingxuan
+</description>
+    </item>
+    
     <item>
       <title>吉林大学软件工程荣誉课随机数分组器</title>
       <link>https://hhhhlkf.github.io/post/%E5%90%89%E6%9E%97%E5%A4%A7%E5%AD%A6%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E8%8D%A3%E8%AA%89%E8%AF%BE%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%88%86%E7%BB%84%E5%99%A8/</link>
       <pubDate>Sun, 11 Sep 2022 00:00:00 +0000</pubDate>
       
       <guid>https://hhhhlkf.github.io/post/%E5%90%89%E6%9E%97%E5%A4%A7%E5%AD%A6%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B%E8%8D%A3%E8%AA%89%E8%AF%BE%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%88%86%E7%BB%84%E5%99%A8/</guid>
-      <description></description>
+      <description> </description>
     </item>
     
     <item>
@@ -162,7 +175,7 @@ f(n) = f(n-1)*11/10，f[1]=10. 通项从左向右计算，*和/分别表示整�
       <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
       
       <guid>https://hhhhlkf.github.io/post/nzk/</guid>
-      <description>1.Binary Star ——by SawanoHiroyuki[nZk]/Uru </description>
+      <description>1.Binary-Star ——by SawanoHiroyuki[nZk]2.Tranquility ——by SawanoHiroyuki[nZk]3.UNICORN ——by 澤野弘之4.ViEW ——by mizuki(瑞葵)/SawanoHiroyuki[nZk]5.ninelie&amp;lt;cry-v&amp;gt; ——by SawanoHiroyuki[nZk]6.EARth ——by 澤野弘之7.Tot Musica ——by Ado8.counter・attack-m’aenkaind ——by 澤野弘之9.Roads to Ride ——by 澤野弘之10.ətˈæk 0N tάɪtn&amp;lt;TFSv&amp;gt;——by 澤野弘之</description>
     </item>
     
     <item>
@@ -189,7 +202,7 @@ f(n) = f(n-1)*11/10，f[1]=10. 通项从左向右计算，*和/分别表示整�
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://hhhhlkf.github.io/top/about/</guid>
-      <description>LiKefan is a JLUer,graduated from Zhengzhou Foreign Language School.</description>
+      <description>LiKefan is a JLUer,from software collage.</description>
     </item>
     
   </channel>
