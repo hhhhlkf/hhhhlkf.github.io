@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    
+    
+    <meta property="og:site_name" content="Linexus blog">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://hhhhlkf.github.io//img/fantasy.png">
+    <meta property="twitter:image" content="https://hhhhlkf.github.io//img/fantasy.png" />
+    
+
+    
+    <meta name="title" content="Oracle数据库学习笔记——用navicat连接Oracle" />
+    <meta property="og:title" content="Oracle数据库学习笔记——用navicat连接Oracle" />
+    <meta property="twitter:title" content="Oracle数据库学习笔记——用navicat连接Oracle" />
+    
+
+    
+    <meta name="description" content="用navicat可视化操作数据库软件连接Oracle">
+    <meta property="og:description" content="用navicat可视化操作数据库软件连接Oracle" />
+    <meta property="twitter:description" content="用navicat可视化操作数据库软件连接Oracle" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>Oracle数据库学习笔记——用navicat连接Oracle-LKF的博客 | Linexus&#39;s Blog</title>
+
+    <link rel="canonical" href="/post/oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E7%94%A8navicat%E8%BF%9E%E6%8E%A5oracle/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    
+
+    <link rel="stylesheet" href="/css/hugo-theme-cleanwhite.css">
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    <link rel="stylesheet" href="https://hhhhlkf.github.io/css/search.css" />
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+
+  
+    <script src="//unpkg.com/element-plus"></script>
+    <script type="text/javascript" src="/js/random.js"></script>
+    <script type="text/javascript" src="/js/mersenne-twister.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <script src="//unpkg.com/element-plus"></script>
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+    
+
+
+</head>
+
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Linexus blog</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/music">music</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/categories/post">post</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/books/">BOOKS</a></li>
+                    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+                        <li><a href="/top/photos/">PHOTOS</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="#modalSearch" id="modalA" data-target="#modalSearch" data-toggle="modal"><i class="fa fa-search"></i></a>
+                        <script>
+                            function getDialog(){
+                                $('#modalSearch').modal('show')
+                            }
+                        </script>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<div id="modalSearch" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Search hhhhlkf.github.io</h4>
+        </div>
+        <div class="modal-body">
+            <div class="aa-input-container" id="aa-input-container">
+  <input type="search" id="aa-search-input" class="aa-input-search" placeholder="Search for titles or URIs..." name="search" autocomplete="off" />
+  <svg class="aa-input-icon" viewBox="654 -372 1664 1664">
+      <path d="M1806,332c0-123.3-43.8-228.8-131.5-316.5C1586.8-72.2,1481.3-116,1358-116s-228.8,43.8-316.5,131.5  C953.8,103.2,910,208.7,910,332s43.8,228.8,131.5,316.5C1129.2,736.2,1234.7,780,1358,780s228.8-43.8,316.5-131.5  C1762.2,560.8,1806,455.3,1806,332z M2318,1164c0,34.7-12.7,64.7-38,90s-55.3,38-90,38c-36,0-66-12.7-90-38l-343-342  c-119.3,82.7-252.3,124-399,124c-95.3,0-186.5-18.5-273.5-55.5s-162-87-225-150s-113-138-150-225S654,427.3,654,332  s18.5-186.5,55.5-273.5s87-162,150-225s138-113,225-150S1262.7-372,1358-372s186.5,18.5,273.5,55.5s162,87,225,150s113,138,150,225  S2062,236.7,2062,332c0,146.7-41.3,279.7-124,399l343,343C2305.7,1098.7,2318,1128.7,2318,1164z" />
+  </svg>
+</div>
+<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
+<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
+<script>
+var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
+var index = client.initIndex('blog');
+autocomplete('#aa-search-input',
+{ hint: false}, {
+  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
+  displayKey: 'name',
+  templates: {
+      suggestion: function(suggestion) {
+          console.log(suggestion);
+          return '<span>' + '<a href="' + suggestion.url + '">' +
+          suggestion._highlightResult.title.value + '</a></span>';
+      }
+  }
+});
+</script>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('https://i.loli.net/2021/09/30/3bSAB6Fru9xCdh8.jpg')
+    }
+</style>
+
+<header class="intro-header" >
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/oracle" title="oracle">
+                            oracle
+                        </a>
+                        
+                        <a class="tag" href="/tags/database" title="database">
+                            database
+                        </a>
+                        
+                    </div>
+                    <h1>Oracle数据库学习笔记——用navicat连接Oracle</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        
+                            Posted by 
+                            
+                                 Linexus
+                             
+                            on 
+                            Sunday, January 8, 2023
+                            
+                            
+                            
+                            
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <h1 id="navicat连接oracle">Navicat连接Oracle</h1>
+<p>对于navicat的安装就不再过多的叙述了，详情可以参考别的<a href="https://learnku.com/articles/67706">博客</a>或是<a href="https://www.bilibili.com/video/BV1He4y1C7Hg">视频</a>。</p>
+<h2 id="软件版本">软件版本</h2>
+<ul>
+<li><strong>Navicat</strong>：Navicat Premium 16.0.11</li>
+<li><strong>Oracle</strong>：Oracle Database 21c</li>
+<li><strong>Windows</strong>：Windows 10 家庭版</li>
+</ul>
+<h2 id="配置navicat">配置Navicat</h2>
+<ul>
+<li>打开Navicat软件，依次点击进入：工具 <strong>&ndash;&gt;</strong> 选项 <strong>&ndash;&gt;</strong> 环境 ； 如下图：</li>
+</ul>
+<p>
+  <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94%e7%94%a8navicat%e8%bf%9e%e6%8e%a5Oracle/image-20230108223826283.png" alt="image-20230108223826283">
+
+</p>
+<ul>
+<li>
+<p>进入环境界面后，可以看到OCI环境选项中的 <strong>&ndash;&gt;</strong> OCI library (oci.dll) * ，将其换为navicat自带的链接库：</p>
+<p>
+  <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94%e7%94%a8navicat%e8%bf%9e%e6%8e%a5Oracle/image-20230108224100163.png" alt="image-20230108224100163">
+
+</p>
+<p>重新启动后生效。</p>
+</li>
+</ul>
+<h2 id="配置oracle服务端参数">配置Oracle服务端参数</h2>
+<h3 id="修改listenerora">修改listener.ora</h3>
+<p>打开Oracle安装文件路径中的文件listener.ora</p>
+<p>
+  <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94%e7%94%a8navicat%e8%bf%9e%e6%8e%a5Oracle/image-20230108225703966.png" alt="image-20230108225703966">
+
+</p>
+<p>将<strong>listener.ora</strong>中的HOST进行修改，如下图所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt"> ## 原本
+ (ADDRESS = (PROTOCOL = TCP)(HOST = {你的IP地址})(PORT = 1521))
+ 
+ ## 改为
+ (ADDRESS = (PROTOCOL = TCP)(HOST = {你的主机名称})(PORT = 1521))
+</code></pre></div><p>
+  <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94%e7%94%a8navicat%e8%bf%9e%e6%8e%a5Oracle/image-20230108225944012.png" alt="image-20230108225944012">
+
+</p>
+<h3 id="重启服务">重启服务</h3>
+<p>并通过<code>win + R</code>打开 service.msc找到Oracle的所有服务：</p>
+<p>
+  <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94%e7%94%a8navicat%e8%bf%9e%e6%8e%a5Oracle/image-20230108230136450.png" alt="image-20230108230136450">
+
+</p>
+<p>将正在运行的三个服务重启，为了加载服务端监听配置，并改成手动启动，防止在开机时启动消耗内存。</p>
+<p>且看到<strong>OracleServiceXXX</strong>服务，其中<strong>XXX</strong>就是<strong>服务名称</strong>。其默认名称为<strong>XXX</strong>，具体名称为与listener.ora同路径的tnsnames.ora，其由加载客户端程序的sqlnet.ora配置文件引用。</p>
+<p>
+  <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94%e7%94%a8navicat%e8%bf%9e%e6%8e%a5Oracle/image-20230108230445421.png" alt="image-20230108230445421">
+
+</p>
+<h2 id="开始连接navicat">开始连接navicat</h2>
+<h3 id="连接配置">连接配置</h3>
+<p>打开navicat，点击连接，选择Oracle。</p>
+<p>
+  <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94%e7%94%a8navicat%e8%bf%9e%e6%8e%a5Oracle/image-20230108230747217.png" alt="image-20230108230747217">
+
+</p>
+<p>出现弹框后，输入连接名(随便起)、主机名(IP地址或者域名)、服务名(上文的<strong>XXX</strong>)、用户名(sys或者system以及之前创建的scott)、密码：</p>
+<p>
+  <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94%e7%94%a8navicat%e8%bf%9e%e6%8e%a5Oracle/image-20230108232137103.png" alt="image-20230108232137103">
+
+</p>
+<h3 id="sys设置">sys设置</h3>
+<p>如果选择的是sys，需要点击tab标签——高级，角色选择SYSDBA，然后返回测试连接：</p>
+<p>
+  <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94%e7%94%a8navicat%e8%bf%9e%e6%8e%a5Oracle/image-20230108231409039.png" alt="image-20230108231409039">
+
+</p>
+<p>下图为成功表现：</p>
+<p>
+  <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94%e7%94%a8navicat%e8%bf%9e%e6%8e%a5Oracle/image-20230108231424402.png" alt="image-20230108231424402">
+
+</p>
+<p>如果选择的是system或者是scott可以直接点击测试连接是否成功，如果成功，则可以创建连接了。</p>
+<p>接下来就可以在navicat中享受操作数据库了。🎉🎉🎉</p>
+
+
+                
+
+                
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0scott%E7%94%A8%E6%88%B7%E7%9A%84%E5%88%9B%E5%BB%BA/" data-toggle="tooltip" data-placement="top" title="Oracle数据库学习笔记——scott用户的创建">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+                
+
+                
+<div id="disqus-comment">
+    
+    <script src="https://giscus.app/client.js"
+        data-repo="hhhhlkf/comment"
+        data-repo-id="R_kgDOH-fgGQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOH-fgGc4CRXvh"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+        
+    </script>
+    
+</div>
+
+
+            </div>
+
+            
+            
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body">
+
+                    </ul>
+                </div>
+            </div>
+            
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        <a href="/tags/database" title="database">
+                            database
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/music" title="music">
+                            music
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/oracle" title="oracle">
+                            oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1" title="数学建模">
+                            数学建模
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B" title="软件工程">
+                            软件工程
+                        </a>
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://hbai.site/">Bai的博客</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    <script src="https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget/autoload.js"></script>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+                    <li>
+                        <a href="mailto:likefan2002@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/hhhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-zhihu fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="/img/erweima.png">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-weixin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/hhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://gitee.com/linexus">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-git fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://stackoverflow.com/users/yourstackoverflowid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="img/qqpay.jpg">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-qq fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://blog.csdn.net/qq_56208478?spm=1000.2115.3001.5343">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-blogger fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Linexus blog 2023
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
+                        href="https://hhhhlkf.github.io">Linexus</a> |
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"
+                        height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=hhhhlkf&repo=hhhhlkf.github.io&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function loadAsync(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        
+        
+        
+        
+            _containerSelector = 'div.post-container'
+        
+
+        
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        
+        $(selector).html('')
+
+        
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    
+
+
+    loadAsync("\/js\/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<script>
+    
+    if ($('#tag_cloud').length !== 0) {
+        loadAsync("/js/jquery.tagcloud.js", function () {
+            $.fn.tagcloud.defaults = {
+                
+                color: { start: '#bbbbee', end: '#0085a1' },
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    loadAsync("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+<script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+</script>
+
+
+
+
+
+
+
+
+
+
+<script>
+    
+    var _baId = 'b6cbc3cbead2c9e01d34c11c0c66f764';
+
+    
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
+<div id="sakana-widget-right"></div>
+<div id="sakana-widget-left"></div>
+<script>
+    function initSakanaWidget() {
+        new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
+        
+        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
+    }
+</script>
+<script async onload="initSakanaWidget()"
+    src="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.js"></script>
+<style>
+    #sakana-widget-right {
+        position: fixed;
+        right: 40px;
+        bottom: 24px;
+        z-index: 4;
+
+    }
+
+    #sakana-widget-left {
+        position: fixed;
+        left: 30px;
+        bottom: 24px;
+    }
+</style>
+
+
+
+</body>
+</html>
