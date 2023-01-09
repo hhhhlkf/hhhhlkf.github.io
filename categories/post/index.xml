@@ -6,7 +6,19 @@
     <description>Recent content in post on Linexus blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Jan 2023 22:28:08 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/categories/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 09 Jan 2023 14:33:08 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/categories/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Oracle数据库学习笔记——sql语句函数</title>
+      <link>https://hhhhlkf.github.io/post/oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0sql%E8%AF%AD%E5%8F%A5/</link>
+      <pubDate>Mon, 09 Jan 2023 14:33:08 +0800</pubDate>
+      
+      <guid>https://hhhhlkf.github.io/post/oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0sql%E8%AF%AD%E5%8F%A5/</guid>
+      <description>sql语句小记 sql中的函数 sql中有许多的函数，其中包括了单行函数和其他函数。
+单行函数 实验表emp样例： 字符函数  大小写函数：upper()、lower()  SELECT &amp;#39;The job id for &amp;#39;||upper(ename)||&amp;#39; is &amp;#39;||lower(job) &amp;#34;EMPLOYEE DETAILS&amp;#34; from emp;  将每个单词的首字母转换为大写，其他转换为小写：initcap  SELECT &amp;#39;The job id for &amp;#39;||initcap(ename)||&amp;#39; is &amp;#39;||initcap(job) &amp;#34;EMPLOYEE DETAILS&amp;#34; from emp;   字符处理函数 dual表：可以借助dual来满足结构化查询语言格式，作为伪表。
+  拼接函数concat
+  -- 使用“||”来拼接字符串 select &amp;#39;拼接&amp;#39;||&amp;#39;字符串&amp;#39; as str from dual -- 通过concat()函数实现 select concat(&amp;#39;拼接&amp;#39;, &amp;#39;字符串&amp;#39;) as str from dual -- 拼接多个参数 select concat(concat(&amp;#39;拼接&amp;#39;, &amp;#39;多个&amp;#39;), &amp;#39;字符串&amp;#39;) from dual  截取函数substr  select substr(to_char(sysdate, &amp;#39;yyyy-mm-dd HH:mi:ss&amp;#39;), 12, 5) as time from dual  长度函数length  length(&amp;#39;Hello World!</description>
+    </item>
+    
     <item>
       <title>Oracle数据库学习笔记——用navicat连接Oracle</title>
       <link>https://hhhhlkf.github.io/post/oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E7%94%A8navicat%E8%BF%9E%E6%8E%A5oracle/</link>
