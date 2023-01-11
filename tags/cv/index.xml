@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>cv on Linexus blog</title>
+    <link>https://hhhhlkf.github.io/tags/cv/</link>
+    <description>Recent content in cv on Linexus blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 11 Jan 2023 10:15:06 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/tags/cv/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>FSKNet——论文概述与代码分析</title>
+      <link>https://hhhhlkf.github.io/post/fsknet%E8%AE%BA%E6%96%87%E6%A6%82%E8%BF%B0%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</link>
+      <pubDate>Wed, 11 Jan 2023 10:15:06 +0800</pubDate>
+      
+      <guid>https://hhhhlkf.github.io/post/fsknet%E8%AE%BA%E6%96%87%E6%A6%82%E8%BF%B0%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+      <description>FSKNet的论文分析 提出背景 对早年提出的3D-CNN会导致参数量过大，对系统的训练能力要求较强。因此提出了FSKNet解决这一问题。其中主要参考改进点有两个：
+ 设计了3D-CNN和2D-CNN转换模块，利用3D-CNN完成特征提取，同时降低空间和光谱的维数。 在转换后的2D-CNN中，提出了一种选择性核机制，允许每个神经元根据双向输入信息尺度调整感受野大小。  涉及较新的模型结构  2D和3D CNN结合进行特征提取的同时进行降维 可变卷积操作 可分离卷积操作 最后的全局最大池化替换全连接进行加速  网络总体结构 其中所有的网络层结构链接如下表格所示：
+其中给出了所有的层数，输出维度，链接层和参数，接下来将一一阐述。
+3D-CNN and 2D-CNN conversion modules 本模块由三层3D-Conv、一层可分离3D-Conv和最后经过reshape操作后的2D-Conv组成：
+为了避免常规降维时，PCA对其他数据舍弃而导致的信息丢失，本论文采用了一边卷积一边降维的方式，通过设置通道维数的大幅度stride进行降维。
+最后通过reshape+2D Conv进行图像的转换防止图像降维。
+Selective kernel mechanism 下图是其内部结构：
+包括了三个重点的结构，可变卷积、注意力机制和可分离卷积。
+可变卷积 简要概括
+可变形卷积是指卷积核在每一个元素上额外增加了一个参数方向参数，这样卷积核就能在训练过程中扩展到很大的范围。
+目的
+为了解决在采样过程中卷积核过于固定，不能很好的适应局部空间的采样操作。
+解决方案
+上图是可变形卷积的学习过程，首先偏差是通过一个卷积层获得，该卷积层的卷积核与普通卷积核一样。输出的偏差尺寸和输入的特征图尺寸一致。生成通道维度是2N，分别对应原始输出特征和偏移特征。这两个卷积核通过双线性插值后向传播算法同时学习。
+解释
+事实上，可变形卷积单元中增加的偏移量是网络结构的一部分，通过另外一个平行的标准卷积单元计算得到，进而也可以通过梯度反向传播进行端到端的学习。加上该偏移量的学习之后，可变形卷积核的大小和位置可以根据当前需要识别的图像内容进行动态调整，其直观效果就是不同位置的卷积核采样点位置会根据图像内容发生自适应的变化，从而适应不同物体的形状、大小等几何形变。然而，这样的操作引入了一个问题，即需要对不连续的位置变量求导。
+注意力机制 注意力机制主要存在于se block中。
+注意力机制主要通过对当前输入的卷积层进行全局平均池化，并使用激活函数对得到的向量进行激活，再乘到相应的卷积层上，以达到对每个卷积层权重的赋值。
+可分离卷积 可分离卷积时经过注意力机制之后的卷积操作，通过可分离卷积进行网络加速，达到减小参数量并保持准确率的效果。
+分类器部分 通过全局池化操作将上一层的卷积层从7×7×128转换成了长度为128的向量，并通过全卷积降至种类数，进行分类。
+代码实现部分 网络结构总体设计：
+# 组合模型 class ResnetBuilder(object): @staticmethod def build(input_shape, num_outputs): print(&amp;#39;original input shape:&amp;#39;, input_shape) _handle_dim_ordering() if len(input_shape) !</description>
+    </item>
+    
+  </channel>
+</rss>
