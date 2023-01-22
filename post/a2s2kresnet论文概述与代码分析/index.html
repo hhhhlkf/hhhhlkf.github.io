@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    
+    
+    <meta property="og:site_name" content="Linexus blog">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://hhhhlkf.github.io//img/fantasy.png">
+    <meta property="twitter:image" content="https://hhhhlkf.github.io//img/fantasy.png" />
+    
+
+    
+    <meta name="title" content="A2S2KResNet——论文概述与代码分析" />
+    <meta property="og:title" content="A2S2KResNet——论文概述与代码分析" />
+    <meta property="twitter:title" content="A2S2KResNet——论文概述与代码分析" />
+    
+
+    
+    <meta name="description" content="具体分析了论文中提出的重点网络结构，并对开源代码进行了分析">
+    <meta property="og:description" content="具体分析了论文中提出的重点网络结构，并对开源代码进行了分析" />
+    <meta property="twitter:description" content="具体分析了论文中提出的重点网络结构，并对开源代码进行了分析" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>A2S2KResNet——论文概述与代码分析-LKF的博客 | Linexus&#39;s Blog</title>
+
+    <link rel="canonical" href="/post/a2s2kresnet%E8%AE%BA%E6%96%87%E6%A6%82%E8%BF%B0%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    
+
+    <link rel="stylesheet" href="/css/hugo-theme-cleanwhite.css">
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    <link rel="stylesheet" href="https://hhhhlkf.github.io/css/search.css" />
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+
+  
+    <script src="//unpkg.com/element-plus"></script>
+    <script type="text/javascript" src="/js/random.js"></script>
+    <script type="text/javascript" src="/js/mersenne-twister.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <script src="//unpkg.com/element-plus"></script>
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+    
+
+
+</head>
+
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Linexus blog</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/music">music</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/categories/post">post</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/books/">BOOKS</a></li>
+                    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+                        <li><a href="/top/photos/">PHOTOS</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="#modalSearch" id="modalA" data-target="#modalSearch" data-toggle="modal"><i class="fa fa-search"></i></a>
+                        <script>
+                            function getDialog(){
+                                $('#modalSearch').modal('show')
+                            }
+                        </script>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<div id="modalSearch" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Search hhhhlkf.github.io</h4>
+        </div>
+        <div class="modal-body">
+            <div class="aa-input-container" id="aa-input-container">
+  <input type="search" id="aa-search-input" class="aa-input-search" placeholder="Search for titles or URIs..." name="search" autocomplete="off" />
+  <svg class="aa-input-icon" viewBox="654 -372 1664 1664">
+      <path d="M1806,332c0-123.3-43.8-228.8-131.5-316.5C1586.8-72.2,1481.3-116,1358-116s-228.8,43.8-316.5,131.5  C953.8,103.2,910,208.7,910,332s43.8,228.8,131.5,316.5C1129.2,736.2,1234.7,780,1358,780s228.8-43.8,316.5-131.5  C1762.2,560.8,1806,455.3,1806,332z M2318,1164c0,34.7-12.7,64.7-38,90s-55.3,38-90,38c-36,0-66-12.7-90-38l-343-342  c-119.3,82.7-252.3,124-399,124c-95.3,0-186.5-18.5-273.5-55.5s-162-87-225-150s-113-138-150-225S654,427.3,654,332  s18.5-186.5,55.5-273.5s87-162,150-225s138-113,225-150S1262.7-372,1358-372s186.5,18.5,273.5,55.5s162,87,225,150s113,138,150,225  S2062,236.7,2062,332c0,146.7-41.3,279.7-124,399l343,343C2305.7,1098.7,2318,1128.7,2318,1164z" />
+  </svg>
+</div>
+<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
+<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
+<script>
+var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
+var index = client.initIndex('blog');
+autocomplete('#aa-search-input',
+{ hint: false}, {
+  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
+  displayKey: 'name',
+  templates: {
+      suggestion: function(suggestion) {
+          console.log(suggestion);
+          return '<span>' + '<a href="' + suggestion.url + '">' +
+          suggestion._highlightResult.title.value + '</a></span>';
+      }
+  }
+});
+</script>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('https://i.loli.net/2021/09/30/3bSAB6Fru9xCdh8.jpg')
+    }
+</style>
+
+<header class="intro-header" >
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/hsi-classification" title="HSI classification">
+                            HSI classification
+                        </a>
+                        
+                        <a class="tag" href="/tags/cv" title="cv">
+                            cv
+                        </a>
+                        
+                    </div>
+                    <h1>A2S2KResNet——论文概述与代码分析</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        
+                            Posted by 
+                            
+                                 Linexus
+                             
+                            on 
+                            Sunday, January 22, 2023
+                            
+                            
+                            
+                            
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <h1 id="a2s2k-resnet的论文分析">A2S2K-ResNet的论文分析</h1>
+<h2 id="提出背景">提出背景</h2>
+<p>为了使神经元有效地调整感受野大小和跨通道依赖性，本文提出了基于注意力的自适应频谱空间核改进的剩余网络，其中的改进点有几个：</p>
+<ul>
+<li>attention-based adaptive spectral–spatial kernel</li>
+<li>improved spectral–spatial ResNet</li>
+</ul>
+<h3 id="设计较新的模型结构">设计较新的模型结构</h3>
+<ul>
+<li>EFR module</li>
+<li>A2S2K-Net&rsquo;s block</li>
+</ul>
+<h2 id="网络总体结构">网络总体结构</h2>
+<h3 id="网络总体结构图">网络总体结构图</h3>
+<p>
+  <img src="../../static/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122223532018.png" alt="image-20230122223532018">
+
+</p>
+<p>分为A2S2K-block、ResNet block、Pool Layer、输出层。将重点阐述前两个模块。</p>
+<h4 id="a2s2k-block">A2S2K-block</h4>
+<p>
+  <img src="../../static/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122224459860.png" alt="image-20230122224459860">
+
+</p>
+<p>来自于<strong>Selective kernel networks</strong>，及通过attention操作将不同卷积核提取的特征进行自适应选取。其网络结构涉及到三个部分：</p>
+<ul>
+<li>Split：生成具有各种内核大小的多个路径，这些大小对应于神经元的不同感受野大小。</li>
+<li>Fuse：组合并汇总来自多个路径的信息，以获得选择权重的全局和全面表示。</li>
+<li>Select：根据选择权重聚合大小不同的内核的特征图。(及相加操作)</li>
+</ul>
+<p>代码片段如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#6272a4"># 上层卷积</span>
+x_1x1 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv1x1(X)
+x_1x1 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm1x1(x_1x1)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+<span style="color:#6272a4"># 下层卷积</span>
+x_3x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv3x3(X)
+x_3x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm3x3(x_3x3)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+<span style="color:#6272a4"># concat操作</span>
+x1 <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat([x_3x3, x_1x1], dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+<span style="color:#6272a4"># 加和(初步融合特征)</span>
+U <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>sum(x1, dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+<span style="color:#6272a4"># 全局池化操作，为了将特征进行融合和便于之后的attention操作</span>
+S <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>pool(U)
+<span style="color:#6272a4"># 通过3D卷积进行特征融合</span>
+Z <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv_se(S)
+attention_vector <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat(
+    [
+        <span style="color:#6272a4"># 通过3D卷积进行扩张</span>
+        self<span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>),
+        self<span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+    ],
+    dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+<span style="color:#6272a4"># softmax是为了将空间和维度的比例进行统一划分</span>
+attention_vector <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>softmax(attention_vector)
+<span style="color:#6272a4"># 所谓乘上attention后的结果进行权重自适应调整</span>
+V <span style="color:#ff79c6">=</span> (x1 <span style="color:#ff79c6">*</span> attention_vector)<span style="color:#ff79c6">.</span>sum(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</code></pre></div><h4 id="efr-module">EFR Module</h4>
+<p>
+  <img src="../../static/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122231258793.png" alt="image-20230122231258793">
+
+</p>
+<p>就是特征重提取，本模块来自于SENet中的SEA模块，为了在之后能够对卷积后相对重要的特征进行进一步的重提取，可以有效减少网络层数，提升速度。(SENet也是SKNet的主要参考论文)。</p>
+<h4 id="改进残差网络">改进残差网络</h4>
+<p>
+  <img src="../../static/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122232550024.png" alt="image-20230122232550024">
+
+</p>
+<p>原论文没有提及为什么这么改，我觉得就是为了让3D卷积后面接一个BN和激活函数，让层之间保持这样跨层关系？</p>
+<h2 id="代码">代码</h2>
+<h3 id="网络代码">网络代码</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">A2S2K<span style="color:#ff79c6">-</span>blockclass S3KAIResNet(nn<span style="color:#ff79c6">.</span>Module):
+    <span style="color:#ff79c6">def</span> __init__(self, band, classes, reduction):
+        <span style="color:#8be9fd;font-style:italic">super</span>(S3KAIResNet, self)<span style="color:#ff79c6">.</span>__init__()
+        self<span style="color:#ff79c6">.</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;SSRN&#39;</span>
+        self<span style="color:#ff79c6">.</span>conv1x1 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
+            in_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
+            out_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
+            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>),
+            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>),
+            padding<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>)
+        self<span style="color:#ff79c6">.</span>conv3x3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
+            in_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
+            out_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
+            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">7</span>),
+            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>),
+            padding<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>))
+
+        self<span style="color:#ff79c6">.</span>batch_norm1x1 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+            nn<span style="color:#ff79c6">.</span>BatchNorm3d(
+                PARAM_KERNEL_SIZE, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>,
+                affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
+            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
+        self<span style="color:#ff79c6">.</span>batch_norm3x3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+            nn<span style="color:#ff79c6">.</span>BatchNorm3d(
+                PARAM_KERNEL_SIZE, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>,
+                affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
+            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
+
+        self<span style="color:#ff79c6">.</span>pool <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>AdaptiveAvgPool3d(<span style="color:#bd93f9">1</span>)
+        self<span style="color:#ff79c6">.</span>conv_se <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+            nn<span style="color:#ff79c6">.</span>Conv3d(
+                PARAM_KERNEL_SIZE, band <span style="color:#ff79c6">//</span> reduction, <span style="color:#bd93f9">1</span>, padding<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>, bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),
+            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
+        self<span style="color:#ff79c6">.</span>conv_ex <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
+            band <span style="color:#ff79c6">//</span> reduction, PARAM_KERNEL_SIZE, <span style="color:#bd93f9">1</span>, padding<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>, bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+        self<span style="color:#ff79c6">.</span>softmax <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Softmax(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+
+        self<span style="color:#ff79c6">.</span>res_net1 <span style="color:#ff79c6">=</span> Residual(
+            PARAM_KERNEL_SIZE,
+            PARAM_KERNEL_SIZE, (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>), (<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">3</span>),
+            start_block<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+        self<span style="color:#ff79c6">.</span>res_net2 <span style="color:#ff79c6">=</span> Residual(PARAM_KERNEL_SIZE, PARAM_KERNEL_SIZE,
+                                 (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>), (<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">3</span>))
+        self<span style="color:#ff79c6">.</span>res_net3 <span style="color:#ff79c6">=</span> Residual(PARAM_KERNEL_SIZE, PARAM_KERNEL_SIZE,
+                                 (<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>), (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>))
+        self<span style="color:#ff79c6">.</span>res_net4 <span style="color:#ff79c6">=</span> Residual(
+            PARAM_KERNEL_SIZE,
+            PARAM_KERNEL_SIZE, (<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>), (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>),
+            end_block<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+
+        kernel_3d <span style="color:#ff79c6">=</span> math<span style="color:#ff79c6">.</span>ceil((band <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">6</span>) <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">2</span>)
+        <span style="color:#6272a4"># print(kernel_3d)</span>
+
+        self<span style="color:#ff79c6">.</span>conv2 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
+            in_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
+            out_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">128</span>,
+            padding<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>),
+            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, kernel_3d),
+            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>))
+        self<span style="color:#ff79c6">.</span>batch_norm2 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+            nn<span style="color:#ff79c6">.</span>BatchNorm3d(<span style="color:#bd93f9">128</span>, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>, affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
+            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
+        self<span style="color:#ff79c6">.</span>conv3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
+            in_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
+            out_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
+            padding<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>),
+            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">128</span>),
+            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>))
+        self<span style="color:#ff79c6">.</span>batch_norm3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+            nn<span style="color:#ff79c6">.</span>BatchNorm3d(
+                PARAM_KERNEL_SIZE, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>,
+                affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
+            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
+
+        self<span style="color:#ff79c6">.</span>avg_pooling <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>AvgPool3d(kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">1</span>))
+        self<span style="color:#ff79c6">.</span>full_connection <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+            nn<span style="color:#ff79c6">.</span>Linear(PARAM_KERNEL_SIZE, classes)
+            <span style="color:#6272a4"># nn.Softmax()</span>
+        )
+
+    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">forward</span>(self, X):
+        <span style="color:#6272a4"># A2S2K-block</span>
+        x_1x1 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv1x1(X)
+        x_1x1 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm1x1(x_1x1)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+        x_3x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv3x3(X)
+        x_3x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm3x3(x_3x3)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+
+        x1 <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat([x_3x3, x_1x1], dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+        U <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>sum(x1, dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+        S <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>pool(U)
+        Z <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv_se(S)
+        attention_vector <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat(
+            [
+                self<span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>),
+                self<span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+            ],
+            dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+        attention_vector <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>softmax(attention_vector)
+        V <span style="color:#ff79c6">=</span> (x1 <span style="color:#ff79c6">*</span> attention_vector)<span style="color:#ff79c6">.</span>sum(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+		
+        <span style="color:#6272a4"># res-net block</span>
+        <span style="color:#6272a4"># start block</span>
+        x2 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>res_net1(V)
+        <span style="color:#6272a4"># middle block</span>
+        x2 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>res_net2(x2)
+        <span style="color:#6272a4"># 防止过拟合</span>
+        x2 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm2(self<span style="color:#ff79c6">.</span>conv2(x2))
+        x2 <span style="color:#ff79c6">=</span> x2<span style="color:#ff79c6">.</span>permute(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>)
+        x2 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm3(self<span style="color:#ff79c6">.</span>conv3(x2))
+		<span style="color:#6272a4"># middle block</span>
+        x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>res_net3(x2)
+        <span style="color:#6272a4"># last block</span>
+        x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>res_net4(x3)
+        x4 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>avg_pooling(x3)
+        x4 <span style="color:#ff79c6">=</span> x4<span style="color:#ff79c6">.</span>view(x4<span style="color:#ff79c6">.</span>size(<span style="color:#bd93f9">0</span>), <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
+        <span style="color:#ff79c6">return</span> self<span style="color:#ff79c6">.</span>full_connection(x4)
+
+
+model <span style="color:#ff79c6">=</span> S3KAIResNet(BAND, CLASSES_NUM, <span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">.</span>cuda()
+
+summary(model, input_data<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, img_rows, img_cols, BAND), verbose<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</code></pre></div><p>剩下的代码太多了，详情前往<a href="https://colab.research.google.com/drive/1x2CYfaUXNjX4yDMLCvoVFqAMZXZwwVgS">代码处</a>查看。</p>
+
+
+                
+
+                
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/fsknet%E8%AE%BA%E6%96%87%E6%A6%82%E8%BF%B0%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" data-toggle="tooltip" data-placement="top" title="FSKNet——论文概述与代码分析">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+                
+
+                
+<div id="disqus-comment">
+    
+    <script src="https://giscus.app/client.js"
+        data-repo="hhhhlkf/comment"
+        data-repo-id="R_kgDOH-fgGQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOH-fgGc4CRXvh"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+        
+    </script>
+    
+</div>
+
+
+            </div>
+
+            
+            
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body">
+
+                    </ul>
+                </div>
+            </div>
+            
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        <a href="/tags/cv" title="cv">
+                            cv
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/database" title="database">
+                            database
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/deep-learning" title="deep-learning">
+                            deep-learning
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/hsi-classification" title="hsi-classification">
+                            hsi-classification
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/music" title="music">
+                            music
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/oracle" title="oracle">
+                            oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1" title="数学建模">
+                            数学建模
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B" title="软件工程">
+                            软件工程
+                        </a>
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://hbai.site/">Bai的博客</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+                    <li>
+                        <a href="mailto:likefan2002@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/hhhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-zhihu fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="/img/erweima.png">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-weixin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/hhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://gitee.com/linexus">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-git fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://stackoverflow.com/users/yourstackoverflowid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="img/qqpay.jpg">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-qq fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://blog.csdn.net/qq_56208478?spm=1000.2115.3001.5343">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-blogger fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Linexus blog 2023
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
+                        href="https://hhhhlkf.github.io">Linexus</a> |
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"
+                        height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=hhhhlkf&repo=hhhhlkf.github.io&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function loadAsync(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        
+        
+        
+        
+            _containerSelector = 'div.post-container'
+        
+
+        
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        
+        $(selector).html('')
+
+        
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    
+
+
+    loadAsync("\/js\/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<script>
+    
+    if ($('#tag_cloud').length !== 0) {
+        loadAsync("/js/jquery.tagcloud.js", function () {
+            $.fn.tagcloud.defaults = {
+                
+                color: { start: '#bbbbee', end: '#0085a1' },
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    loadAsync("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+<script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+</script>
+
+
+
+
+
+
+
+
+
+
+<script>
+    
+    var _baId = 'b6cbc3cbead2c9e01d34c11c0c66f764';
+
+    
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
+<div id="sakana-widget-right"></div>
+<div id="sakana-widget-left"></div>
+<script>
+    function initSakanaWidget() {
+        new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
+        
+        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
+    }
+</script>
+<script async onload="initSakanaWidget()"
+    src="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.js"></script>
+<style>
+    #sakana-widget-right {
+        position: fixed;
+        right: 40px;
+        bottom: 24px;
+        z-index: 4;
+
+    }
+
+    #sakana-widget-left {
+        position: fixed;
+        left: 30px;
+        bottom: 24px;
+    }
+</style>
+
+
+
+</body>
+</html>
