@@ -293,13 +293,13 @@ autocomplete('#aa-search-input',
 <h2 id="网络总体结构">网络总体结构</h2>
 <h3 id="网络总体结构图">网络总体结构图</h3>
 <p>
-  <img src="../../static/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122223532018.png" alt="image-20230122223532018">
+  <img src="/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122223532018.png" alt="image-20230122223532018">
 
 </p>
 <p>分为A2S2K-block、ResNet block、Pool Layer、输出层。将重点阐述前两个模块。</p>
 <h4 id="a2s2k-block">A2S2K-block</h4>
 <p>
-  <img src="../../static/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122224459860.png" alt="image-20230122224459860">
+  <img src="/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122224459860.png" alt="image-20230122224459860">
 
 </p>
 <p>来自于<strong>Selective kernel networks</strong>，及通过attention操作将不同卷积核提取的特征进行自适应选取。其网络结构涉及到三个部分：</p>
@@ -336,13 +336,13 @@ attention_vector <span style="color:#ff79c6">=</span> self<span style="color:#ff
 V <span style="color:#ff79c6">=</span> (x1 <span style="color:#ff79c6">*</span> attention_vector)<span style="color:#ff79c6">.</span>sum(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
 </code></pre></div><h4 id="efr-module">EFR Module</h4>
 <p>
-  <img src="../../static/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122231258793.png" alt="image-20230122231258793">
+  <img src="/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122231258793.png" alt="image-20230122231258793">
 
 </p>
 <p>就是特征重提取，本模块来自于SENet中的SEA模块，为了在之后能够对卷积后相对重要的特征进行进一步的重提取，可以有效减少网络层数，提升速度。(SENet也是SKNet的主要参考论文)。</p>
 <h4 id="改进残差网络">改进残差网络</h4>
 <p>
-  <img src="../../static/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122232550024.png" alt="image-20230122232550024">
+  <img src="/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122232550024.png" alt="image-20230122232550024">
 
 </p>
 <p>原论文没有提及为什么这么改，我觉得就是为了让3D卷积后面接一个BN和激活函数，让层之间保持这样跨层关系？</p>
