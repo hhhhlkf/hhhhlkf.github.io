@@ -562,6 +562,21 @@ fcmp:
 <span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> fcmp one float <span style="color:#bd93f9">4.0</span>, <span style="color:#bd93f9">5.0</span>    ; yields: result<span style="color:#ff79c6">=</span>true
 <span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> fcmp olt float <span style="color:#bd93f9">4.0</span>, <span style="color:#bd93f9">5.0</span>    ; yields: result<span style="color:#ff79c6">=</span>true
 <span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> fcmp ueq double <span style="color:#bd93f9">1.0</span>, <span style="color:#bd93f9">2.0</span>   ; yields: result<span style="color:#ff79c6">=</span>false
+</code></pre></div><h3 id="函数语法">函数语法</h3>
+<h2 id="函数定义">函数定义</h2>
+<p>在LLVM中，一个最基本的函数定义的样子我们之前已经遇到过多次，就是<code>@main</code>函数的样子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">define <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#8be9fd;font-style:italic">@</span>&lt;<span style="color:#8be9fd;font-style:italic">name</span><span style="color:#ff79c6">&gt;</span>(<span style="color:#f1fa8c">&lt;param&gt;</span>, <span style="color:#ff79c6">...</span>) {
+	<span style="color:#ff79c6">...</span>
+	[ret <span style="color:#f1fa8c">&lt;op&gt;</span>] 
+}
+</code></pre></div><p>在函数名之后可以加上参数列表，如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">define i32 <span style="color:#8be9fd;font-style:italic">@foo</span>(i32 <span style="color:#8be9fd;font-style:italic">%a</span>, i64 <span style="color:#8be9fd;font-style:italic">%b</span>) {
+	ret i32 <span style="color:#bd93f9">0</span>
+}
+</code></pre></div><p>一个函数定义最基本的框架，就是返回值（<code>i32</code>）+函数名（<code>@foo</code>）+参数列表（<code>(i32 %a, i64 %b）</code>）+函数体（<code>{ ret i32 0 }</code>）。</p>
+<p>除了函数定义之外，还有一种情况十分常见，那就是函数声明。我们在一个编译单元（模块）下，可以使用别的模块的函数，这时候就需要在本模块先声明这个函数，才能保证编译时不出错，从而在链接时正确将声明的函数与别的模块下其定义进行链接。</p>
+<p>函数声明也相对比较简单，就是使用<code>declare</code>关键词替换<code>define</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">declare i32 <span style="color:#8be9fd;font-style:italic">@printf</span>(i8<span style="color:#ff79c6">*</span>, <span style="color:#ff79c6">...</span>)
 </code></pre></div>
 
                 
