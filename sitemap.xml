@@ -2,28 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://hhhhlkf.github.io/post/a2s2kresnet%E8%AE%BA%E6%96%87%E6%A6%82%E8%BF%B0%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</loc>
-    <lastmod>2023-01-22T21:39:39+08:00</lastmod>
-  </url><url>
     <loc>https://hhhhlkf.github.io/categories/</loc>
+    <lastmod>2023-05-01T18:32:11+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/tags/compiler/</loc>
+    <lastmod>2023-05-01T18:32:11+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/</loc>
+    <lastmod>2023-05-01T18:32:11+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/tags/llvm/</loc>
+    <lastmod>2023-05-01T18:32:11+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/post/llvm-ir%E9%83%A8%E5%88%86%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%94%AF%E6%8C%81sysy2022%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/</loc>
+    <lastmod>2023-05-01T18:32:11+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/categories/post/</loc>
+    <lastmod>2023-05-01T18:32:11+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/post/</loc>
+    <lastmod>2023-05-01T18:32:11+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/tags/</loc>
+    <lastmod>2023-05-01T18:32:11+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/post/scp%E8%AE%A4%E8%AF%81%E5%A4%8D%E4%B9%A0%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%B8%8E%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/</loc>
+    <lastmod>2023-03-06T19:54:19+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
+    <lastmod>2023-03-06T19:54:19+08:00</lastmod>
+  </url><url>
+    <loc>https://hhhhlkf.github.io/post/a2s2kresnet%E8%AE%BA%E6%96%87%E6%A6%82%E8%BF%B0%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</loc>
     <lastmod>2023-01-22T21:39:39+08:00</lastmod>
   </url><url>
     <loc>https://hhhhlkf.github.io/tags/cv/</loc>
     <lastmod>2023-01-22T21:39:39+08:00</lastmod>
   </url><url>
     <loc>https://hhhhlkf.github.io/tags/hsi-classification/</loc>
-    <lastmod>2023-01-22T21:39:39+08:00</lastmod>
-  </url><url>
-    <loc>https://hhhhlkf.github.io/</loc>
-    <lastmod>2023-01-22T21:39:39+08:00</lastmod>
-  </url><url>
-    <loc>https://hhhhlkf.github.io/categories/post/</loc>
-    <lastmod>2023-01-22T21:39:39+08:00</lastmod>
-  </url><url>
-    <loc>https://hhhhlkf.github.io/post/</loc>
-    <lastmod>2023-01-22T21:39:39+08:00</lastmod>
-  </url><url>
-    <loc>https://hhhhlkf.github.io/tags/</loc>
     <lastmod>2023-01-22T21:39:39+08:00</lastmod>
   </url><url>
     <loc>https://hhhhlkf.github.io/tags/deep-learning/</loc>

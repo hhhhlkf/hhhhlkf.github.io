@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    
+    
+    <meta property="og:site_name" content="Linexus blog">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://hhhhlkf.github.io//img/fantasy.png">
+    <meta property="twitter:image" content="https://hhhhlkf.github.io//img/fantasy.png" />
+    
+
+    
+    <meta name="title" content="SCP认证复习——线段树与树状数组" />
+    <meta property="og:title" content="SCP认证复习——线段树与树状数组" />
+    <meta property="twitter:title" content="SCP认证复习——线段树与树状数组" />
+    
+
+    
+    <meta name="description" content="树状数组和线段树">
+    <meta property="og:description" content="树状数组和线段树" />
+    <meta property="twitter:description" content="树状数组和线段树" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>SCP认证复习——线段树与树状数组-LKF的博客 | Linexus&#39;s Blog</title>
+
+    <link rel="canonical" href="/post/scp%E8%AE%A4%E8%AF%81%E5%A4%8D%E4%B9%A0%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%B8%8E%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    
+
+    <link rel="stylesheet" href="/css/hugo-theme-cleanwhite.css">
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    <link rel="stylesheet" href="https://hhhhlkf.github.io/css/search.css" />
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+
+  
+    <script src="//unpkg.com/element-plus"></script>
+    <script type="text/javascript" src="/js/random.js"></script>
+    <script type="text/javascript" src="/js/mersenne-twister.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <script src="//unpkg.com/element-plus"></script>
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+</head>
+
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Linexus blog</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/music">music</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/categories/post">post</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/books/">BOOKS</a></li>
+                    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+                        <li><a href="/top/photos/">PHOTOS</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="#modalSearch" id="modalA" data-target="#modalSearch" data-toggle="modal"><i class="fa fa-search"></i></a>
+                        <script>
+                            function getDialog(){
+                                $('#modalSearch').modal('show')
+                            }
+                        </script>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<div id="modalSearch" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Search hhhhlkf.github.io</h4>
+        </div>
+        <div class="modal-body">
+            <div class="aa-input-container" id="aa-input-container">
+  <input type="search" id="aa-search-input" class="aa-input-search" placeholder="Search for titles or URIs..." name="search" autocomplete="off" />
+  <svg class="aa-input-icon" viewBox="654 -372 1664 1664">
+      <path d="M1806,332c0-123.3-43.8-228.8-131.5-316.5C1586.8-72.2,1481.3-116,1358-116s-228.8,43.8-316.5,131.5  C953.8,103.2,910,208.7,910,332s43.8,228.8,131.5,316.5C1129.2,736.2,1234.7,780,1358,780s228.8-43.8,316.5-131.5  C1762.2,560.8,1806,455.3,1806,332z M2318,1164c0,34.7-12.7,64.7-38,90s-55.3,38-90,38c-36,0-66-12.7-90-38l-343-342  c-119.3,82.7-252.3,124-399,124c-95.3,0-186.5-18.5-273.5-55.5s-162-87-225-150s-113-138-150-225S654,427.3,654,332  s18.5-186.5,55.5-273.5s87-162,150-225s138-113,225-150S1262.7-372,1358-372s186.5,18.5,273.5,55.5s162,87,225,150s113,138,150,225  S2062,236.7,2062,332c0,146.7-41.3,279.7-124,399l343,343C2305.7,1098.7,2318,1128.7,2318,1164z" />
+  </svg>
+</div>
+<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
+<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
+<script>
+var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
+var index = client.initIndex('blog');
+autocomplete('#aa-search-input',
+{ hint: false}, {
+  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
+  displayKey: 'name',
+  templates: {
+      suggestion: function(suggestion) {
+          console.log(suggestion);
+          return '<span>' + '<a href="' + suggestion.url + '">' +
+          suggestion._highlightResult.title.value + '</a></span>';
+      }
+  }
+});
+</script>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('https://i.loli.net/2021/09/30/uDASrq42lRX6Z8J.jpg')
+    }
+</style>
+
+<header class="intro-header" >
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" title="数据结构">
+                            数据结构
+                        </a>
+                        
+                    </div>
+                    <h1>SCP认证复习——线段树与树状数组</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        
+                            Posted by 
+                            
+                                 Linexus
+                             
+                            on 
+                            Monday, March 6, 2023
+                            
+                            
+                            
+                            
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <h1 id="线段树与树状数组">线段树与树状数组</h1>
+<h2 id="线段树">线段树</h2>
+<h3 id="题目描述">题目描述</h3>
+<p>如题，已知一个数列，你需要进行下面两种操作：</p>
+<ol>
+<li>将某区间每一个数加上 k。</li>
+<li>求出某区间每一个数的和。</li>
+</ol>
+<h3 id="输入格式">输入格式</h3>
+<p>第一行包含两个整数n*,*m，分别表示该数列数字的个数和操作的总个数。</p>
+<p>第二行包含 n<em>n</em> 个用空格分隔的整数，其中第 i<em>i</em> 个数字表示数列第 i<em>i</em> 项的初始值。</p>
+<p>接下来 m<em>m</em> 行每行包含 33 或 44 个整数，表示一个操作，具体如下：</p>
+<ol>
+<li><code>1 x y k</code>：将区间[<em>x</em>,<em>y</em>]内每个数加上 <em>k</em>。</li>
+<li><code>2 x y</code>：输出区间[<em>x</em>,<em>y</em>]内每个数的和。</li>
+</ol>
+<h3 id="输出格式">输出格式</h3>
+<p>输出包含若干行整数，即为所有操作 2 的结果。</p>
+<h3 id="输入输出样例">输入输出样例</h3>
+<p><strong>输入 #1</strong></p>
+<pre tabindex="0"><code>5 5
+1 5 4 2 3
+2 2 4
+1 2 3 2
+2 3 4
+1 1 5 1
+2 1 4
+</code></pre><p><strong>输出 #1</strong></p>
+<pre tabindex="0"><code>11
+8
+20
+</code></pre><h3 id="线段树的关键数据结构">线段树的关键数据结构：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">num[MAX]
+ans[MAX <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">2</span>]
+lazy[MAX <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">2</span>]
+</code></pre></div><p>其中num作为输入的数字集合，ans作为线段树的集合，lazy作为懒标记，懒记录了当前区间的更新值。</p>
+<h4 id="update操作">update操作</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#6272a4">//其中x-y是当前更新区间，l-r是当前划分区间的两端，k是更新值，p是区间段值
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">update</span>(<span style="color:#8be9fd">int</span> x, <span style="color:#8be9fd">int</span> y, <span style="color:#8be9fd">int</span> l, <span style="color:#8be9fd">int</span> r, <span style="color:#8be9fd">int</span> k, <span style="color:#8be9fd">int</span> p)
+{
+    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> l <span style="color:#ff79c6">&amp;&amp;</span> y <span style="color:#ff79c6">&gt;=</span> r)
+    {
+        <span style="color:#6272a4">//更新当前区间值，并阻断下方的更新，做到懒更新
+</span><span style="color:#6272a4"></span>        ans[p] <span style="color:#ff79c6">+=</span> (ll)k <span style="color:#ff79c6">*</span> (r <span style="color:#ff79c6">-</span> l <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+        lazy[p] <span style="color:#ff79c6">+=</span> k;
+        <span style="color:#ff79c6">return</span>;
+    }
+    <span style="color:#6272a4">//伸展操作，如果当前层不是更新的最底层，则向下伸展更新下一层
+</span><span style="color:#6272a4"></span>    spread(p, r, l);
+    <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> r <span style="color:#ff79c6">+</span> l <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
+    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> mid)
+        update(x, y, l, mid, k, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>);
+    <span style="color:#ff79c6">if</span> (y <span style="color:#ff79c6">&gt;</span> mid)
+        update(x, y, mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, r, k, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">1</span>);
+    <span style="color:#6272a4">//更新时只有最底层在更新，递归返回后更新上层
+</span><span style="color:#6272a4"></span>    ans[p] <span style="color:#ff79c6">=</span> ans[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+</span> ans[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>];
+}
+</code></pre></div><h4 id="spread操作">spread操作</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#6272a4">//伸展操作，将lazy[p]传递给子结点，并更新子结点
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">spread</span>(<span style="color:#8be9fd">int</span> p, <span style="color:#8be9fd">int</span> r, <span style="color:#8be9fd">int</span> l)
+{
+    <span style="color:#ff79c6">if</span> (lazy[p] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
+    {
+        <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> (r <span style="color:#ff79c6">+</span> l) <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
+        ans[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p] <span style="color:#ff79c6">*</span> (mid <span style="color:#ff79c6">-</span> l <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+        ans[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p] <span style="color:#ff79c6">*</span> (r <span style="color:#ff79c6">-</span> mid);
+        lazy[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p];
+        lazy[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p];
+        lazy[p] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+    }
+}
+</code></pre></div><h4 id="read操作">read操作</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++">ll <span style="color:#50fa7b">read</span>(<span style="color:#8be9fd">int</span> x, <span style="color:#8be9fd">int</span> y, <span style="color:#8be9fd">int</span> l, <span style="color:#8be9fd">int</span> r, <span style="color:#8be9fd">int</span> p)
+{
+    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> l <span style="color:#ff79c6">&amp;&amp;</span> y <span style="color:#ff79c6">&gt;=</span> r)
+    {
+        <span style="color:#ff79c6">return</span> ans[p];
+    }
+    <span style="color:#6272a4">//有时候需要读入未更新的底层，所以需要伸展
+</span><span style="color:#6272a4"></span>    spread(p, r, l);
+    <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> r <span style="color:#ff79c6">+</span> l <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
+    ll sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> mid)
+        sum <span style="color:#ff79c6">+=</span> read(x, y, l, mid, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>);
+    <span style="color:#ff79c6">if</span> (y <span style="color:#ff79c6">&gt;=</span> mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>)
+        sum <span style="color:#ff79c6">+=</span> read(x, y, mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, r, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">|</span><span style="color:#bd93f9">1</span>);
+    <span style="color:#ff79c6">return</span> sum;
+}
+</code></pre></div><h4 id="建树操作">建树操作</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#6272a4">//建立线段树
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">build</span>(<span style="color:#8be9fd">int</span> p, <span style="color:#8be9fd">int</span> l, <span style="color:#8be9fd">int</span> r)
+{
+    <span style="color:#ff79c6">if</span> (l <span style="color:#ff79c6">==</span> r)
+    {
+        ans[p] <span style="color:#ff79c6">=</span> num[l];
+        <span style="color:#ff79c6">return</span>;
+    }
+    <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> l <span style="color:#ff79c6">+</span> r <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
+    build((p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>), l, mid);
+    build((p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, r);
+    ans[p] <span style="color:#ff79c6">=</span> ans[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+</span> ans[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>];
+}
+</code></pre></div><h2 id="树状数组">树状数组</h2>
+<h2 id="题目描述-1">题目描述</h2>
+<p>如题，已知一个数列，你需要进行下面两种操作：</p>
+<ul>
+<li>将某一个数加上 x</li>
+<li>求出某区间每一个数的和</li>
+</ul>
+<h2 id="输入格式-1">输入格式</h2>
+<p>第一行包含两个正整数 n,m，分别表示该数列数字的个数和操作的总个数。</p>
+<p>第二行包含 n个用空格分隔的整数，其中第 i个数字表示数列第 i项的初始值。</p>
+<p>接下来 m行每行包含 33 个整数，表示一个操作，具体如下：</p>
+<ul>
+<li><code>1 x k</code> 含义：将第 x个数加上 k</li>
+<li><code>2 x y</code> 含义：输出区间 [x,y][<em>x</em>,<em>y</em>] 内每个数的和</li>
+</ul>
+<h2 id="输出格式-1">输出格式</h2>
+<p>输出包含若干行整数，即为所有操作 22 的结果。</p>
+<h2 id="输入输出样例-1">输入输出样例</h2>
+<p><strong>输入 #1</strong></p>
+<pre tabindex="0"><code>5 5
+1 5 4 2 3
+1 1 3
+2 2 5
+1 3 -1
+1 4 2
+2 1 4
+</code></pre><p><strong>输出 #1</strong></p>
+<pre tabindex="0"><code>14
+16
+</code></pre><p>参考博客，讲的非常好</p>
+<p><a href="https://blog.csdn.net/TheWayForDream/article/details/118436732">https://blog.csdn.net/TheWayForDream/article/details/118436732</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#define lowbit(x) (x&amp;(-x)) 
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ll;
+<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> Maxn<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1e6</span><span style="color:#ff79c6">+</span><span style="color:#bd93f9">5</span>;
+<span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">500005</span>];
+<span style="color:#8be9fd">int</span> d[Maxn]<span style="color:#ff79c6">=</span>{<span style="color:#bd93f9">0</span>};<span style="color:#6272a4">//d[i]的值，d[i]表示第i和i-1个数的差值
+</span><span style="color:#6272a4"></span>ll c[Maxn]; 
+<span style="color:#8be9fd">int</span> n,m;
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">update</span>(<span style="color:#8be9fd">int</span> pos,<span style="color:#8be9fd">int</span> k)<span style="color:#6272a4">//pos表示修改点的位置,K表示修改的值也即+K操作
+</span><span style="color:#6272a4"></span>{
+	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>pos;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">+=</span>lowbit(i))
+	c[i]<span style="color:#ff79c6">+=</span>k;
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+ll <span style="color:#50fa7b">ask_qujian</span>(<span style="color:#8be9fd">int</span> pos)<span style="color:#6272a4">//返回区间pos到1的总和
+</span><span style="color:#6272a4"></span>{
+	ll ans<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>pos;i;i<span style="color:#ff79c6">-=</span>lowbit(i)) ans<span style="color:#ff79c6">+=</span>c[i];
+	<span style="color:#ff79c6">return</span> ans;
+} 
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	memset(c,<span style="color:#bd93f9">0</span>,<span style="color:#ff79c6">sizeof</span>(c));
+	scanf(<span style="color:#f1fa8c">&#34;%d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n,<span style="color:#ff79c6">&amp;</span>m);
+	a[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
+	{
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>a[i]);
+		d[i]<span style="color:#ff79c6">=</span>a[i]<span style="color:#ff79c6">-</span>a[i<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>];
+		update(i,d[i]);
+	}
+	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>m;i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> choice,x,y,k;
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>choice);
+		<span style="color:#ff79c6">if</span>(choice<span style="color:#ff79c6">==</span><span style="color:#bd93f9">1</span>)
+		{
+			scanf(<span style="color:#f1fa8c">&#34;%d %d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>x,<span style="color:#ff79c6">&amp;</span>y,<span style="color:#ff79c6">&amp;</span>k);
+			update(x,k);
+			update(y<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>,<span style="color:#ff79c6">-</span>k);
+		}
+		<span style="color:#ff79c6">else</span>
+		{
+			scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>x);
+			printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,ask_qujian(x));
+		}
+	}
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
+</span><span style="color:#ff79c6">#define lowbit(x) (x&amp;(-x))
+</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ll; 
+<span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+<span style="color:#8be9fd">int</span> c[<span style="color:#bd93f9">2000006</span>];
+<span style="color:#8be9fd">int</span> n,m;
+ll ans;
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">add_dandian</span>(<span style="color:#8be9fd">int</span> x,<span style="color:#8be9fd">int</span> k)
+{
+	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>x;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">+=</span>lowbit(i))
+	c[i]<span style="color:#ff79c6">+=</span>k;
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">search</span>(<span style="color:#8be9fd">int</span> begin,<span style="color:#8be9fd">int</span> end)
+{
+	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>end;i;i<span style="color:#ff79c6">-=</span>lowbit(i))
+	ans<span style="color:#ff79c6">+=</span>c[i];
+	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>begin<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;i;i<span style="color:#ff79c6">-=</span>lowbit(i))
+	ans<span style="color:#ff79c6">-=</span>c[i];
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+{
+	scanf(<span style="color:#f1fa8c">&#34;%d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n,<span style="color:#ff79c6">&amp;</span>m);
+	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> number;
+		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>number);
+		add_dandian(i,number);
+	}
+	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>m;i<span style="color:#ff79c6">++</span>)
+	{
+		<span style="color:#8be9fd">int</span> choice,x,y;
+		scanf(<span style="color:#f1fa8c">&#34;%d %d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>choice,<span style="color:#ff79c6">&amp;</span>x,<span style="color:#ff79c6">&amp;</span>y);
+		<span style="color:#ff79c6">if</span>(choice<span style="color:#ff79c6">==</span><span style="color:#bd93f9">1</span>) add_dandian(x,y);
+		<span style="color:#ff79c6">else</span>
+		{
+			ans<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+			search(x,y);
+			printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,ans);
+		}
+	}
+	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+}
+
+</code></pre></div>
+
+                
+
+                
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/a2s2kresnet%E8%AE%BA%E6%96%87%E6%A6%82%E8%BF%B0%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" data-toggle="tooltip" data-placement="top" title="A2S2KResNet——论文概述与代码分析">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/post/llvm-ir%E9%83%A8%E5%88%86%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%94%AF%E6%8C%81sysy2022%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/" data-toggle="tooltip" data-placement="top" title="LLVM IR部分常用语法——支持Sysy2022中间代码生成">Next
+                            Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+                
+
+                
+<div id="disqus-comment">
+    
+    <script src="https://giscus.app/client.js"
+        data-repo="hhhhlkf/comment"
+        data-repo-id="R_kgDOH-fgGQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOH-fgGc4CRXvh"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+        
+    </script>
+    
+</div>
+
+
+            </div>
+
+            
+            
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body">
+
+                    </ul>
+                </div>
+            </div>
+            
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        <a href="/tags/compiler" title="compiler">
+                            compiler
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/cv" title="cv">
+                            cv
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/database" title="database">
+                            database
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/deep-learning" title="deep-learning">
+                            deep-learning
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/hsi-classification" title="hsi-classification">
+                            hsi-classification
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/llvm" title="llvm">
+                            llvm
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/music" title="music">
+                            music
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/oracle" title="oracle">
+                            oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1" title="数学建模">
+                            数学建模
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" title="数据结构">
+                            数据结构
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B" title="软件工程">
+                            软件工程
+                        </a>
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://hbai.site/">Bai的博客</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+                    <li>
+                        <a href="mailto:likefan2002@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/hhhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-zhihu fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="/img/erweima.png">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-weixin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/hhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://gitee.com/linexus">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-git fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://stackoverflow.com/users/yourstackoverflowid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="img/qqpay.jpg">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-qq fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://blog.csdn.net/qq_56208478?spm=1000.2115.3001.5343">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-blogger fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Linexus blog 2023
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
+                        href="https://hhhhlkf.github.io">Linexus</a> |
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"
+                        height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=hhhhlkf&repo=hhhhlkf.github.io&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function loadAsync(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        
+        
+        
+        
+            _containerSelector = 'div.post-container'
+        
+
+        
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        
+        $(selector).html('')
+
+        
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    
+
+
+    loadAsync("\/js\/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<script>
+    
+    if ($('#tag_cloud').length !== 0) {
+        loadAsync("/js/jquery.tagcloud.js", function () {
+            $.fn.tagcloud.defaults = {
+                
+                color: { start: '#bbbbee', end: '#0085a1' },
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    loadAsync("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+<script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+</script>
+
+
+
+
+
+
+
+
+
+
+<script>
+    
+    var _baId = 'b6cbc3cbead2c9e01d34c11c0c66f764';
+
+    
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
+<div id="sakana-widget-right"></div>
+<div id="sakana-widget-left"></div>
+<script>
+    function initSakanaWidget() {
+        new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
+        
+        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
+    }
+</script>
+<script async onload="initSakanaWidget()"
+    src="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.js"></script>
+<style>
+    #sakana-widget-right {
+        position: fixed;
+        right: 40px;
+        bottom: 24px;
+        z-index: 4;
+
+    }
+
+    #sakana-widget-left {
+        position: fixed;
+        left: 30px;
+        bottom: 24px;
+    }
+</style>
+
+
+
+</body>
+</html>

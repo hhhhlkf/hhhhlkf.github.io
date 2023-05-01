@@ -6,7 +6,37 @@
     <description>Recent content in Posts on Linexus blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 22 Jan 2023 21:39:39 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 01 May 2023 18:32:11 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLVM IR部分常用语法——支持Sysy2022中间代码生成</title>
+      <link>https://hhhhlkf.github.io/post/llvm-ir%E9%83%A8%E5%88%86%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%94%AF%E6%8C%81sysy2022%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/</link>
+      <pubDate>Mon, 01 May 2023 18:32:11 +0800</pubDate>
+      
+      <guid>https://hhhhlkf.github.io/post/llvm-ir%E9%83%A8%E5%88%86%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%94%AF%E6%8C%81sysy2022%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/</guid>
+      <description>LLVM IR常用语法 加减乘除指令 1.加法指令（add） 加法指令用于对两个数值进行相加。在 LLVM 中，加法指令的语法如下所示：
+%result = add &amp;lt;type&amp;gt; &amp;lt;value1&amp;gt;, &amp;lt;value2&amp;gt; 例如，如果我们想将两个整数相加并得到一个整数结果，可以使用以下指令：
+%result = add i32 1, 2 %x = add i32 2, 3 %x = add i32 %a, %b %z = add i32 %x, %y 这里，&amp;lt;type&amp;gt;指定为i32，&amp;lt;value1&amp;gt;为整数值1，&amp;lt;value2&amp;gt;为整数值2，&amp;lt;result&amp;gt;为整数类型i32。各种类型的内存空间大小（以位为单位）如下：
+在LLVM中，add指令的&amp;lt;type&amp;gt;参数指定了&amp;lt;value1&amp;gt;和&amp;lt;value2&amp;gt;的类型，同时也指定了&amp;lt;result&amp;gt;的类型。支持的类型包括：
+ 整数类型：i1, i8, i16, i32, i64, i128等； 浮点类型：half, float, double, fp128等； 向量类型：&amp;lt;n x i8&amp;gt;, &amp;lt;n x i16&amp;gt;, &amp;lt;n x i32&amp;gt;等； 指针类型：i8*, i32*, float*等； 标签类型：metadata；  浮点加法 加法指令还有一种形式，可以用于计算两个浮点数之间的差值。语法为：
+%result = fadd &amp;lt;type&amp;gt; &amp;lt;value1&amp;gt;, &amp;lt;value2&amp;gt; 2.</description>
+    </item>
+    
+    <item>
+      <title>SCP认证复习——线段树与树状数组</title>
+      <link>https://hhhhlkf.github.io/post/scp%E8%AE%A4%E8%AF%81%E5%A4%8D%E4%B9%A0%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%B8%8E%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/</link>
+      <pubDate>Mon, 06 Mar 2023 19:54:19 +0800</pubDate>
+      
+      <guid>https://hhhhlkf.github.io/post/scp%E8%AE%A4%E8%AF%81%E5%A4%8D%E4%B9%A0%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%B8%8E%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/</guid>
+      <description>线段树与树状数组 线段树 题目描述 如题，已知一个数列，你需要进行下面两种操作：
+ 将某区间每一个数加上 k。 求出某区间每一个数的和。  输入格式 第一行包含两个整数n*,*m，分别表示该数列数字的个数和操作的总个数。
+第二行包含 nn 个用空格分隔的整数，其中第 ii 个数字表示数列第 ii 项的初始值。
+接下来 mm 行每行包含 33 或 44 个整数，表示一个操作，具体如下：
+ 1 x y k：将区间[x,y]内每个数加上 k。 2 x y：输出区间[x,y]内每个数的和。  输出格式 输出包含若干行整数，即为所有操作 2 的结果。
+输入输出样例 输入 #1
+5 51 5 4 2 32 2 41 2 3 22 3 41 1 5 12 1 4输出 #1
+11820线段树的关键数据结构： num[MAX] ans[MAX &amp;lt;&amp;lt; 2] lazy[MAX &amp;lt;&amp;lt; 2] 其中num作为输入的数字集合，ans作为线段树的集合，lazy作为懒标记，懒记录了当前区间的更新值。</description>
+    </item>
+    
     <item>
       <title>A2S2KResNet——论文概述与代码分析</title>
       <link>https://hhhhlkf.github.io/post/a2s2kresnet%E8%AE%BA%E6%96%87%E6%A6%82%E8%BF%B0%E4%B8%8E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/</link>
@@ -255,7 +285,7 @@ f(n) = f(n-1)*11/10，f[1]=10. 通项从左向右计算，*和/分别表示整�
       <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
       
       <guid>https://hhhhlkf.github.io/post/nzk/</guid>
-      <description>1.Binary-Star ——by SawanoHiroyuki[nZk]2.Tranquility ——by SawanoHiroyuki[nZk]3.UNICORN ——by 澤野弘之4.ViEW ——by mizuki(瑞葵)/SawanoHiroyuki[nZk]5.ninelie&amp;lt;cry-v&amp;gt; ——by SawanoHiroyuki[nZk]6.EARth ——by 澤野弘之7.Tot Musica ——by Ado8.counter・attack-m’aenkaind ——by 澤野弘之9.Roads to Ride ——by 澤野弘之10.ətˈæk 0N tάɪtn&amp;lt;TFSv&amp;gt;——by 澤野弘之11.LEMONADE——by SawanoHiroyuki[nZk]/XAI</description>
+      <description>1.Binary-Star ——by SawanoHiroyuki[nZk]2.Tranquility ——by SawanoHiroyuki[nZk]3.UNICORN ——by 澤野弘之4.ViEW ——by mizuki(瑞葵)/SawanoHiroyuki[nZk]5.ninelie&amp;lt;cry-v&amp;gt; ——by SawanoHiroyuki[nZk]6.EARth ——by 澤野弘之7.Tot Musica ——by Ado8.counter・attack-m’aenkaind ——by 澤野弘之9.Roads to Ride ——by 澤野弘之10.ətˈæk 0N tάɪtn&amp;lt;TFSv&amp;gt;——by 澤野弘之11.LEMONADE——by SawanoHiroyuki[nZk]/XAI</description>
     </item>
     
     <item>

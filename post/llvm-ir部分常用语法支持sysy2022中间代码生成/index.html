@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    
+    
+    <meta property="og:site_name" content="Linexus blog">
+    <meta property="og:type" content="article">
+
+    
+    <meta property="og:image" content="https://hhhhlkf.github.io//img/fantasy.png">
+    <meta property="twitter:image" content="https://hhhhlkf.github.io//img/fantasy.png" />
+    
+
+    
+    <meta name="title" content="LLVM IR部分常用语法——支持Sysy2022中间代码生成" />
+    <meta property="og:title" content="LLVM IR部分常用语法——支持Sysy2022中间代码生成" />
+    <meta property="twitter:title" content="LLVM IR部分常用语法——支持Sysy2022中间代码生成" />
+    
+
+    
+    <meta name="description" content="LLVM IR常用语法">
+    <meta property="og:description" content="LLVM IR常用语法" />
+    <meta property="twitter:description" content="LLVM IR常用语法" />
+    
+
+    
+    <meta property="twitter:card" content="summary" />
+    
+    
+
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>LLVM IR部分常用语法——支持Sysy2022中间代码生成-LKF的博客 | Linexus&#39;s Blog</title>
+
+    <link rel="canonical" href="/post/llvm-ir%E9%83%A8%E5%88%86%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%94%AF%E6%8C%81sysy2022%E4%B8%AD%E9%97%B4%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90/">
+
+    <link rel="stylesheet" href="/css/iDisqus.min.css"/>
+
+    
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    
+    
+
+    <link rel="stylesheet" href="/css/hugo-theme-cleanwhite.css">
+    
+    <link rel="stylesheet" href="/css/zanshang.css">
+
+    <link rel="stylesheet" href="https://hhhhlkf.github.io/css/search.css" />
+    
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" type="text/css">
+
+
+  
+    <script src="//unpkg.com/element-plus"></script>
+    <script type="text/javascript" src="/js/random.js"></script>
+    <script type="text/javascript" src="/js/mersenne-twister.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+    <script src="//unpkg.com/element-plus"></script>
+    
+    
+
+    
+    
+    <script src="/js/jquery.min.js"></script>
+
+    
+    <script src="/js/bootstrap.min.js"></script>
+
+    
+    <script src="/js/hux-blog.min.js"></script>
+
+    
+    
+
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+</head>
+
+
+
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+
+    <div class="container-fluid">
+        
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Linexus blog</a>
+        </div>
+
+        
+        
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    
+                        
+                        <li>
+                            <a href="/categories/music">music</a>
+                        </li>
+                        
+                        <li>
+                            <a href="/categories/post">post</a>
+                        </li>
+                        
+                    
+                    
+		    
+                        <li><a href="/top/books/">BOOKS</a></li>
+                    
+                        <li><a href="/top/about/">ABOUT</a></li>
+                    
+                        <li><a href="/top/photos/">PHOTOS</a></li>
+                    
+
+                    
+		    <li>
+                        <a href="#modalSearch" id="modalA" data-target="#modalSearch" data-toggle="modal"><i class="fa fa-search"></i></a>
+                        <script>
+                            function getDialog(){
+                                $('#modalSearch').modal('show')
+                            }
+                        </script>
+		    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+
+    
+</nav>
+<script>
+    
+    
+    
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        
+            $navbar.className = " ";
+            
+            setTimeout(function(){
+                
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<div id="modalSearch" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Search hhhhlkf.github.io</h4>
+        </div>
+        <div class="modal-body">
+            <div class="aa-input-container" id="aa-input-container">
+  <input type="search" id="aa-search-input" class="aa-input-search" placeholder="Search for titles or URIs..." name="search" autocomplete="off" />
+  <svg class="aa-input-icon" viewBox="654 -372 1664 1664">
+      <path d="M1806,332c0-123.3-43.8-228.8-131.5-316.5C1586.8-72.2,1481.3-116,1358-116s-228.8,43.8-316.5,131.5  C953.8,103.2,910,208.7,910,332s43.8,228.8,131.5,316.5C1129.2,736.2,1234.7,780,1358,780s228.8-43.8,316.5-131.5  C1762.2,560.8,1806,455.3,1806,332z M2318,1164c0,34.7-12.7,64.7-38,90s-55.3,38-90,38c-36,0-66-12.7-90-38l-343-342  c-119.3,82.7-252.3,124-399,124c-95.3,0-186.5-18.5-273.5-55.5s-162-87-225-150s-113-138-150-225S654,427.3,654,332  s18.5-186.5,55.5-273.5s87-162,150-225s138-113,225-150S1262.7-372,1358-372s186.5,18.5,273.5,55.5s162,87,225,150s113,138,150,225  S2062,236.7,2062,332c0,146.7-41.3,279.7-124,399l343,343C2305.7,1098.7,2318,1128.7,2318,1164z" />
+  </svg>
+</div>
+<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
+<script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
+<script>
+var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
+var index = client.initIndex('blog');
+autocomplete('#aa-search-input',
+{ hint: false}, {
+  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
+  displayKey: 'name',
+  templates: {
+      suggestion: function(suggestion) {
+          console.log(suggestion);
+          return '<span>' + '<a href="' + suggestion.url + '">' +
+          suggestion._highlightResult.title.value + '</a></span>';
+      }
+  }
+});
+</script>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+<style type="text/css">
+    header.intro-header {
+        background-image: url('https://i.loli.net/2021/09/30/3bSAB6Fru9xCdh8.jpg')
+    }
+</style>
+
+<header class="intro-header" >
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/compiler" title="compiler">
+                            compiler
+                        </a>
+                        
+                        <a class="tag" href="/tags/llvm" title="llvm">
+                            llvm
+                        </a>
+                        
+                    </div>
+                    <h1>LLVM IR部分常用语法——支持Sysy2022中间代码生成</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        
+                            Posted by 
+                            
+                                 Linexus
+                             
+                            on 
+                            Monday, May 1, 2023
+                            
+                            
+                            
+                            
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<article>
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                
+                <h1 id="llvm-ir常用语法">LLVM IR常用语法</h1>
+<h2 id="加减乘除指令">加减乘除指令</h2>
+<h3 id="1加法指令add">1.加法指令（add）</h3>
+<p>加法指令用于对两个数值进行相加。在 LLVM 中，加法指令的语法如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> add <span style="color:#f1fa8c">&lt;type&gt;</span> <span style="color:#f1fa8c">&lt;value1&gt;</span>, <span style="color:#f1fa8c">&lt;value2&gt;</span>
+</code></pre></div><p>例如，如果我们想将两个整数相加并得到一个整数结果，可以使用以下指令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> add i32 <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>
+<span style="color:#8be9fd;font-style:italic">%x</span> <span style="color:#ff79c6">=</span> add i32 <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>
+<span style="color:#8be9fd;font-style:italic">%x</span> <span style="color:#ff79c6">=</span> add i32 <span style="color:#8be9fd;font-style:italic">%a</span>, <span style="color:#8be9fd;font-style:italic">%b</span>
+<span style="color:#8be9fd;font-style:italic">%z</span> <span style="color:#ff79c6">=</span> add i32 <span style="color:#8be9fd;font-style:italic">%x</span>, <span style="color:#8be9fd;font-style:italic">%y</span>
+</code></pre></div><p>这里，<code>&lt;type&gt;</code>指定为<code>i32</code>，<code>&lt;value1&gt;</code>为整数值<code>1</code>，<code>&lt;value2&gt;</code>为整数值<code>2</code>，<code>&lt;result&gt;</code>为整数类型<code>i32</code>。各种类型的内存空间大小（以位为单位）如下：</p>
+<p>在LLVM中，<code>add</code>指令的<code>&lt;type&gt;</code>参数指定了<code>&lt;value1&gt;</code>和<code>&lt;value2&gt;</code>的类型，同时也指定了<code>&lt;result&gt;</code>的类型。支持的类型包括：</p>
+<ul>
+<li>整数类型：<code>i1</code>, <code>i8</code>, <code>i16</code>, <code>i32</code>, <code>i64</code>, <code>i128</code>等；</li>
+<li>浮点类型：<code>half</code>, <code>float</code>, <code>double</code>, <code>fp128</code>等；</li>
+<li>向量类型：<code>&lt;n x i8&gt;</code>, <code>&lt;n x i16&gt;</code>, <code>&lt;n x i32&gt;</code>等；</li>
+<li>指针类型：<code>i8*</code>, <code>i32*</code>, <code>float*</code>等；</li>
+<li>标签类型：<code>metadata</code>；</li>
+</ul>
+<h4 id="浮点加法">浮点加法</h4>
+<p>加法指令还有一种形式，可以用于计算两个浮点数之间的差值。语法为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> fadd <span style="color:#f1fa8c">&lt;type&gt;</span> <span style="color:#f1fa8c">&lt;value1&gt;</span>, <span style="color:#f1fa8c">&lt;value2&gt;</span>
+</code></pre></div><h3 id="2减法指令sub">2.减法指令（sub）</h3>
+<p>减法指令用于对两个数值进行相减，语法为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">sub</span> &lt;<span style="color:#50fa7b">type</span>&gt; &lt;<span style="color:#50fa7b">value1</span>&gt;, &lt;<span style="color:#50fa7b">value2</span>&gt;
+</code></pre></div><p>其中，<code>&lt;type&gt;</code> 表示要进行减法运算的值的数据类型，可以是整数、浮点数等；<code>&lt;value1&gt;</code> 和 <code>&lt;value2&gt;</code> 分别表示相减的两个数，可以是常量、寄存器或者其他指令的结果。</p>
+<p>下面是一个减法指令的代码示例，将两个整数相减：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%diff</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">sub</span> <span style="color:#50fa7b">i32</span> %<span style="color:#50fa7b">x</span>, %<span style="color:#50fa7b">y</span>
+</code></pre></div><h4 id="浮点减法">浮点减法</h4>
+<p>减法指令还有一种形式，可以用于计算两个浮点数之间的差值。语法为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> fsub float <span style="color:#f1fa8c">&lt;value1&gt;</span>, <span style="color:#f1fa8c">&lt;value2&gt;</span>
+</code></pre></div><h3 id="3-乘法指令mul">3. 乘法指令（mul）</h3>
+<p>乘法指令用于对两个数值进行相乘，语法为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> mul <span style="color:#f1fa8c">&lt;type&gt;</span> <span style="color:#f1fa8c">&lt;value1&gt;</span>, <span style="color:#f1fa8c">&lt;value2&gt;</span>
+</code></pre></div><p>下面是一个乘法指令的代码示例，将两个整数相乘：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%prod</span> <span style="color:#ff79c6">=</span> mul i32 <span style="color:#8be9fd;font-style:italic">%x</span>, <span style="color:#8be9fd;font-style:italic">%y</span>
+</code></pre></div><h4 id="浮点乘法">浮点乘法</h4>
+<p>减法指令还有一种形式，可以用于计算两个浮点数之间的差值。语法为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> fmul float <span style="color:#f1fa8c">&lt;value1&gt;</span>, <span style="color:#f1fa8c">&lt;value2&gt;</span>
+</code></pre></div><h3 id="4除法指令div">4.除法指令（div）</h3>
+<p>除法指令用于对两个数值进行相除，语法为：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&lt;u/s&gt;</span>div <span style="color:#f1fa8c">&lt;type&gt;</span> <span style="color:#f1fa8c">&lt;value1&gt;</span>, <span style="color:#f1fa8c">&lt;value2&gt;</span>
+</code></pre></div><p>其中，表示要执行有符号<code>（sdiv）</code>还是无符号<code>（udiv）</code>的除法运算；表示要进行除法运算的值的数据类型，可以是整数、浮点数等；和分别表示相除的两个数，可以是常量、寄存器或者其他指令的结果。</p>
+<p>下面是一个除法指令的代码示例，将两个整数相除：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%quot</span> <span style="color:#ff79c6">=</span> sdiv i32 <span style="color:#8be9fd;font-style:italic">%x</span>, <span style="color:#8be9fd;font-style:italic">%y</span>
+</code></pre></div><p>如果要进行无符号除法运算，可以使用 <code>udiv</code> 指令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%quot</span> <span style="color:#ff79c6">=</span> udiv i32 <span style="color:#8be9fd;font-style:italic">%x</span>, <span style="color:#8be9fd;font-style:italic">%y</span>
+</code></pre></div><h4 id="浮点除法">浮点除法</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> fdiv <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>, <span style="color:#f1fa8c">&lt;op2&gt;</span>
+</code></pre></div><p><code>fdiv</code>指令返回其两个操作数的商。示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> fdiv float <span style="color:#bd93f9">4.0</span>, <span style="color:#8be9fd;font-style:italic">%var</span>  
+</code></pre></div><h3 id="模运算指令-rem">模运算指令 (rem)</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&lt;u/s&gt;</span>rem <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>, <span style="color:#f1fa8c">&lt;op2&gt;</span>
+</code></pre></div><p><code>urem</code>指令返回其两个参数的无符号除法的余数。<code>srem</code>指令返回其两个操作数的有符号除法的余数。使用该指令的示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> urem i32 <span style="color:#bd93f9">4</span>, <span style="color:#8be9fd;font-style:italic">%var</span>
+<span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> srem i32 <span style="color:#bd93f9">4</span>, <span style="color:#8be9fd;font-style:italic">%var</span>
+</code></pre></div><h3 id="位运算指令">位运算指令</h3>
+<p>IR有多种位运算指令，包括位与（and）、位或（or）、位异或（xor）、位取反（not）等。这些指令可以对整数类型进行按位操作，并将结果存储到一个新的寄存器中。以下是 IR 中常见的位运算指令及其作用：</p>
+<p>这些指令都可以用类似的语法进行使用，其中 <code>&lt;type&gt;</code> 表示要进行位运算的整数的数据类型，可以是 i1、i8、i16、i32、i64 等；<code>&lt;value1&gt;</code> 和 <code>&lt;value2&gt;</code> 分别表示要进行位运算的整数，可以是常量、寄存器或其他指令的结果。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">and</span> i32 <span style="color:#8be9fd;font-style:italic">%x</span>, <span style="color:#8be9fd;font-style:italic">%y</span>
+<span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">or</span> i32 <span style="color:#8be9fd;font-style:italic">%x</span>, <span style="color:#8be9fd;font-style:italic">%y</span>
+<span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> xor i32 <span style="color:#8be9fd;font-style:italic">%x</span>, <span style="color:#8be9fd;font-style:italic">%y</span>
+<span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> xor i32 <span style="color:#8be9fd;font-style:italic">%x</span>, <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>
+</code></pre></div><h4 id="shl指令">shl指令</h4>
+<p><code>shl</code>指令是左移运算符，将<code>op1</code>向左按位移动<code>opt2</code>位。如果<code>opt2</code>的位数大于或等于<code>opt1</code>的位数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> lshr <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>, <span style="color:#f1fa8c">&lt;op2&gt;</span>         ; yields ty:result
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> lshr exact <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>, <span style="color:#f1fa8c">&lt;op2&gt;</span>   ; yields ty:result 
+</code></pre></div><p>下面是例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> shl i32 <span style="color:#bd93f9">4</span>, <span style="color:#8be9fd;font-style:italic">%var</span>   ; yields i32: <span style="color:#bd93f9">4</span> <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#8be9fd;font-style:italic">%var</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> shl i32 <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">2</span>      ; yields i32: <span style="color:#bd93f9">16</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> shl i32 <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">10</span>     ; yields i32: <span style="color:#bd93f9">1024</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> shl i32 <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">32</span>     ; undefined
+</code></pre></div><h4 id="lshr指令">lshr指令</h4>
+<p><code>lshr</code>指令是右移运算符，将<code>opt2</code>向右按位移动<code>opt1</code>位。如果<code>opt2</code>的位数大于或等于<code>opt1</code>的位数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> lshr <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>, <span style="color:#f1fa8c">&lt;op2&gt;</span>         ; yields ty:result
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> lshr exact <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>, <span style="color:#f1fa8c">&lt;op2&gt;</span>   ; yields ty:result 
+</code></pre></div><p>下面是例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> lshr i32 <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">1</span>   ; yields i32:result <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> lshr i32 <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">2</span>   ; yields i32:result <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> lshr i8  <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>   ; yields i8:result <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> lshr i8 <span style="color:#ff79c6">-</span><span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">1</span>   ; yields i8:result <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0x7F</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> lshr i32 <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">32</span>  ; undefined
+</code></pre></div><h4 id="ashr指令">ashr指令</h4>
+<p><code>ashr</code>指令是算数右移运算符，将<code>opt2</code>向右按位移动<code>opt1</code>位。如果<code>opt2</code>的位数大于或等于<code>opt1</code>的位数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> ashr <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>, <span style="color:#f1fa8c">&lt;op2&gt;</span>         ; yields ty:result
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> ashr exact <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>, <span style="color:#f1fa8c">&lt;op2&gt;</span>   ; yields ty:result 
+</code></pre></div><p>这里注意区分算数右移和逻辑右移的区别，算术右移在最高位要补符号位的，而逻辑右移最高位都是零。下面是例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> ashr i32 <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">1</span>   ; yields i32:result <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> ashr i32 <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">2</span>   ; yields i32:result <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> ashr i8  <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>   ; yields i8:result <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> ashr i8 <span style="color:#ff79c6">-</span><span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">1</span>   ; yields i8:result <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> ashr i32 <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">32</span>  ; undefined
+</code></pre></div><h2 id="转换指令">转换指令</h2>
+<h3 id="2zext">2.zext</h3>
+<p><code>zext</code>指令将一个整数或布尔值的位数增加，新位数的高位都填充为零，即进行零扩展。<code>zext</code>指令的使用格式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> zext <span style="color:#ff79c6">&lt;</span>source type<span style="color:#ff79c6">&gt;</span> <span style="color:#f1fa8c">&lt;value&gt;</span> to <span style="color:#ff79c6">&lt;</span>destination type<span style="color:#ff79c6">&gt;</span>
+</code></pre></div><p>例如，下面的代码将一个8位整数扩展为16位整数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%short</span> <span style="color:#ff79c6">=</span> add i8 <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>
+<span style="color:#8be9fd;font-style:italic">%long</span> <span style="color:#ff79c6">=</span> zext i8 <span style="color:#8be9fd;font-style:italic">%short</span> to i16
+</code></pre></div><h3 id="3sext">3.sext</h3>
+<p><code>sext</code>指令将一个整数的位数增加，新位数的高位都填充为原有的最高位，即进行符号扩展。<code>sext</code>指令的使用格式与<code>zext</code>指令类似：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> sext <span style="color:#ff79c6">&lt;</span>source type<span style="color:#ff79c6">&gt;</span> <span style="color:#f1fa8c">&lt;value&gt;</span> to <span style="color:#ff79c6">&lt;</span>destination type<span style="color:#ff79c6">&gt;</span>
+</code></pre></div><p>例如，下面的代码将一个8位整数扩展为16位整数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%short</span> <span style="color:#ff79c6">=</span> add i8 <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>
+<span style="color:#8be9fd;font-style:italic">%long</span> <span style="color:#ff79c6">=</span> sext i8 <span style="color:#8be9fd;font-style:italic">%short</span> to i16
+</code></pre></div><h3 id="4fptosi">4.fptosi</h3>
+<p><code>fptosi</code>指令将一个浮点数转换为一个带符号整数。转换时，如果浮点数的值超出了目标类型的表示范围，则结果为该类型的最小值或最大值。<code>fptosi</code>指令的使用格式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> fptosi <span style="color:#ff79c6">&lt;</span>source type<span style="color:#ff79c6">&gt;</span> <span style="color:#f1fa8c">&lt;value&gt;</span> to <span style="color:#ff79c6">&lt;</span>destination type<span style="color:#ff79c6">&gt;</span>
+</code></pre></div><p>例如，下面的代码将一个双精度浮点数转换为32位带符号整数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%double</span> <span style="color:#ff79c6">=</span> fadd double <span style="color:#bd93f9">1.0</span>, <span style="color:#ff79c6">-</span><span style="color:#bd93f9">2.0</span>
+<span style="color:#8be9fd;font-style:italic">%i32</span> <span style="color:#ff79c6">=</span> fptosi double <span style="color:#8be9fd;font-style:italic">%double</span> to i32
+</code></pre></div><h3 id="5sitofp">5.sitofp</h3>
+<p><code>sitofp</code>指令将一个带符号整数转换为一个浮点数。<code>sitofp</code>指令的使用格式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> sitofp <span style="color:#ff79c6">&lt;</span>source type<span style="color:#ff79c6">&gt;</span> <span style="color:#f1fa8c">&lt;value&gt;</span> to <span style="color:#ff79c6">&lt;</span>destination type<span style="color:#ff79c6">&gt;</span>
+</code></pre></div><p>例如，下面的代码将一个32位带符号整数转换为单精度浮点数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%i32</span> <span style="color:#ff79c6">=</span> add i32 <span style="color:#bd93f9">1</span>, <span style="color:#ff79c6">-</span><span style="color:#bd93f9">2</span>
+<span style="color:#8be9fd;font-style:italic">%float</span> <span style="color:#ff79c6">=</span> sitofp i32 <span style="color:#8be9fd;font-style:italic">%i32</span> to float
+</code></pre></div><h3 id="6bitcast">6.bitcast</h3>
+<p><code>bitcast</code>指令将一个值的位表示转换为另一个类型的位表示，但是它不会改变值本身。<code>bitcast</code>指令的使用格式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> bitcast <span style="color:#ff79c6">&lt;</span>source type<span style="color:#ff79c6">&gt;</span> <span style="color:#f1fa8c">&lt;value&gt;</span> to <span style="color:#ff79c6">&lt;</span>destination type<span style="color:#ff79c6">&gt;</span>
+</code></pre></div><p>例如，下面的代码将一个64位双精度浮点数转换为64位整数类型：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%double</span> <span style="color:#ff79c6">=</span> fadd double <span style="color:#bd93f9">1.0</span>, <span style="color:#ff79c6">-</span><span style="color:#bd93f9">2.0</span>
+<span style="color:#8be9fd;font-style:italic">%i64</span> <span style="color:#ff79c6">=</span> bitcast double <span style="color:#8be9fd;font-style:italic">%double</span> to i64
+</code></pre></div><h2 id="内存指令">内存指令</h2>
+<h3 id="1alloca">1.alloca</h3>
+<p><code>alloca</code>指令用于在栈上分配内存，并返回一个指向新分配的内存的指针。<code>alloca</code>指令的使用格式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%ptr</span> <span style="color:#ff79c6">=</span> alloca <span style="color:#f1fa8c">&lt;type&gt;</span>
+</code></pre></div><p>其中，<code>&lt;type&gt;</code>是要分配的内存块的类型。例如，下面的代码分配一个包含5个整数的数组：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%array</span> <span style="color:#ff79c6">=</span> alloca [<span style="color:#bd93f9">5</span> x i32]
+</code></pre></div><h3 id="2load">2.load</h3>
+<p><code>load</code>指令用于从内存中读取数据，并将其加载到寄存器中。<code>load</code>指令的使用格式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%val</span> <span style="color:#ff79c6">=</span> load <span style="color:#f1fa8c">&lt;type&gt;</span><span style="color:#ff79c6">*</span> <span style="color:#f1fa8c">&lt;ptr&gt;</span>
+</code></pre></div><p>其中，<code>&lt;type&gt;</code>是要读取的数据的类型，<code>&lt;ptr&gt;</code>是指向要读取数据的内存块的指针。例如，下面的代码将一个整数数组的第一个元素加载到寄存器中：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%array</span> <span style="color:#ff79c6">=</span> alloca [<span style="color:#bd93f9">5</span> x i32]
+<span style="color:#8be9fd;font-style:italic">%ptr</span> <span style="color:#ff79c6">=</span> getelementptr [<span style="color:#bd93f9">5</span> x i32], [<span style="color:#bd93f9">5</span> x i32]<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%array</span>, i32 <span style="color:#bd93f9">0</span>, i32 <span style="color:#bd93f9">0</span>
+<span style="color:#8be9fd;font-style:italic">%val</span> <span style="color:#ff79c6">=</span> load i32, i32<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%ptr</span>
+</code></pre></div><h3 id="3store">3.store</h3>
+<p><code>store</code>指令用于将数据从寄存器中写入内存。<code>store</code>指令的使用格式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">store <span style="color:#f1fa8c">&lt;type&gt;</span> <span style="color:#f1fa8c">&lt;val&gt;</span>, <span style="color:#f1fa8c">&lt;type&gt;</span><span style="color:#ff79c6">*</span> <span style="color:#f1fa8c">&lt;ptr&gt;</span>
+</code></pre></div><p>其中，<code>&lt;type&gt;</code>是要写入的数据的类型，<code>&lt;val&gt;</code>是要写入的数据的值，<code>&lt;ptr&gt;</code>是指向要写入数据的内存块的指针。例如，下面的代码将一个整数存储到一个整数数组的第一个元素中：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%array</span> <span style="color:#ff79c6">=</span> alloca [<span style="color:#bd93f9">5</span> x i32]
+<span style="color:#8be9fd;font-style:italic">%ptr</span> <span style="color:#ff79c6">=</span> getelementptr [<span style="color:#bd93f9">5</span> x i32], [<span style="color:#bd93f9">5</span> x i32]<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%array</span>, i32 <span style="color:#bd93f9">0</span>, i32 <span style="color:#bd93f9">0</span>
+store i32 <span style="color:#bd93f9">42</span>, i32<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%ptr</span>
+</code></pre></div><h3 id="4getelementptr">4.getelementptr</h3>
+<p><code>getelementptr</code>指令用于计算指针的偏移量，以便访问内存中的数据。<code>getelementptr</code>指令的使用格式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%ptr</span> <span style="color:#ff79c6">=</span> getelementptr <span style="color:#f1fa8c">&lt;type&gt;</span>, <span style="color:#f1fa8c">&lt;type&gt;</span><span style="color:#ff79c6">*</span> <span style="color:#f1fa8c">&lt;ptr&gt;</span>, <span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd;font-style:italic">index</span> type<span style="color:#ff79c6">&gt;</span> <span style="color:#f1fa8c">&lt;idx&gt;</span>, <span style="color:#ff79c6">...</span>
+</code></pre></div><p>其中，<code>&lt;type&gt;</code>是指针指向的数据类型，<code>&lt;ptr&gt;</code>是指向数据的指针，<code>&lt;index type&gt;</code>是索引的类型，<code>&lt;idx&gt;</code>是索引的值。<code>getelementptr</code>指令可以接受多个索引，每个索引都可以是任意类型的。索引类型必须是整数类型，用于计算偏移量。例如，下面的代码计算一个二维数组中的一个元素的指针：g</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%array</span> <span style="color:#ff79c6">=</span> alloca [<span style="color:#bd93f9">3</span> x [<span style="color:#bd93f9">4</span> x i32]]
+<span style="color:#8be9fd;font-style:italic">%ptr</span> <span style="color:#ff79c6">=</span> getelementptr [<span style="color:#bd93f9">3</span> x [<span style="color:#bd93f9">4</span> x i32]], [<span style="color:#bd93f9">3</span> x [<span style="color:#bd93f9">4</span> x i32]]<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%array</span>, i32 <span style="color:#bd93f9">1</span>, i32 <span style="color:#bd93f9">2</span>
+</code></pre></div><p>在这个例子中，<code>%array</code>是一个二维数组，<code>%ptr</code>是指向第二行第三列元素的指针。</p>
+<h3 id="5memset">5.memset</h3>
+<p><code>memset</code>指令用于将一段内存区域的内容设置为指定的值。它的基本语法如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">call void <span style="color:#8be9fd;font-style:italic">@llvm</span><span style="color:#ff79c6">.</span>memset<span style="color:#ff79c6">.</span>p0i8<span style="color:#ff79c6">.</span>i64(i8<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%dst</span>, i8 <span style="color:#8be9fd;font-style:italic">%val</span>, i64 <span style="color:#8be9fd;font-style:italic">%size</span>, i1 <span style="color:#bd93f9">0</span>)
+</code></pre></div><p>其中，第一个参数<code>%dst</code>是要设置的内存区域的起始地址，它应该是指针类型。第二个参数<code>%val</code>是要设置的值，它应该是整型。第三个参数<code>%size</code>是内存区域的大小，它应该是64位整型。最后一个参数是一个布尔值，表示对齐方式。如果它为1，表示按照指针类型对齐；如果它为0，表示不按照指针类型对齐。</p>
+<p>下面是一个简单的使用示例，将一个整型数组中的所有元素都设置为0：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">define void <span style="color:#8be9fd;font-style:italic">@set_to_zero</span>(i32<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%array</span>, i32 <span style="color:#8be9fd;font-style:italic">%size</span>) {
+entry:
+  <span style="color:#8be9fd;font-style:italic">%zero</span> <span style="color:#ff79c6">=</span> alloca i32, align <span style="color:#bd93f9">4</span>
+  store i32 <span style="color:#bd93f9">0</span>, i32<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%zero</span>, align <span style="color:#bd93f9">4</span>
+  <span style="color:#8be9fd;font-style:italic">%array_end</span> <span style="color:#ff79c6">=</span> getelementptr i32, i32<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%array</span>, i32 <span style="color:#8be9fd;font-style:italic">%size</span>
+  call void <span style="color:#8be9fd;font-style:italic">@llvm</span><span style="color:#ff79c6">.</span>memset<span style="color:#ff79c6">.</span>p0i8<span style="color:#ff79c6">.</span>i64(i8<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%array</span>, i8 <span style="color:#bd93f9">0</span>, i64 sub(i32<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%array_end</span>, <span style="color:#8be9fd;font-style:italic">%array</span>), i1 false)
+  ret void
+}
+</code></pre></div><h2 id="控制指令">控制指令</h2>
+<h3 id="1条件分支指令br">1.条件分支指令（br）</h3>
+<p><code>br</code>指令用于执行条件分支，根据条件跳转到不同的基本块。它的语法如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">br i1 <span style="color:#f1fa8c">&lt;cond&gt;</span>, label <span style="color:#f1fa8c">&lt;iftrue&gt;</span>, label <span style="color:#f1fa8c">&lt;iffalse&gt;</span>
+</code></pre></div><p>其中<code>&lt;cond&gt;</code>是条件值，如果其值为真，则跳转到标记为<code>&lt;iftrue&gt;</code>的基本块；否则跳转到标记为<code>&lt;iffalse&gt;</code>的基本块。下面是一个简单的示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">define i32 <span style="color:#8be9fd;font-style:italic">@test</span>(i32 <span style="color:#8be9fd;font-style:italic">%a</span>, i32 <span style="color:#8be9fd;font-style:italic">%b</span>) {
+  <span style="color:#8be9fd;font-style:italic">%cmp</span> <span style="color:#ff79c6">=</span> icmp <span style="color:#ff79c6">eq</span> i32 <span style="color:#8be9fd;font-style:italic">%a</span>, <span style="color:#8be9fd;font-style:italic">%b</span>
+  br i1 <span style="color:#8be9fd;font-style:italic">%cmp</span>, label <span style="color:#8be9fd;font-style:italic">%equal</span>, label <span style="color:#8be9fd;font-style:italic">%notequal</span>
+
+equal:
+  ret i32 <span style="color:#bd93f9">1</span>
+
+notequal:
+  ret i32 <span style="color:#bd93f9">0</span>
+}
+</code></pre></div><h3 id="2函数返回指令-ret">2.函数返回指令 (ret)</h3>
+<p><code>ret</code>指令用于从函数中返回一个值。它的语法如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">ret <span style="color:#f1fa8c">&lt;type&gt;</span> <span style="color:#f1fa8c">&lt;value&gt;</span>
+</code></pre></div><p>其中，<code>&lt;type&gt;</code>是返回值的类型，<code>&lt;value&gt;</code>是返回的值。如果函数没有返回值，则<code>&lt;type&gt;</code>应该是<code>void</code>。下面是一个示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">define i32 <span style="color:#8be9fd;font-style:italic">@test</span>(i32 <span style="color:#8be9fd;font-style:italic">%a</span>, i32 <span style="color:#8be9fd;font-style:italic">%b</span>) {
+  <span style="color:#8be9fd;font-style:italic">%sum</span> <span style="color:#ff79c6">=</span> add i32 <span style="color:#8be9fd;font-style:italic">%a</span>, <span style="color:#8be9fd;font-style:italic">%b</span>
+  ret i32 <span style="color:#8be9fd;font-style:italic">%sum</span>
+}
+</code></pre></div><h3 id="3置反指令-fneg">3.置反指令 (fneg)</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> fneg [fast<span style="color:#ff79c6">-</span>math flags]<span style="color:#ff79c6">*</span> <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>
+</code></pre></div><p><code>fneg</code>指令返回其操作数的否定值。例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> fneg float <span style="color:#8be9fd;font-style:italic">%val</span> 
+</code></pre></div><h2 id="其他指令">其他指令</h2>
+<h3 id="1phi">1.phi</h3>
+<p>phi指令用于在基本块之间传递值。它的语法如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> phi <span style="color:#f1fa8c">&lt;type&gt;</span> [ <span style="color:#f1fa8c">&lt;value1&gt;</span>, <span style="color:#f1fa8c">&lt;label1&gt;</span> ], [ <span style="color:#f1fa8c">&lt;value2&gt;</span>, <span style="color:#f1fa8c">&lt;label2&gt;</span> ], <span style="color:#ff79c6">...</span>
+</code></pre></div><p>其中，<code>&lt;type&gt;</code>是要传递的值的类型，<code>&lt;value1&gt;</code>是要传递的第一个值，<code>&lt;label1&gt;</code>是要从中传递第一个值的基本块。其他的<code>&lt;value&gt;</code>和<code>&lt;label&gt;</code>对也类似。下面是一个示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">define i32 <span style="color:#8be9fd;font-style:italic">@test</span>(i32 <span style="color:#8be9fd;font-style:italic">%a</span>, i32 <span style="color:#8be9fd;font-style:italic">%b</span>) {
+  <span style="color:#8be9fd;font-style:italic">%cmp</span> <span style="color:#ff79c6">=</span> icmp slt i32 <span style="color:#8be9fd;font-style:italic">%a</span>, <span style="color:#8be9fd;font-style:italic">%b</span>
+  br i1 <span style="color:#8be9fd;font-style:italic">%cmp</span>, label <span style="color:#8be9fd;font-style:italic">%if_true</span>, label <span style="color:#8be9fd;font-style:italic">%if_false</span>
+
+if_true:
+  <span style="color:#8be9fd;font-style:italic">%result1</span> <span style="color:#ff79c6">=</span> add i32 <span style="color:#8be9fd;font-style:italic">%a</span>, <span style="color:#bd93f9">1</span>
+  br label <span style="color:#8be9fd;font-style:italic">%merge</span>
+
+if_false:
+  <span style="color:#8be9fd;font-style:italic">%result2</span> <span style="color:#ff79c6">=</span> add i32 <span style="color:#8be9fd;font-style:italic">%b</span>, <span style="color:#bd93f9">1</span>
+  br label <span style="color:#8be9fd;font-style:italic">%merge</span>
+
+merge:
+  <span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> phi i32 [ <span style="color:#8be9fd;font-style:italic">%result1</span>, <span style="color:#8be9fd;font-style:italic">%if_true</span> ], [ <span style="color:#8be9fd;font-style:italic">%result2</span>, <span style="color:#8be9fd;font-style:italic">%if_false</span> ]
+  ret i32 <span style="color:#8be9fd;font-style:italic">%result</span>
+}
+</code></pre></div><p>在这个示例中，我们定义了一个函数<code>test</code>，它的功能是比较<code>a</code>和<code>b</code>的值，并返回一个结果。在标记<code>%if_true</code>处，我们使用<code>add</code>指令计算<code>a+1</code>的值；在标记<code>%if_false</code>处，我们使用<code>add</code>指令计算<code>b+1</code>的值。然后，在标记<code>%merge</code>处，我们使用<code>phi</code>指令选择一个值。具体来说，如果<code>%cmp</code>的值为<code>true</code>，我们就选择<code>%result1</code>的值（即<code>a+1</code>）；否则，我们就选择<code>%result2</code>的值（即<code>b+1</code>）。</p>
+<h3 id="2call">2.call</h3>
+<p>call指令用于调用函数。它的语法如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#8be9fd;font-style:italic">%result</span> <span style="color:#ff79c6">=</span> call <span style="color:#f1fa8c">&lt;type&gt;</span> <span style="color:#f1fa8c">&lt;function&gt;</span>(<span style="color:#ff79c6">&lt;</span>argument list<span style="color:#ff79c6">&gt;</span>)
+</code></pre></div><p>其中，<code>&lt;type&gt;</code>是函数返回值的类型，<code>&lt;function&gt;</code>是要调用的函数的名称，<code>&lt;argument list&gt;</code>是函数参数的列表。下面是一个示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">declare i32 <span style="color:#8be9fd;font-style:italic">@printf</span>(i8<span style="color:#ff79c6">*</span>, <span style="color:#ff79c6">...</span>)
+define i32 <span style="color:#8be9fd;font-style:italic">@test</span>(i32 <span style="color:#8be9fd;font-style:italic">%a</span>, i32 <span style="color:#8be9fd;font-style:italic">%b</span>) {
+  <span style="color:#8be9fd;font-style:italic">%sum</span> <span style="color:#ff79c6">=</span> add i32 <span style="color:#8be9fd;font-style:italic">%a</span>, <span style="color:#8be9fd;font-style:italic">%b</span>
+  <span style="color:#8be9fd;font-style:italic">%format_str</span> <span style="color:#ff79c6">=</span> getelementptr inbounds [<span style="color:#bd93f9">4</span> x i8], [<span style="color:#bd93f9">4</span> x i8]<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">@</span>.<span style="color:#8be9fd;font-style:italic">str</span>, i64 <span style="color:#bd93f9">0</span>, i64 <span style="color:#bd93f9">0</span>
+  call i32 (i8<span style="color:#ff79c6">*</span>, <span style="color:#ff79c6">...</span>) <span style="color:#8be9fd;font-style:italic">@printf</span>(i8<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%format_str</span>, i32 <span style="color:#8be9fd;font-style:italic">%sum</span>)
+  ret i32 <span style="color:#8be9fd;font-style:italic">%sum</span>
+}
+</code></pre></div><h3 id="3icmp和fcmp">3.icmp和fcmp</h3>
+<p><code>icmp</code>指令的操作数类型是整型或整型向量、指针或指针向量。对于指针或指针向量，在做比较运算的时候，都会将其指向的地址值作为整型数值去比较，所以归根结底也还是整型。</p>
+<p><code>fcmp</code>指令要求操作数是浮点值或者浮点向量，这个没有指针类型。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl"><span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> icmp <span style="color:#f1fa8c">&lt;cond&gt;</span> <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>, <span style="color:#f1fa8c">&lt;op2&gt;</span>   ; yields i1 <span style="color:#ff79c6">or</span> <span style="color:#ff79c6">&lt;</span>N x i1<span style="color:#ff79c6">&gt;</span>:result
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> fcmp <span style="color:#f1fa8c">&lt;cond&gt;</span> <span style="color:#f1fa8c">&lt;ty&gt;</span> <span style="color:#f1fa8c">&lt;op1&gt;</span>, <span style="color:#f1fa8c">&lt;op2&gt;</span>     ; yields i1 <span style="color:#ff79c6">or</span> <span style="color:#ff79c6">&lt;</span>N x i1<span style="color:#ff79c6">&gt;</span>:result
+</code></pre></div><p><code>&lt;cond&gt;</code>这是比较规则，<code>icmp</code>和<code>fcmp</code>指令的比较规则不一样。</p>
+<p><code>icmp</code>比较规则：</p>
+<ol>
+<li><code>eq</code>：相等</li>
+<li><code>ne</code>：不等于</li>
+<li><code>ugt</code>：无符号大于</li>
+<li><code>uge</code>：无符号大于或等于</li>
+<li><code>ult</code>：无符号小于</li>
+<li><code>ule</code>：无符号小于或等于</li>
+<li><code>sgt</code>：有符号大于</li>
+<li><code>sge</code>：有符号大于或等于</li>
+<li><code>slt</code>：有符号小于</li>
+<li><code>sle</code>：有符号小于或等于</li>
+</ol>
+<p><code>fcmp</code>比较规则：</p>
+<ol>
+<li><code>false</code>：不比较，总是返回false</li>
+<li><code>oeq</code>：有序且相等</li>
+<li><code>ogt</code>：有序且大于</li>
+<li><code>oge</code>：有序且大于或等于</li>
+<li><code>olt</code>：有序且小于</li>
+<li><code>ole</code>：有序且小于或等于</li>
+<li><code>one</code>：有序且不相等</li>
+<li><code>ord</code>：有序（无 nans）</li>
+<li><code>ueq</code>：无序或相等</li>
+<li><code>ugt</code>：无序或大于</li>
+<li><code>uge</code>：无序或大于等于</li>
+<li><code>ult</code>：无序或小于</li>
+<li><code>ule</code>：无序或小于等于</li>
+<li><code>une</code>：无序或不相等</li>
+<li><code>uno</code>：无序（nans）</li>
+<li><code>true</code>: 不比较，总是返回 true</li>
+</ol>
+<p>有序意味着两个操作数都不是<code>QNAN</code>，而无序意味着任何一个操作数都可能是<code>QNAN</code>。</p>
+<blockquote>
+<p>QNAN是一个计算机术语，表示<strong>不是一个数字</strong>（Not a Number），它是一种特殊的浮点数，用于表示未定义或不可表示的值，例如0除以0，负数的平方根，或者无穷大减去无穷大等。</p>
+</blockquote>
+<p>下面是例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-perl" data-lang="perl">icmp：
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> icmp <span style="color:#ff79c6">eq</span> i32 <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>          ; yields: result<span style="color:#ff79c6">=</span>false
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> icmp <span style="color:#ff79c6">ne</span> float<span style="color:#ff79c6">*</span> <span style="color:#8be9fd;font-style:italic">%X</span>, <span style="color:#8be9fd;font-style:italic">%X</span>     ; yields: result<span style="color:#ff79c6">=</span>false
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> icmp ult i16  <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>        ; yields: result<span style="color:#ff79c6">=</span>true
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> icmp sgt i16  <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>        ; yields: result<span style="color:#ff79c6">=</span>false
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> icmp ule i16 <span style="color:#ff79c6">-</span><span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>        ; yields: result<span style="color:#ff79c6">=</span>false
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> icmp sge i16  <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>        ; yields: result<span style="color:#ff79c6">=</span>false
+fcmp:
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> fcmp oeq float <span style="color:#bd93f9">4.0</span>, <span style="color:#bd93f9">5.0</span>    ; yields: result<span style="color:#ff79c6">=</span>false
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> fcmp one float <span style="color:#bd93f9">4.0</span>, <span style="color:#bd93f9">5.0</span>    ; yields: result<span style="color:#ff79c6">=</span>true
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> fcmp olt float <span style="color:#bd93f9">4.0</span>, <span style="color:#bd93f9">5.0</span>    ; yields: result<span style="color:#ff79c6">=</span>true
+<span style="color:#f1fa8c">&lt;result&gt;</span> <span style="color:#ff79c6">=</span> fcmp ueq double <span style="color:#bd93f9">1.0</span>, <span style="color:#bd93f9">2.0</span>   ; yields: result<span style="color:#ff79c6">=</span>false
+</code></pre></div>
+
+                
+
+                
+                <hr>
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/post/scp%E8%AE%A4%E8%AF%81%E5%A4%8D%E4%B9%A0%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%B8%8E%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/" data-toggle="tooltip" data-placement="top" title="SCP认证复习——线段树与树状数组">&larr;
+                            Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+                
+
+                
+<div id="disqus-comment">
+    
+    <script src="https://giscus.app/client.js"
+        data-repo="hhhhlkf/comment"
+        data-repo-id="R_kgDOH-fgGQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOH-fgGc4CRXvh"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="zh-CN"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+        
+    </script>
+    
+</div>
+
+
+            </div>
+
+            
+            
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body">
+
+                    </ul>
+                </div>
+            </div>
+            
+
+            
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                
+                
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                        
+                        
+                        
+                        <a href="/tags/compiler" title="compiler">
+                            compiler
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/cv" title="cv">
+                            cv
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/database" title="database">
+                            database
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/deep-learning" title="deep-learning">
+                            deep-learning
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/hsi-classification" title="hsi-classification">
+                            hsi-classification
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/llvm" title="llvm">
+                            llvm
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/music" title="music">
+                            music
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/oracle" title="oracle">
+                            oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E5%AD%A6%E5%BB%BA%E6%A8%A1" title="数学建模">
+                            数学建模
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" title="数据结构">
+                            数据结构
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E9%A2%98%E8%A7%A3" title="数据结构题解">
+                            数据结构题解
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B" title="软件工程">
+                            软件工程
+                        </a>
+                        
+                        
+                    </div>
+                </section>
+                
+
+                
+                
+                <section>
+                    <hr>
+                    <h5>FRIENDS</h5>
+                    <ul class="list-inline">
+                        
+                        <li><a target="_blank" href="https://hbai.site/">Bai的博客</a></li>
+                        
+                    </ul>
+                </section>
+                
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+<footer>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                    
+                    <li>
+                        <a href="mailto:likefan2002@gmail.com">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/hhhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-zhihu fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+
+                    
+
+                    
+                    
+                    <li>
+                        <a target="_blank" href="/img/erweima.png">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-weixin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://github.com/hhhhlkf">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://gitee.com/linexus">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-git fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://stackoverflow.com/users/yourstackoverflowid">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-stack-overflow fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <li>
+                        <a target="_blank" href="img/qqpay.jpg">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-qq fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a target="_blank" href="https://blog.csdn.net/qq_56208478?spm=1000.2115.3001.5343">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-blogger fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Linexus blog 2023
+                    <br>
+                    <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
+                        href="https://hhhhlkf.github.io">Linexus</a> |
+                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"
+                        height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=hhhhlkf&repo=hhhhlkf.github.io&type=star&count=true">
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+<script>
+    function loadAsync(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+
+
+
+
+
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        
+        
+        
+        
+            _containerSelector = 'div.post-container'
+        
+
+        
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        
+        $(selector).html('')
+
+        
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    
+
+
+    loadAsync("\/js\/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<script>
+    
+    if ($('#tag_cloud').length !== 0) {
+        loadAsync("/js/jquery.tagcloud.js", function () {
+            $.fn.tagcloud.defaults = {
+                
+                color: { start: '#bbbbee', end: '#0085a1' },
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+
+<script>
+    loadAsync("https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+<script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+</script>
+
+
+
+
+
+
+
+
+
+
+<script>
+    
+    var _baId = 'b6cbc3cbead2c9e01d34c11c0c66f764';
+
+    
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
+<div id="sakana-widget-right"></div>
+<div id="sakana-widget-left"></div>
+<script>
+    function initSakanaWidget() {
+        new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
+        
+        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
+    }
+</script>
+<script async onload="initSakanaWidget()"
+    src="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.js"></script>
+<style>
+    #sakana-widget-right {
+        position: fixed;
+        right: 40px;
+        bottom: 24px;
+        z-index: 4;
+
+    }
+
+    #sakana-widget-left {
+        position: fixed;
+        left: 30px;
+        bottom: 24px;
+    }
+</style>
+
+
+
+</body>
+</html>
