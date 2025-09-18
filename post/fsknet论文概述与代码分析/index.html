@@ -66,6 +66,7 @@
     <script src="//unpkg.com/element-plus"></script>
     
     
+    
 
     
     
@@ -86,8 +87,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},   // 块级公式
+                {left: '$', right: '$', display: false},    // 行内公式
+                {left: '\\(', right: '\\)', display: false} // 行内公式
+            ]
+        });">
+</script>
+
 
 </head>
 
@@ -200,19 +214,50 @@
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
 <script>
-var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
-var index = client.initIndex('blog');
-autocomplete('#aa-search-input',
-{ hint: false}, {
-  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
-  displayKey: 'name',
-  templates: {
-      suggestion: function(suggestion) {
-          console.log(suggestion);
-          return '<span>' + '<a href="' + suggestion.url + '">' +
-          suggestion._highlightResult.title.value + '</a></span>';
-      }
-  }
+var client = algoliasearch("601I7K6MCB", "2cec145d214a1ec8bbdfec33d0764bfc");
+var index = client.initIndex('linexus');
+
+
+
+function truncateContent(content, maxBytes = 9500) { 
+    let encoder = new TextEncoder();
+    let bytes = encoder.encode(content);
+    if (bytes.length <= maxBytes) return content;
+
+    let truncated = '';
+    for (let char of content) {
+        if (encoder.encode(truncated + char).length > maxBytes) break;
+        truncated += char;
+    }
+    return truncated + '...';
+}
+
+
+
+var records = posts.map(post => {
+    return {
+        objectID: post.url,
+        title: post.title,
+        url: post.url,
+        excerpt: truncateContent(post.content)
+    };
+});
+
+
+index.saveObjects(records)
+    .then(() => console.log('Algolia 索引上传完成 ✅'))
+    .catch(err => console.error('上传出错 ❌', err));
+
+
+autocomplete('#aa-search-input', { hint: false }, {
+    source: autocomplete.sources.hits(index, { hitsPerPage: 8 }),
+    displayKey: 'title',
+    templates: {
+        suggestion: function(suggestion) {
+            return '<span><a href="' + suggestion.url + '">' +
+                   suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
 });
 </script>
         </div>
@@ -231,6 +276,7 @@ autocomplete('#aa-search-input',
         background-image: url('https://i.loli.net/2021/09/30/o7FWDmbLwxrYzAd.jpg')
     }
 </style>
+
 
 <header class="intro-header" >
 
@@ -365,295 +411,295 @@ autocomplete('#aa-search-input',
 <p>通过全局池化操作将上一层的卷积层从7×7×128转换成了长度为128的向量，并通过全卷积降至种类数，进行分类。</p>
 <h2 id="代码实现部分">代码实现部分</h2>
 <p>网络结构总体设计：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#6272a4"># 组合模型</span>
-<span style="color:#ff79c6">class</span> <span style="color:#50fa7b">ResnetBuilder</span>(<span style="color:#8be9fd;font-style:italic">object</span>):
-    @staticmethod
-    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">build</span>(input_shape, num_outputs):
-        <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;original input shape:&#39;</span>, input_shape)
-        _handle_dim_ordering()
-        <span style="color:#ff79c6">if</span> <span style="color:#8be9fd;font-style:italic">len</span>(input_shape) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">4</span>:
-            <span style="color:#ff79c6">raise</span> Exception(<span style="color:#f1fa8c">&#34;Input shape should be a tuple (nb_channels, kernel_dim1, kernel_dim2, kernel_dim3)&#34;</span>)
-
-        <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;original input shape:&#39;</span>, input_shape)
-        <span style="color:#6272a4"># 根据是否将通道放到最后一维进行变更</span>
-        <span style="color:#ff79c6">if</span> K<span style="color:#ff79c6">.</span>image_dim_ordering() <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;tf&#39;</span>:
-            input_shape <span style="color:#ff79c6">=</span> (input_shape[<span style="color:#bd93f9">1</span>], input_shape[<span style="color:#bd93f9">2</span>], input_shape[<span style="color:#bd93f9">3</span>], input_shape[<span style="color:#bd93f9">0</span>])
-        <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;change input shape:&#39;</span>, input_shape)
-
-        <span style="color:#8be9fd;font-style:italic">input</span> <span style="color:#ff79c6">=</span> Input(shape<span style="color:#ff79c6">=</span>input_shape)
-
-        <span style="color:#6272a4"># input = applyPCA(input, 30)</span>
-        <span style="color:#6272a4"># 3D-CNN and 2D-CNN conversion modules begin</span>
-        conv1 <span style="color:#ff79c6">=</span> Conv3D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">16</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">7</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">5</span>), kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
-                       kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>, use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(<span style="color:#8be9fd;font-style:italic">input</span>)
-        conv1 <span style="color:#ff79c6">=</span> BatchNormalization()(conv1)
-        conv2 <span style="color:#ff79c6">=</span> Conv3D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">32</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">5</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">3</span>), kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
-                       kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>, use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(conv1)
-        conv2 <span style="color:#ff79c6">=</span> BatchNormalization()(conv2)
-        <span style="color:#8be9fd;font-style:italic">print</span>(conv2<span style="color:#ff79c6">.</span>shape)
-        conv3 <span style="color:#ff79c6">=</span> Conv3D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">64</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
-                       kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>, use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(conv2)
-        conv3 <span style="color:#ff79c6">=</span> BatchNormalization()(conv3)
-        <span style="color:#8be9fd;font-style:italic">print</span>(conv3<span style="color:#ff79c6">.</span>shape)
-        conv3 <span style="color:#ff79c6">=</span> SeparableConv3D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">128</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>),
-                                kernel_initializer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
-                                use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(conv3)
-        <span style="color:#8be9fd;font-style:italic">print</span>(conv3<span style="color:#ff79c6">.</span>_keras_shape)
-        conv3_shape <span style="color:#ff79c6">=</span> conv3<span style="color:#ff79c6">.</span>_keras_shape
-
-        l <span style="color:#ff79c6">=</span> Reshape((conv3_shape[<span style="color:#bd93f9">1</span>], conv3_shape[<span style="color:#bd93f9">2</span>], conv3_shape[<span style="color:#bd93f9">3</span>] <span style="color:#ff79c6">*</span> conv3_shape[<span style="color:#bd93f9">4</span>]))(conv3)
-        <span style="color:#8be9fd;font-style:italic">print</span>(l)
-
-        <span style="color:#6272a4"># conv11</span>
-        l <span style="color:#ff79c6">=</span> Conv2D(<span style="color:#bd93f9">32</span>, (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), padding<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;same&#39;</span>, kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>), kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>,
-                   use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(l)
-        l <span style="color:#ff79c6">=</span> BatchNormalization()(l)
-        <span style="color:#8be9fd;font-style:italic">print</span>(l<span style="color:#ff79c6">.</span>shape)
-        <span style="color:#6272a4"># 3D-CNN and 2D-CNN conversion modules end</span>
-
-        <span style="color:#6272a4"># Selective kernel mechanism begin</span>
-        <span style="color:#6272a4"># conv12 - 可变卷积</span>
-        l_offset <span style="color:#ff79c6">=</span> ConvOffset2D(<span style="color:#bd93f9">32</span>)(l)  <span style="color:#6272a4"># 求取偏移量offset</span>
-        l1 <span style="color:#ff79c6">=</span> Conv2D(<span style="color:#bd93f9">64</span>, (<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>), padding<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;same&#39;</span>, strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
-                    kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>, use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(l_offset)
-        l1 <span style="color:#ff79c6">=</span> BatchNormalization()(l1)
-        <span style="color:#8be9fd;font-style:italic">print</span>(l1<span style="color:#ff79c6">.</span>shape)
-
-        <span style="color:#6272a4"># conv21 - 可变卷积</span>
-        l_offset <span style="color:#ff79c6">=</span> ConvOffset2D(<span style="color:#bd93f9">32</span>)(l)  <span style="color:#6272a4"># 求取偏移量offset</span>
-        l2 <span style="color:#ff79c6">=</span> Conv2D(<span style="color:#bd93f9">64</span>, (<span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">5</span>), padding<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;same&#39;</span>, strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), dilation_rate<span style="color:#ff79c6">=</span><span style="color:#bd93f9">5</span>,
-                    kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>), kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>, use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>,
-                    activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(l_offset)
-        l2 <span style="color:#ff79c6">=</span> BatchNormalization()(l2)
-        <span style="color:#8be9fd;font-style:italic">print</span>(l2<span style="color:#ff79c6">.</span>shape)
-
-        l <span style="color:#ff79c6">=</span> keras<span style="color:#ff79c6">.</span>layers<span style="color:#ff79c6">.</span>add([l1, l2])
-        <span style="color:#6272a4"># attention 操作</span>
-        se <span style="color:#ff79c6">=</span> squeeze_excite_block(l)
-        l1 <span style="color:#ff79c6">=</span> multiply([l1, se])
-        l2 <span style="color:#ff79c6">=</span> multiply([l2, se])
-
-        l <span style="color:#ff79c6">=</span> keras<span style="color:#ff79c6">.</span>layers<span style="color:#ff79c6">.</span>add([l1, l2])
-        <span style="color:#8be9fd;font-style:italic">print</span>(l)
-        <span style="color:#6272a4"># 可分离卷积</span>
-        l <span style="color:#ff79c6">=</span> SeparableConv2D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">128</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), kernel_initializer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
-                            use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(l)
-        l <span style="color:#ff79c6">=</span> BatchNormalization()(l)
-        l <span style="color:#ff79c6">=</span> SeparableConv2D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">256</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), kernel_initializer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
-                            use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(l)
-        l <span style="color:#ff79c6">=</span> BatchNormalization()(l)
-        <span style="color:#6272a4"># Selective kernel mechanism end</span>
-        <span style="color:#6272a4"># out</span>
-        l <span style="color:#ff79c6">=</span> GlobalAvgPool2D()(l)
-
-        <span style="color:#6272a4"># 输入分类器</span>
-        <span style="color:#6272a4"># Classifier block</span>
-        dense <span style="color:#ff79c6">=</span> Dense(units<span style="color:#ff79c6">=</span>num_outputs, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;softmax&#34;</span>, kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;he_normal&#34;</span>)(l)
-
-        model <span style="color:#ff79c6">=</span> Model(inputs<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">input</span>, outputs<span style="color:#ff79c6">=</span>dense)
-        <span style="color:#ff79c6">return</span> model
-
-    @staticmethod
-    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">build_resnet_8</span>(input_shape, num_outputs):
-        <span style="color:#6272a4"># (1,7,7,200),16</span>
-        <span style="color:#ff79c6">return</span> ResnetBuilder<span style="color:#ff79c6">.</span>build(input_shape, num_outputs)
-</code></pre></div><h3 id="数据准备">数据准备：</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#6272a4"># 加载数据</span>
-mat_data <span style="color:#ff79c6">=</span> sio<span style="color:#ff79c6">.</span>loadmat(<span style="color:#f1fa8c">&#39;F:/transfer code/Tensorflow  Learning/SKNet/datasets/IN/Indian_pines_corrected.mat&#39;</span>)
-data_IN <span style="color:#ff79c6">=</span> mat_data[<span style="color:#f1fa8c">&#39;indian_pines_corrected&#39;</span>]
-<span style="color:#6272a4"># 标签数据</span>
-mat_gt <span style="color:#ff79c6">=</span> sio<span style="color:#ff79c6">.</span>loadmat(<span style="color:#f1fa8c">&#39;F:/transfer code/Tensorflow  Learning/SKNet/datasets/IN/Indian_pines_gt.mat&#39;</span>)
-gt_IN <span style="color:#ff79c6">=</span> mat_gt[<span style="color:#f1fa8c">&#39;indian_pines_gt&#39;</span>]
-<span style="color:#6272a4"># print(&#39;data_IN:&#39;,data_IN)</span>
-<span style="color:#8be9fd;font-style:italic">print</span>(data_IN<span style="color:#ff79c6">.</span>shape)
-<span style="color:#6272a4"># (145,145,200)</span>
-<span style="color:#8be9fd;font-style:italic">print</span>(gt_IN<span style="color:#ff79c6">.</span>shape)
-<span style="color:#6272a4"># (145,145)</span>
-<span style="color:#6272a4"># 标签拷贝</span>
-new_gt_IN <span style="color:#ff79c6">=</span> gt_IN
-
-batch_size <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">16</span>
-
-nb_classes <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">16</span>
-nb_epoch <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">200</span>  <span style="color:#6272a4"># 400</span>
-<span style="color:#6272a4"># 单个训练样本长宽大小</span>
-img_rows, img_cols <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">23</span>, <span style="color:#bd93f9">23</span>  <span style="color:#6272a4"># 27, 27</span>
-patience <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">200</span>
-
-
-INPUT_DIMENSION_CONV <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">200</span>
-INPUT_DIMENSION <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">200</span>
-
-TOTAL_SIZE <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">10249</span>
-VAL_SIZE <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1025</span>
-
-TRAIN_SIZE <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">5128</span>
-TEST_SIZE <span style="color:#ff79c6">=</span> TOTAL_SIZE <span style="color:#ff79c6">-</span> TRAIN_SIZE
-VALIDATION_SPLIT <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0.5</span>  <span style="color:#6272a4"># 20% for training and 80% for validation and testing</span>
-<span style="color:#6272a4"># 0.9  1031</span>
-<span style="color:#6272a4"># 0.8  2055</span>
-<span style="color:#6272a4"># 0.7  3081</span>
-<span style="color:#6272a4"># 0.6  4106</span>
-<span style="color:#6272a4"># 0.5  5128</span>
-<span style="color:#6272a4"># 0.4  6153</span>
-
-<span style="color:#6272a4"># 通道数</span>
-img_channels <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">200</span>
-PATCH_LENGTH <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">11</span>  <span style="color:#6272a4"># Patch_size (13*2+1)*(13*2+1)</span>
-
-<span style="color:#8be9fd;font-style:italic">print</span>(data_IN<span style="color:#ff79c6">.</span>shape[:<span style="color:#bd93f9">2</span>])
-<span style="color:#6272a4"># (145,145)</span>
-<span style="color:#8be9fd;font-style:italic">print</span>(np<span style="color:#ff79c6">.</span>prod(data_IN<span style="color:#ff79c6">.</span>shape[:<span style="color:#bd93f9">2</span>]))
-<span style="color:#6272a4"># 21025</span>
-<span style="color:#8be9fd;font-style:italic">print</span>(data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>:])
-<span style="color:#6272a4"># (200,)</span>
-<span style="color:#8be9fd;font-style:italic">print</span>(np<span style="color:#ff79c6">.</span>prod(data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>:]))
-<span style="color:#6272a4"># 200</span>
-<span style="color:#8be9fd;font-style:italic">print</span>(np<span style="color:#ff79c6">.</span>prod(new_gt_IN<span style="color:#ff79c6">.</span>shape[:<span style="color:#bd93f9">2</span>]))
-<span style="color:#6272a4"># 21025</span>
-
-<span style="color:#6272a4"># 对数据进行reshape处理之后，进行scale操作</span>
-data <span style="color:#ff79c6">=</span> data_IN<span style="color:#ff79c6">.</span>reshape(np<span style="color:#ff79c6">.</span>prod(data_IN<span style="color:#ff79c6">.</span>shape[:<span style="color:#bd93f9">2</span>]), np<span style="color:#ff79c6">.</span>prod(data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>:]))
-gt <span style="color:#ff79c6">=</span> new_gt_IN<span style="color:#ff79c6">.</span>reshape(np<span style="color:#ff79c6">.</span>prod(new_gt_IN<span style="color:#ff79c6">.</span>shape[:<span style="color:#bd93f9">2</span>]), )
-
-<span style="color:#6272a4"># 标准化操作，即将所有数据沿行沿列均归一化道0-1之间</span>
-data <span style="color:#ff79c6">=</span> preprocessing<span style="color:#ff79c6">.</span>scale(data)
-<span style="color:#8be9fd;font-style:italic">print</span>(data<span style="color:#ff79c6">.</span>shape)
-<span style="color:#6272a4"># (21025, 200)</span>
-
-<span style="color:#6272a4"># 对数据边缘进行填充操作，有点类似之前的镜像操作</span>
-data_ <span style="color:#ff79c6">=</span> data<span style="color:#ff79c6">.</span>reshape(data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>])
-whole_data <span style="color:#ff79c6">=</span> data_
-padded_data <span style="color:#ff79c6">=</span> zeroPadding<span style="color:#ff79c6">.</span>zeroPadding_3D(whole_data, PATCH_LENGTH)
-<span style="color:#8be9fd;font-style:italic">print</span>(padded_data<span style="color:#ff79c6">.</span>shape)
-<span style="color:#6272a4"># (151, 151, 200)</span>
-<span style="color:#6272a4"># 因为选择的是7*7的滑动窗口，145*145,145/7余5，也就是说有5个像素点扫描不到，所有在长宽每边个填充3，也就是6，这样的话</span>
-<span style="color:#6272a4"># 就可以将所有像素点扫描到</span>
-
-ITER <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
-CATEGORY <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">16</span>
-<span style="color:#6272a4"># 提前准备训练集的接收格式</span>
-train_data <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>zeros((TRAIN_SIZE, <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">*</span> PATCH_LENGTH <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">*</span> PATCH_LENGTH <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, INPUT_DIMENSION_CONV))
-<span style="color:#8be9fd;font-style:italic">print</span>(train_data<span style="color:#ff79c6">.</span>shape)
-<span style="color:#6272a4"># 提前准备测试集的接收格式</span>
-test_data <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>zeros((TEST_SIZE, <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">*</span> PATCH_LENGTH <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">*</span> PATCH_LENGTH <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, INPUT_DIMENSION_CONV))
-<span style="color:#8be9fd;font-style:italic">print</span>(test_data<span style="color:#ff79c6">.</span>shape)
-
-<span style="color:#6272a4"># 评价指标</span>
-KAPPA_3D_HSICNNet <span style="color:#ff79c6">=</span> []
-OA_3D_HSICNNet <span style="color:#ff79c6">=</span> []
-AA_3D_HSICNNet <span style="color:#ff79c6">=</span> []
-TRAINING_TIME_3D_HSICNNet <span style="color:#ff79c6">=</span> []
-TESTING_TIME_3D_HSICNNet <span style="color:#ff79c6">=</span> []
-ELEMENT_ACC_3D_HSICNNet <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>zeros((ITER, CATEGORY))
-
-<span style="color:#6272a4"># seeds = [1220, 1221, 1222, 1223, 1224, 1225, 1226, 1227, 1228, 1229] 随机数种子</span>
-seeds <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1334</span>]
-</code></pre></div><h3 id="训练步骤">训练步骤：</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">for</span> index_iter <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(ITER):
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;# </span><span style="color:#f1fa8c">%d</span><span style="color:#f1fa8c"> Iteration&#34;</span> <span style="color:#ff79c6">%</span> (index_iter <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>))
-    <span style="color:#6272a4"># Iteration</span>
-
-    <span style="color:#6272a4"># save the best validated model</span>
-    best_weights_HSICNNet_path <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;F:/transfer code/Tensorflow  Learning/SKNet/models-in-densenet-23-514/Indian_best_3D_HSICNNet_&#39;</span> <span style="color:#ff79c6">+</span> <span style="color:#8be9fd;font-style:italic">str</span>(
-        index_iter <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;.hdf5&#39;</span>
-
-    <span style="color:#6272a4"># 通过sampling函数拿到测试和训练样本</span>
-    np<span style="color:#ff79c6">.</span>random<span style="color:#ff79c6">.</span>seed(seeds[index_iter])
-    train_indices, test_indices <span style="color:#ff79c6">=</span> sampling(VALIDATION_SPLIT, gt)
-    <span style="color:#6272a4"># train_indices 2055     test_indices 8094</span>
-
-    <span style="color:#6272a4"># gt本身是标签类，从标签类中取出相应的标签 -1，转成one-hot形式</span>
-    y_train <span style="color:#ff79c6">=</span> gt[train_indices] <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>
-    y_train <span style="color:#ff79c6">=</span> to_categorical(np<span style="color:#ff79c6">.</span>asarray(y_train))
-
-    y_test <span style="color:#ff79c6">=</span> gt[test_indices] <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>
-    y_test <span style="color:#ff79c6">=</span> to_categorical(np<span style="color:#ff79c6">.</span>asarray(y_test))
-    <span style="color:#6272a4"># whole_data 是未填充之前的图片、train_indices是用做训练的训练点。</span>
-    train_assign <span style="color:#ff79c6">=</span> indexToAssignment(train_indices, whole_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], whole_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], PATCH_LENGTH)
-    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#8be9fd;font-style:italic">len</span>(train_assign)):
-        train_data[i] <span style="color:#ff79c6">=</span> selectNeighboringPatch(padded_data, train_assign[i][<span style="color:#bd93f9">0</span>], train_assign[i][<span style="color:#bd93f9">1</span>], PATCH_LENGTH)
-    <span style="color:#6272a4"># whole_data 是未填充之前的图片、train_indices是用做训练的训练点。</span>
-    <span style="color:#6272a4"># 返回的是在整个数据图片上的x,y坐标对</span>
-    test_assign <span style="color:#ff79c6">=</span> indexToAssignment(test_indices, whole_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], whole_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], PATCH_LENGTH)
-    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#8be9fd;font-style:italic">len</span>(test_assign)):
-        <span style="color:#6272a4"># 求取该像素点周围预设卷积区域的大小</span>
-        test_data[i] <span style="color:#ff79c6">=</span> selectNeighboringPatch(padded_data, test_assign[i][<span style="color:#bd93f9">0</span>], test_assign[i][<span style="color:#bd93f9">1</span>], PATCH_LENGTH)
-
-    x_train <span style="color:#ff79c6">=</span> train_data<span style="color:#ff79c6">.</span>reshape(train_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], train_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], train_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], INPUT_DIMENSION_CONV)
-    x_test_all <span style="color:#ff79c6">=</span> test_data<span style="color:#ff79c6">.</span>reshape(test_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], test_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], test_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], INPUT_DIMENSION_CONV)
-	<span style="color:#6272a4"># 选取部分进行训练</span>
-    x_val <span style="color:#ff79c6">=</span> x_test_all[<span style="color:#ff79c6">-</span>VAL_SIZE:]
-    y_val <span style="color:#ff79c6">=</span> y_test[<span style="color:#ff79c6">-</span>VAL_SIZE:]
-	<span style="color:#6272a4"># 选取部分进行测试</span>
-    x_test <span style="color:#ff79c6">=</span> x_test_all[:<span style="color:#ff79c6">-</span>VAL_SIZE]
-    y_test <span style="color:#ff79c6">=</span> y_test[:<span style="color:#ff79c6">-</span>VAL_SIZE]
-	<span style="color:#6272a4"># 加载模型</span>
-    model_HSICNNet <span style="color:#ff79c6">=</span> model_HSICNNet()
-
-    <span style="color:#6272a4"># 创建一个实例history</span>
-    history <span style="color:#ff79c6">=</span> LossHistory()
-
-    <span style="color:#6272a4"># monitor：监视数据接口，此处是val_loss,patience是在多少步可以容忍没有提高变化</span>
-    earlyStopping6 <span style="color:#ff79c6">=</span> kcallbacks<span style="color:#ff79c6">.</span>EarlyStopping(monitor<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;val_loss&#39;</span>, patience<span style="color:#ff79c6">=</span>patience, verbose<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>, mode<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;auto&#39;</span>)
-    <span style="color:#6272a4"># 用户每次epoch最后都会保存模型，如果save_best_only=True,那么最近验证误差最后的数据将会被保存下来</span>
-    saveBestModel6 <span style="color:#ff79c6">=</span> kcallbacks<span style="color:#ff79c6">.</span>ModelCheckpoint(best_weights_HSICNNet_path, monitor<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;val_loss&#39;</span>, verbose<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
-                                                save_best_only<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>,
-                                                mode<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;auto&#39;</span>)
-
-    <span style="color:#6272a4"># 训练和验证</span>
-    tic6 <span style="color:#ff79c6">=</span> time<span style="color:#ff79c6">.</span>clock()
-    <span style="color:#8be9fd;font-style:italic">print</span>(x_train<span style="color:#ff79c6">.</span>shape, x_test<span style="color:#ff79c6">.</span>shape)
-    <span style="color:#6272a4"># (2055,7,7,200)  (7169,7,7,200)</span>
-    history_3d_HSICNNet <span style="color:#ff79c6">=</span> model_HSICNNet<span style="color:#ff79c6">.</span>fit(
-        x_train<span style="color:#ff79c6">.</span>reshape(x_train<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], x_train<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], x_train<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], x_train<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">3</span>], <span style="color:#bd93f9">1</span>), y_train,
-        validation_data<span style="color:#ff79c6">=</span>(x_val<span style="color:#ff79c6">.</span>reshape(x_val<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], x_val<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], x_val<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], x_val<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">3</span>], <span style="color:#bd93f9">1</span>), y_val),
-        batch_size<span style="color:#ff79c6">=</span>batch_size,
-        nb_epoch<span style="color:#ff79c6">=</span>nb_epoch, shuffle<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>, callbacks<span style="color:#ff79c6">=</span>[earlyStopping6, saveBestModel6, history])
-    toc6 <span style="color:#ff79c6">=</span> time<span style="color:#ff79c6">.</span>clock()
-
-    <span style="color:#6272a4"># 测试</span>
-    tic7 <span style="color:#ff79c6">=</span> time<span style="color:#ff79c6">.</span>clock()
-    loss_and_metrics <span style="color:#ff79c6">=</span> model_HSICNNet<span style="color:#ff79c6">.</span>evaluate(
-        x_test<span style="color:#ff79c6">.</span>reshape(x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">3</span>], <span style="color:#bd93f9">1</span>), y_test,
-        batch_size<span style="color:#ff79c6">=</span>batch_size)
-    toc7 <span style="color:#ff79c6">=</span> time<span style="color:#ff79c6">.</span>clock()
-
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;3D HSICNNet Time: &#39;</span>, toc6 <span style="color:#ff79c6">-</span> tic6)
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;3D HSICNNet Test time:&#39;</span>, toc7 <span style="color:#ff79c6">-</span> tic7)
-
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;3D HSICNNet Test score:&#39;</span>, loss_and_metrics[<span style="color:#bd93f9">0</span>])
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;3D HSICNNet Test accuracy:&#39;</span>, loss_and_metrics[<span style="color:#bd93f9">1</span>])
-
-    <span style="color:#8be9fd;font-style:italic">print</span>(history_3d_HSICNNet<span style="color:#ff79c6">.</span>history<span style="color:#ff79c6">.</span>keys())
-
-    <span style="color:#6272a4"># 预测</span>
-    pred_test <span style="color:#ff79c6">=</span> model_HSICNNet<span style="color:#ff79c6">.</span>predict(
-        x_test<span style="color:#ff79c6">.</span>reshape(x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">3</span>], <span style="color:#bd93f9">1</span>))<span style="color:#ff79c6">.</span>argmax(axis<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-    <span style="color:#6272a4"># 跟踪值出现的次数</span>
-    collections<span style="color:#ff79c6">.</span>Counter(pred_test)
-
-    gt_test <span style="color:#ff79c6">=</span> gt[test_indices] <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>
-    <span style="color:#6272a4"># print(len(gt_test))</span>
-    <span style="color:#6272a4"># 8194</span>
-    <span style="color:#6272a4"># 这是测试集，验证和测试还没有分开</span>
-    overall_acc <span style="color:#ff79c6">=</span> metrics<span style="color:#ff79c6">.</span>accuracy_score(pred_test, gt_test[:<span style="color:#ff79c6">-</span>VAL_SIZE])
-    confusion_matrix <span style="color:#ff79c6">=</span> metrics<span style="color:#ff79c6">.</span>confusion_matrix(pred_test, gt_test[:<span style="color:#ff79c6">-</span>VAL_SIZE])
-    each_acc, average_acc <span style="color:#ff79c6">=</span> averageAccuracy<span style="color:#ff79c6">.</span>AA_andEachClassAccuracy(confusion_matrix)
-    kappa <span style="color:#ff79c6">=</span> metrics<span style="color:#ff79c6">.</span>cohen_kappa_score(pred_test, gt_test[:<span style="color:#ff79c6">-</span>VAL_SIZE])
-    KAPPA_3D_HSICNNet<span style="color:#ff79c6">.</span>append(kappa)
-    OA_3D_HSICNNet<span style="color:#ff79c6">.</span>append(overall_acc)
-    AA_3D_HSICNNet<span style="color:#ff79c6">.</span>append(average_acc)
-    TRAINING_TIME_3D_HSICNNet<span style="color:#ff79c6">.</span>append(toc6 <span style="color:#ff79c6">-</span> tic6)
-    TESTING_TIME_3D_HSICNNet<span style="color:#ff79c6">.</span>append(toc7 <span style="color:#ff79c6">-</span> tic7)
-    ELEMENT_ACC_3D_HSICNNet[index_iter, :] <span style="color:#ff79c6">=</span> each_acc
-
-    <span style="color:#6272a4"># 绘制acc-loss曲线</span>
-    history<span style="color:#ff79c6">.</span>loss_plot(<span style="color:#f1fa8c">&#39;epoch&#39;</span>)
-
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;3D HSICNNet finished.&#34;</span>)
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;# </span><span style="color:#f1fa8c">%d</span><span style="color:#f1fa8c"> Iteration&#34;</span> <span style="color:#ff79c6">%</span> (index_iter <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>))
-</code></pre></div><h3 id="运行环境">运行环境：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#6272a4"># 组合模型</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">ResnetBuilder</span>(<span style="color:#8be9fd;font-style:italic">object</span>):
+</span></span><span style="display:flex;"><span>    @staticmethod
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">build</span>(input_shape, num_outputs):
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;original input shape:&#39;</span>, input_shape)
+</span></span><span style="display:flex;"><span>        _handle_dim_ordering()
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> <span style="color:#8be9fd;font-style:italic">len</span>(input_shape) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">4</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">raise</span> Exception(<span style="color:#f1fa8c">&#34;Input shape should be a tuple (nb_channels, kernel_dim1, kernel_dim2, kernel_dim3)&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;original input shape:&#39;</span>, input_shape)
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 根据是否将通道放到最后一维进行变更</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> K<span style="color:#ff79c6">.</span>image_dim_ordering() <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;tf&#39;</span>:
+</span></span><span style="display:flex;"><span>            input_shape <span style="color:#ff79c6">=</span> (input_shape[<span style="color:#bd93f9">1</span>], input_shape[<span style="color:#bd93f9">2</span>], input_shape[<span style="color:#bd93f9">3</span>], input_shape[<span style="color:#bd93f9">0</span>])
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;change input shape:&#39;</span>, input_shape)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">input</span> <span style="color:#ff79c6">=</span> Input(shape<span style="color:#ff79c6">=</span>input_shape)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># input = applyPCA(input, 30)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 3D-CNN and 2D-CNN conversion modules begin</span>
+</span></span><span style="display:flex;"><span>        conv1 <span style="color:#ff79c6">=</span> Conv3D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">16</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">7</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">5</span>), kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
+</span></span><span style="display:flex;"><span>                       kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>, use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(<span style="color:#8be9fd;font-style:italic">input</span>)
+</span></span><span style="display:flex;"><span>        conv1 <span style="color:#ff79c6">=</span> BatchNormalization()(conv1)
+</span></span><span style="display:flex;"><span>        conv2 <span style="color:#ff79c6">=</span> Conv3D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">32</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">5</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">3</span>), kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
+</span></span><span style="display:flex;"><span>                       kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>, use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(conv1)
+</span></span><span style="display:flex;"><span>        conv2 <span style="color:#ff79c6">=</span> BatchNormalization()(conv2)
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(conv2<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span>        conv3 <span style="color:#ff79c6">=</span> Conv3D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">64</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
+</span></span><span style="display:flex;"><span>                       kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>, use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(conv2)
+</span></span><span style="display:flex;"><span>        conv3 <span style="color:#ff79c6">=</span> BatchNormalization()(conv3)
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(conv3<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span>        conv3 <span style="color:#ff79c6">=</span> SeparableConv3D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">128</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>),
+</span></span><span style="display:flex;"><span>                                kernel_initializer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
+</span></span><span style="display:flex;"><span>                                use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(conv3)
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(conv3<span style="color:#ff79c6">.</span>_keras_shape)
+</span></span><span style="display:flex;"><span>        conv3_shape <span style="color:#ff79c6">=</span> conv3<span style="color:#ff79c6">.</span>_keras_shape
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        l <span style="color:#ff79c6">=</span> Reshape((conv3_shape[<span style="color:#bd93f9">1</span>], conv3_shape[<span style="color:#bd93f9">2</span>], conv3_shape[<span style="color:#bd93f9">3</span>] <span style="color:#ff79c6">*</span> conv3_shape[<span style="color:#bd93f9">4</span>]))(conv3)
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(l)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># conv11</span>
+</span></span><span style="display:flex;"><span>        l <span style="color:#ff79c6">=</span> Conv2D(<span style="color:#bd93f9">32</span>, (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), padding<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;same&#39;</span>, kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>), kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>,
+</span></span><span style="display:flex;"><span>                   use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(l)
+</span></span><span style="display:flex;"><span>        l <span style="color:#ff79c6">=</span> BatchNormalization()(l)
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(l<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 3D-CNN and 2D-CNN conversion modules end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># Selective kernel mechanism begin</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># conv12 - 可变卷积</span>
+</span></span><span style="display:flex;"><span>        l_offset <span style="color:#ff79c6">=</span> ConvOffset2D(<span style="color:#bd93f9">32</span>)(l)  <span style="color:#6272a4"># 求取偏移量offset</span>
+</span></span><span style="display:flex;"><span>        l1 <span style="color:#ff79c6">=</span> Conv2D(<span style="color:#bd93f9">64</span>, (<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>), padding<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;same&#39;</span>, strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
+</span></span><span style="display:flex;"><span>                    kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>, use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(l_offset)
+</span></span><span style="display:flex;"><span>        l1 <span style="color:#ff79c6">=</span> BatchNormalization()(l1)
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(l1<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># conv21 - 可变卷积</span>
+</span></span><span style="display:flex;"><span>        l_offset <span style="color:#ff79c6">=</span> ConvOffset2D(<span style="color:#bd93f9">32</span>)(l)  <span style="color:#6272a4"># 求取偏移量offset</span>
+</span></span><span style="display:flex;"><span>        l2 <span style="color:#ff79c6">=</span> Conv2D(<span style="color:#bd93f9">64</span>, (<span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">5</span>), padding<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;same&#39;</span>, strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), dilation_rate<span style="color:#ff79c6">=</span><span style="color:#bd93f9">5</span>,
+</span></span><span style="display:flex;"><span>                    kernel_regularizer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>), kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;he_normal&#39;</span>, use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>,
+</span></span><span style="display:flex;"><span>                    activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(l_offset)
+</span></span><span style="display:flex;"><span>        l2 <span style="color:#ff79c6">=</span> BatchNormalization()(l2)
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(l2<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        l <span style="color:#ff79c6">=</span> keras<span style="color:#ff79c6">.</span>layers<span style="color:#ff79c6">.</span>add([l1, l2])
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># attention 操作</span>
+</span></span><span style="display:flex;"><span>        se <span style="color:#ff79c6">=</span> squeeze_excite_block(l)
+</span></span><span style="display:flex;"><span>        l1 <span style="color:#ff79c6">=</span> multiply([l1, se])
+</span></span><span style="display:flex;"><span>        l2 <span style="color:#ff79c6">=</span> multiply([l2, se])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        l <span style="color:#ff79c6">=</span> keras<span style="color:#ff79c6">.</span>layers<span style="color:#ff79c6">.</span>add([l1, l2])
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">print</span>(l)
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 可分离卷积</span>
+</span></span><span style="display:flex;"><span>        l <span style="color:#ff79c6">=</span> SeparableConv2D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">128</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), kernel_initializer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
+</span></span><span style="display:flex;"><span>                            use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(l)
+</span></span><span style="display:flex;"><span>        l <span style="color:#ff79c6">=</span> BatchNormalization()(l)
+</span></span><span style="display:flex;"><span>        l <span style="color:#ff79c6">=</span> SeparableConv2D(filters<span style="color:#ff79c6">=</span><span style="color:#bd93f9">256</span>, kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>), strides<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>), kernel_initializer<span style="color:#ff79c6">=</span>regularizers<span style="color:#ff79c6">.</span>l2(<span style="color:#bd93f9">0.01</span>),
+</span></span><span style="display:flex;"><span>                            use_bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;relu&#39;</span>)(l)
+</span></span><span style="display:flex;"><span>        l <span style="color:#ff79c6">=</span> BatchNormalization()(l)
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># Selective kernel mechanism end</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># out</span>
+</span></span><span style="display:flex;"><span>        l <span style="color:#ff79c6">=</span> GlobalAvgPool2D()(l)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 输入分类器</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># Classifier block</span>
+</span></span><span style="display:flex;"><span>        dense <span style="color:#ff79c6">=</span> Dense(units<span style="color:#ff79c6">=</span>num_outputs, activation<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;softmax&#34;</span>, kernel_initializer<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;he_normal&#34;</span>)(l)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        model <span style="color:#ff79c6">=</span> Model(inputs<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">input</span>, outputs<span style="color:#ff79c6">=</span>dense)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> model
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @staticmethod
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">build_resnet_8</span>(input_shape, num_outputs):
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># (1,7,7,200),16</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> ResnetBuilder<span style="color:#ff79c6">.</span>build(input_shape, num_outputs)
+</span></span></code></pre></div><h3 id="数据准备">数据准备：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#6272a4"># 加载数据</span>
+</span></span><span style="display:flex;"><span>mat_data <span style="color:#ff79c6">=</span> sio<span style="color:#ff79c6">.</span>loadmat(<span style="color:#f1fa8c">&#39;F:/transfer code/Tensorflow  Learning/SKNet/datasets/IN/Indian_pines_corrected.mat&#39;</span>)
+</span></span><span style="display:flex;"><span>data_IN <span style="color:#ff79c6">=</span> mat_data[<span style="color:#f1fa8c">&#39;indian_pines_corrected&#39;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 标签数据</span>
+</span></span><span style="display:flex;"><span>mat_gt <span style="color:#ff79c6">=</span> sio<span style="color:#ff79c6">.</span>loadmat(<span style="color:#f1fa8c">&#39;F:/transfer code/Tensorflow  Learning/SKNet/datasets/IN/Indian_pines_gt.mat&#39;</span>)
+</span></span><span style="display:flex;"><span>gt_IN <span style="color:#ff79c6">=</span> mat_gt[<span style="color:#f1fa8c">&#39;indian_pines_gt&#39;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># print(&#39;data_IN:&#39;,data_IN)</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(data_IN<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># (145,145,200)</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(gt_IN<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># (145,145)</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 标签拷贝</span>
+</span></span><span style="display:flex;"><span>new_gt_IN <span style="color:#ff79c6">=</span> gt_IN
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>batch_size <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">16</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>nb_classes <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">16</span>
+</span></span><span style="display:flex;"><span>nb_epoch <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">200</span>  <span style="color:#6272a4"># 400</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 单个训练样本长宽大小</span>
+</span></span><span style="display:flex;"><span>img_rows, img_cols <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">23</span>, <span style="color:#bd93f9">23</span>  <span style="color:#6272a4"># 27, 27</span>
+</span></span><span style="display:flex;"><span>patience <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">200</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>INPUT_DIMENSION_CONV <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">200</span>
+</span></span><span style="display:flex;"><span>INPUT_DIMENSION <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">200</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>TOTAL_SIZE <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">10249</span>
+</span></span><span style="display:flex;"><span>VAL_SIZE <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1025</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>TRAIN_SIZE <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">5128</span>
+</span></span><span style="display:flex;"><span>TEST_SIZE <span style="color:#ff79c6">=</span> TOTAL_SIZE <span style="color:#ff79c6">-</span> TRAIN_SIZE
+</span></span><span style="display:flex;"><span>VALIDATION_SPLIT <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0.5</span>  <span style="color:#6272a4"># 20% for training and 80% for validation and testing</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 0.9  1031</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 0.8  2055</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 0.7  3081</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 0.6  4106</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 0.5  5128</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 0.4  6153</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 通道数</span>
+</span></span><span style="display:flex;"><span>img_channels <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">200</span>
+</span></span><span style="display:flex;"><span>PATCH_LENGTH <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">11</span>  <span style="color:#6272a4"># Patch_size (13*2+1)*(13*2+1)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(data_IN<span style="color:#ff79c6">.</span>shape[:<span style="color:#bd93f9">2</span>])
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># (145,145)</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(np<span style="color:#ff79c6">.</span>prod(data_IN<span style="color:#ff79c6">.</span>shape[:<span style="color:#bd93f9">2</span>]))
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 21025</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>:])
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># (200,)</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(np<span style="color:#ff79c6">.</span>prod(data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>:]))
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 200</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(np<span style="color:#ff79c6">.</span>prod(new_gt_IN<span style="color:#ff79c6">.</span>shape[:<span style="color:#bd93f9">2</span>]))
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 21025</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 对数据进行reshape处理之后，进行scale操作</span>
+</span></span><span style="display:flex;"><span>data <span style="color:#ff79c6">=</span> data_IN<span style="color:#ff79c6">.</span>reshape(np<span style="color:#ff79c6">.</span>prod(data_IN<span style="color:#ff79c6">.</span>shape[:<span style="color:#bd93f9">2</span>]), np<span style="color:#ff79c6">.</span>prod(data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>:]))
+</span></span><span style="display:flex;"><span>gt <span style="color:#ff79c6">=</span> new_gt_IN<span style="color:#ff79c6">.</span>reshape(np<span style="color:#ff79c6">.</span>prod(new_gt_IN<span style="color:#ff79c6">.</span>shape[:<span style="color:#bd93f9">2</span>]), )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 标准化操作，即将所有数据沿行沿列均归一化道0-1之间</span>
+</span></span><span style="display:flex;"><span>data <span style="color:#ff79c6">=</span> preprocessing<span style="color:#ff79c6">.</span>scale(data)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(data<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># (21025, 200)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 对数据边缘进行填充操作，有点类似之前的镜像操作</span>
+</span></span><span style="display:flex;"><span>data_ <span style="color:#ff79c6">=</span> data<span style="color:#ff79c6">.</span>reshape(data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], data_IN<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>])
+</span></span><span style="display:flex;"><span>whole_data <span style="color:#ff79c6">=</span> data_
+</span></span><span style="display:flex;"><span>padded_data <span style="color:#ff79c6">=</span> zeroPadding<span style="color:#ff79c6">.</span>zeroPadding_3D(whole_data, PATCH_LENGTH)
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(padded_data<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># (151, 151, 200)</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 因为选择的是7*7的滑动窗口，145*145,145/7余5，也就是说有5个像素点扫描不到，所有在长宽每边个填充3，也就是6，这样的话</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 就可以将所有像素点扫描到</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ITER <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>CATEGORY <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">16</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 提前准备训练集的接收格式</span>
+</span></span><span style="display:flex;"><span>train_data <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>zeros((TRAIN_SIZE, <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">*</span> PATCH_LENGTH <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">*</span> PATCH_LENGTH <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, INPUT_DIMENSION_CONV))
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(train_data<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 提前准备测试集的接收格式</span>
+</span></span><span style="display:flex;"><span>test_data <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>zeros((TEST_SIZE, <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">*</span> PATCH_LENGTH <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">*</span> PATCH_LENGTH <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, INPUT_DIMENSION_CONV))
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">print</span>(test_data<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 评价指标</span>
+</span></span><span style="display:flex;"><span>KAPPA_3D_HSICNNet <span style="color:#ff79c6">=</span> []
+</span></span><span style="display:flex;"><span>OA_3D_HSICNNet <span style="color:#ff79c6">=</span> []
+</span></span><span style="display:flex;"><span>AA_3D_HSICNNet <span style="color:#ff79c6">=</span> []
+</span></span><span style="display:flex;"><span>TRAINING_TIME_3D_HSICNNet <span style="color:#ff79c6">=</span> []
+</span></span><span style="display:flex;"><span>TESTING_TIME_3D_HSICNNet <span style="color:#ff79c6">=</span> []
+</span></span><span style="display:flex;"><span>ELEMENT_ACC_3D_HSICNNet <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>zeros((ITER, CATEGORY))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># seeds = [1220, 1221, 1222, 1223, 1224, 1225, 1226, 1227, 1228, 1229] 随机数种子</span>
+</span></span><span style="display:flex;"><span>seeds <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1334</span>]
+</span></span></code></pre></div><h3 id="训练步骤">训练步骤：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">for</span> index_iter <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(ITER):
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;# </span><span style="color:#f1fa8c">%d</span><span style="color:#f1fa8c"> Iteration&#34;</span> <span style="color:#ff79c6">%</span> (index_iter <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># Iteration</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># save the best validated model</span>
+</span></span><span style="display:flex;"><span>    best_weights_HSICNNet_path <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;F:/transfer code/Tensorflow  Learning/SKNet/models-in-densenet-23-514/Indian_best_3D_HSICNNet_&#39;</span> <span style="color:#ff79c6">+</span> <span style="color:#8be9fd;font-style:italic">str</span>(
+</span></span><span style="display:flex;"><span>        index_iter <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;.hdf5&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 通过sampling函数拿到测试和训练样本</span>
+</span></span><span style="display:flex;"><span>    np<span style="color:#ff79c6">.</span>random<span style="color:#ff79c6">.</span>seed(seeds[index_iter])
+</span></span><span style="display:flex;"><span>    train_indices, test_indices <span style="color:#ff79c6">=</span> sampling(VALIDATION_SPLIT, gt)
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># train_indices 2055     test_indices 8094</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># gt本身是标签类，从标签类中取出相应的标签 -1，转成one-hot形式</span>
+</span></span><span style="display:flex;"><span>    y_train <span style="color:#ff79c6">=</span> gt[train_indices] <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>    y_train <span style="color:#ff79c6">=</span> to_categorical(np<span style="color:#ff79c6">.</span>asarray(y_train))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    y_test <span style="color:#ff79c6">=</span> gt[test_indices] <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>    y_test <span style="color:#ff79c6">=</span> to_categorical(np<span style="color:#ff79c6">.</span>asarray(y_test))
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># whole_data 是未填充之前的图片、train_indices是用做训练的训练点。</span>
+</span></span><span style="display:flex;"><span>    train_assign <span style="color:#ff79c6">=</span> indexToAssignment(train_indices, whole_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], whole_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], PATCH_LENGTH)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#8be9fd;font-style:italic">len</span>(train_assign)):
+</span></span><span style="display:flex;"><span>        train_data[i] <span style="color:#ff79c6">=</span> selectNeighboringPatch(padded_data, train_assign[i][<span style="color:#bd93f9">0</span>], train_assign[i][<span style="color:#bd93f9">1</span>], PATCH_LENGTH)
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># whole_data 是未填充之前的图片、train_indices是用做训练的训练点。</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 返回的是在整个数据图片上的x,y坐标对</span>
+</span></span><span style="display:flex;"><span>    test_assign <span style="color:#ff79c6">=</span> indexToAssignment(test_indices, whole_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], whole_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], PATCH_LENGTH)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#8be9fd;font-style:italic">len</span>(test_assign)):
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 求取该像素点周围预设卷积区域的大小</span>
+</span></span><span style="display:flex;"><span>        test_data[i] <span style="color:#ff79c6">=</span> selectNeighboringPatch(padded_data, test_assign[i][<span style="color:#bd93f9">0</span>], test_assign[i][<span style="color:#bd93f9">1</span>], PATCH_LENGTH)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    x_train <span style="color:#ff79c6">=</span> train_data<span style="color:#ff79c6">.</span>reshape(train_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], train_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], train_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], INPUT_DIMENSION_CONV)
+</span></span><span style="display:flex;"><span>    x_test_all <span style="color:#ff79c6">=</span> test_data<span style="color:#ff79c6">.</span>reshape(test_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], test_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], test_data<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], INPUT_DIMENSION_CONV)
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4"># 选取部分进行训练</span>
+</span></span><span style="display:flex;"><span>    x_val <span style="color:#ff79c6">=</span> x_test_all[<span style="color:#ff79c6">-</span>VAL_SIZE:]
+</span></span><span style="display:flex;"><span>    y_val <span style="color:#ff79c6">=</span> y_test[<span style="color:#ff79c6">-</span>VAL_SIZE:]
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4"># 选取部分进行测试</span>
+</span></span><span style="display:flex;"><span>    x_test <span style="color:#ff79c6">=</span> x_test_all[:<span style="color:#ff79c6">-</span>VAL_SIZE]
+</span></span><span style="display:flex;"><span>    y_test <span style="color:#ff79c6">=</span> y_test[:<span style="color:#ff79c6">-</span>VAL_SIZE]
+</span></span><span style="display:flex;"><span>	<span style="color:#6272a4"># 加载模型</span>
+</span></span><span style="display:flex;"><span>    model_HSICNNet <span style="color:#ff79c6">=</span> model_HSICNNet()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 创建一个实例history</span>
+</span></span><span style="display:flex;"><span>    history <span style="color:#ff79c6">=</span> LossHistory()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># monitor：监视数据接口，此处是val_loss,patience是在多少步可以容忍没有提高变化</span>
+</span></span><span style="display:flex;"><span>    earlyStopping6 <span style="color:#ff79c6">=</span> kcallbacks<span style="color:#ff79c6">.</span>EarlyStopping(monitor<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;val_loss&#39;</span>, patience<span style="color:#ff79c6">=</span>patience, verbose<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>, mode<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;auto&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 用户每次epoch最后都会保存模型，如果save_best_only=True,那么最近验证误差最后的数据将会被保存下来</span>
+</span></span><span style="display:flex;"><span>    saveBestModel6 <span style="color:#ff79c6">=</span> kcallbacks<span style="color:#ff79c6">.</span>ModelCheckpoint(best_weights_HSICNNet_path, monitor<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;val_loss&#39;</span>, verbose<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
+</span></span><span style="display:flex;"><span>                                                save_best_only<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>,
+</span></span><span style="display:flex;"><span>                                                mode<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;auto&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 训练和验证</span>
+</span></span><span style="display:flex;"><span>    tic6 <span style="color:#ff79c6">=</span> time<span style="color:#ff79c6">.</span>clock()
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(x_train<span style="color:#ff79c6">.</span>shape, x_test<span style="color:#ff79c6">.</span>shape)
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># (2055,7,7,200)  (7169,7,7,200)</span>
+</span></span><span style="display:flex;"><span>    history_3d_HSICNNet <span style="color:#ff79c6">=</span> model_HSICNNet<span style="color:#ff79c6">.</span>fit(
+</span></span><span style="display:flex;"><span>        x_train<span style="color:#ff79c6">.</span>reshape(x_train<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], x_train<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], x_train<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], x_train<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">3</span>], <span style="color:#bd93f9">1</span>), y_train,
+</span></span><span style="display:flex;"><span>        validation_data<span style="color:#ff79c6">=</span>(x_val<span style="color:#ff79c6">.</span>reshape(x_val<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], x_val<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], x_val<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], x_val<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">3</span>], <span style="color:#bd93f9">1</span>), y_val),
+</span></span><span style="display:flex;"><span>        batch_size<span style="color:#ff79c6">=</span>batch_size,
+</span></span><span style="display:flex;"><span>        nb_epoch<span style="color:#ff79c6">=</span>nb_epoch, shuffle<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>, callbacks<span style="color:#ff79c6">=</span>[earlyStopping6, saveBestModel6, history])
+</span></span><span style="display:flex;"><span>    toc6 <span style="color:#ff79c6">=</span> time<span style="color:#ff79c6">.</span>clock()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 测试</span>
+</span></span><span style="display:flex;"><span>    tic7 <span style="color:#ff79c6">=</span> time<span style="color:#ff79c6">.</span>clock()
+</span></span><span style="display:flex;"><span>    loss_and_metrics <span style="color:#ff79c6">=</span> model_HSICNNet<span style="color:#ff79c6">.</span>evaluate(
+</span></span><span style="display:flex;"><span>        x_test<span style="color:#ff79c6">.</span>reshape(x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">3</span>], <span style="color:#bd93f9">1</span>), y_test,
+</span></span><span style="display:flex;"><span>        batch_size<span style="color:#ff79c6">=</span>batch_size)
+</span></span><span style="display:flex;"><span>    toc7 <span style="color:#ff79c6">=</span> time<span style="color:#ff79c6">.</span>clock()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;3D HSICNNet Time: &#39;</span>, toc6 <span style="color:#ff79c6">-</span> tic6)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;3D HSICNNet Test time:&#39;</span>, toc7 <span style="color:#ff79c6">-</span> tic7)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;3D HSICNNet Test score:&#39;</span>, loss_and_metrics[<span style="color:#bd93f9">0</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;3D HSICNNet Test accuracy:&#39;</span>, loss_and_metrics[<span style="color:#bd93f9">1</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(history_3d_HSICNNet<span style="color:#ff79c6">.</span>history<span style="color:#ff79c6">.</span>keys())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 预测</span>
+</span></span><span style="display:flex;"><span>    pred_test <span style="color:#ff79c6">=</span> model_HSICNNet<span style="color:#ff79c6">.</span>predict(
+</span></span><span style="display:flex;"><span>        x_test<span style="color:#ff79c6">.</span>reshape(x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">0</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">1</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">2</span>], x_test<span style="color:#ff79c6">.</span>shape[<span style="color:#bd93f9">3</span>], <span style="color:#bd93f9">1</span>))<span style="color:#ff79c6">.</span>argmax(axis<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 跟踪值出现的次数</span>
+</span></span><span style="display:flex;"><span>    collections<span style="color:#ff79c6">.</span>Counter(pred_test)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    gt_test <span style="color:#ff79c6">=</span> gt[test_indices] <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># print(len(gt_test))</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 8194</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 这是测试集，验证和测试还没有分开</span>
+</span></span><span style="display:flex;"><span>    overall_acc <span style="color:#ff79c6">=</span> metrics<span style="color:#ff79c6">.</span>accuracy_score(pred_test, gt_test[:<span style="color:#ff79c6">-</span>VAL_SIZE])
+</span></span><span style="display:flex;"><span>    confusion_matrix <span style="color:#ff79c6">=</span> metrics<span style="color:#ff79c6">.</span>confusion_matrix(pred_test, gt_test[:<span style="color:#ff79c6">-</span>VAL_SIZE])
+</span></span><span style="display:flex;"><span>    each_acc, average_acc <span style="color:#ff79c6">=</span> averageAccuracy<span style="color:#ff79c6">.</span>AA_andEachClassAccuracy(confusion_matrix)
+</span></span><span style="display:flex;"><span>    kappa <span style="color:#ff79c6">=</span> metrics<span style="color:#ff79c6">.</span>cohen_kappa_score(pred_test, gt_test[:<span style="color:#ff79c6">-</span>VAL_SIZE])
+</span></span><span style="display:flex;"><span>    KAPPA_3D_HSICNNet<span style="color:#ff79c6">.</span>append(kappa)
+</span></span><span style="display:flex;"><span>    OA_3D_HSICNNet<span style="color:#ff79c6">.</span>append(overall_acc)
+</span></span><span style="display:flex;"><span>    AA_3D_HSICNNet<span style="color:#ff79c6">.</span>append(average_acc)
+</span></span><span style="display:flex;"><span>    TRAINING_TIME_3D_HSICNNet<span style="color:#ff79c6">.</span>append(toc6 <span style="color:#ff79c6">-</span> tic6)
+</span></span><span style="display:flex;"><span>    TESTING_TIME_3D_HSICNNet<span style="color:#ff79c6">.</span>append(toc7 <span style="color:#ff79c6">-</span> tic7)
+</span></span><span style="display:flex;"><span>    ELEMENT_ACC_3D_HSICNNet[index_iter, :] <span style="color:#ff79c6">=</span> each_acc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 绘制acc-loss曲线</span>
+</span></span><span style="display:flex;"><span>    history<span style="color:#ff79c6">.</span>loss_plot(<span style="color:#f1fa8c">&#39;epoch&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;3D HSICNNet finished.&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;# </span><span style="color:#f1fa8c">%d</span><span style="color:#f1fa8c"> Iteration&#34;</span> <span style="color:#ff79c6">%</span> (index_iter <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>))
+</span></span></code></pre></div><h3 id="运行环境">运行环境：</h3>
 <p><strong>python3.7</strong> + <strong>tensorflow1</strong></p>
 <h2 id="原代码和论文">原代码和论文</h2>
 <p><a href="https://paperswithcode.com/paper/faster-hyperspectral-image-classification">Faster hyperspectral image classification based on selective kernel mechanism using deep convolutional networks</a></p>
@@ -703,6 +749,8 @@ seeds <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1334</sp
 </div>
 
 
+
+
             </div>
 
             
@@ -717,9 +765,7 @@ seeds <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1334</sp
                     <h5>
                         <a class="catalog-toggle" href="#">CATALOG</a>
                     </h5>
-                    <ul class="catalog-body">
-
-                    </ul>
+                    <ul class="catalog-body"></ul>
                 </div>
             </div>
             
@@ -757,14 +803,14 @@ seeds <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1334</sp
                         
                         
                         
-                        <a href="/tags/deep-learning" title="deep-learning">
-                            deep-learning
+                        <a href="/tags/deep-learning" title="deep learning">
+                            deep learning
                         </a>
                         
                         
                         
-                        <a href="/tags/hsi-classification" title="hsi-classification">
-                            hsi-classification
+                        <a href="/tags/hsi-classification" title="hsi classification">
+                            hsi classification
                         </a>
                         
                         
@@ -783,6 +829,12 @@ seeds <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1334</sp
                         
                         <a href="/tags/oracle" title="oracle">
                             oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/rgb-t-detection" title="rgb-t detection">
+                            rgb-t detection
                         </a>
                         
                         
@@ -938,7 +990,7 @@ seeds <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1334</sp
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Linexus blog 2023
+                    Copyright &copy; Linexus blog 2025
                     <br>
                     <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
                         href="https://hhhhlkf.github.io">Linexus</a> |
@@ -1094,12 +1146,10 @@ seeds <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1334</sp
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
 <div id="sakana-widget-right"></div>
-<div id="sakana-widget-left"></div>
 <script>
     function initSakanaWidget() {
         new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
         
-        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
     }
 </script>
 <script async onload="initSakanaWidget()"

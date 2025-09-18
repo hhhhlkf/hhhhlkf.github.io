@@ -66,6 +66,7 @@
     <script src="//unpkg.com/element-plus"></script>
     
     
+    
 
     
     
@@ -86,8 +87,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},   // 块级公式
+                {left: '$', right: '$', display: false},    // 行内公式
+                {left: '\\(', right: '\\)', display: false} // 行内公式
+            ]
+        });">
+</script>
+
 
 </head>
 
@@ -200,19 +214,50 @@
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
 <script>
-var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
-var index = client.initIndex('blog');
-autocomplete('#aa-search-input',
-{ hint: false}, {
-  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
-  displayKey: 'name',
-  templates: {
-      suggestion: function(suggestion) {
-          console.log(suggestion);
-          return '<span>' + '<a href="' + suggestion.url + '">' +
-          suggestion._highlightResult.title.value + '</a></span>';
-      }
-  }
+var client = algoliasearch("601I7K6MCB", "2cec145d214a1ec8bbdfec33d0764bfc");
+var index = client.initIndex('linexus');
+
+
+
+function truncateContent(content, maxBytes = 9500) { 
+    let encoder = new TextEncoder();
+    let bytes = encoder.encode(content);
+    if (bytes.length <= maxBytes) return content;
+
+    let truncated = '';
+    for (let char of content) {
+        if (encoder.encode(truncated + char).length > maxBytes) break;
+        truncated += char;
+    }
+    return truncated + '...';
+}
+
+
+
+var records = posts.map(post => {
+    return {
+        objectID: post.url,
+        title: post.title,
+        url: post.url,
+        excerpt: truncateContent(post.content)
+    };
+});
+
+
+index.saveObjects(records)
+    .then(() => console.log('Algolia 索引上传完成 ✅'))
+    .catch(err => console.error('上传出错 ❌', err));
+
+
+autocomplete('#aa-search-input', { hint: false }, {
+    source: autocomplete.sources.hits(index, { hitsPerPage: 8 }),
+    displayKey: 'title',
+    templates: {
+        suggestion: function(suggestion) {
+            return '<span><a href="' + suggestion.url + '">' +
+                   suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
 });
 </script>
         </div>
@@ -231,6 +276,7 @@ autocomplete('#aa-search-input',
         background-image: url('https://i.loli.net/2021/09/30/uDASrq42lRX6Z8J.jpg')
     }
 </style>
+
 
 <header class="intro-header" >
 
@@ -290,54 +336,53 @@ autocomplete('#aa-search-input',
 <p>1行，1个整数，表示所求连通分量的数目。</p>
 <h3 id="输入样例">输入样例:</h3>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">6</span> <span style="color:#bd93f9">5</span>
-<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
-<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span>
-<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
-<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span>
-<span style="color:#bd93f9">5</span> <span style="color:#bd93f9">6</span>
-</code></pre></div><h3 id="输出样例">输出样例:</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">6</span> <span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">6</span>
+</span></span></code></pre></div><h3 id="输出样例">输出样例:</h3>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">2</span>
-
-</code></pre></div><p>作者<code> </code>谷方明<code> </code>单位<code> </code>吉林大学<code> </code>代码长度限制<code> </code>16 KB<code> </code>时间限制<code> </code>200 ms<code> </code>内存限制<code> </code>10 MB</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">2</span>
+</span></span></code></pre></div><p>作者 谷方明 单位 吉林大学 代码长度限制 16 KB 时间限制 200 ms 内存限制 10 MB</p>
 <p>思路：利用并查集，最后统计并查集个数，及father数组中存的值依旧为零的元素，得到答案。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> father[<span style="color:#bd93f9">100001</span>];
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">find</span>(<span style="color:#8be9fd">int</span> v)
-{
-	<span style="color:#ff79c6">if</span> (father[v] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
-		<span style="color:#ff79c6">return</span> v;
-	<span style="color:#ff79c6">else</span>
-		<span style="color:#ff79c6">return</span> find(father[v]);
-}
-<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Union</span>(<span style="color:#8be9fd">int</span> x,<span style="color:#8be9fd">int</span> y)
-{
-	<span style="color:#8be9fd">int</span> fx <span style="color:#ff79c6">=</span> find(x);
-	<span style="color:#8be9fd">int</span> fy <span style="color:#ff79c6">=</span> find(y);
-	<span style="color:#ff79c6">if</span> (fx <span style="color:#ff79c6">!=</span> fy)father[fx] <span style="color:#ff79c6">=</span> fy;
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-	<span style="color:#8be9fd">int</span> m, n;
-	scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m, <span style="color:#ff79c6">&amp;</span>n);
-	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
-	{
-		<span style="color:#8be9fd">int</span> pre, aft;
-		scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>pre, <span style="color:#ff79c6">&amp;</span>aft);
-		Union(pre, aft);
-	}
-	<span style="color:#8be9fd">int</span> count1 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
-	{
-		<span style="color:#ff79c6">if</span> (father[i] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
-			count1<span style="color:#ff79c6">++</span>;
-	}
-	printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1);
-	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><h2 id="7-2-整数拆分-100-分">7-2 整数拆分 (100 分)</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> father[<span style="color:#bd93f9">100001</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">find</span>(<span style="color:#8be9fd">int</span> v)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> (father[v] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> v;
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">return</span> find(father[v]);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Union</span>(<span style="color:#8be9fd">int</span> x,<span style="color:#8be9fd">int</span> y)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd">int</span> fx <span style="color:#ff79c6">=</span> find(x);
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd">int</span> fy <span style="color:#ff79c6">=</span> find(y);
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">if</span> (fx <span style="color:#ff79c6">!=</span> fy)father[fx] <span style="color:#ff79c6">=</span> fy;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd">int</span> m, n;
+</span></span><span style="display:flex;"><span>	scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m, <span style="color:#ff79c6">&amp;</span>n);
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd">int</span> pre, aft;
+</span></span><span style="display:flex;"><span>		scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>pre, <span style="color:#ff79c6">&amp;</span>aft);
+</span></span><span style="display:flex;"><span>		Union(pre, aft);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd">int</span> count1 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> m; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span> (father[i] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>			count1<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1);
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="7-2-整数拆分-100-分">7-2 整数拆分 (100 分)</h2>
 <p>整数拆分是一个古老又有趣的问题。请给出将正整数 n 拆分成 k 个正整数的所有不重复方案。例如，将 5 拆分成 2 个正整数的不重复方案，有如下2组：(1，4)和(2，3)。注意(1，4) 和(4，1)被视为同一方案。每种方案按递增序输出，所有方案按方案递增序输出。</p>
 <h3 id="输入格式-1">输入格式:</h3>
 <p>1行，2个整数n和k，用空格分隔， 1≤k≤n≤50.</p>
@@ -346,50 +391,50 @@ autocomplete('#aa-search-input',
 <p>最后一行，给出不同拆分方案的总数。</p>
 <h3 id="输入样例-1">输入样例:</h3>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span>
-</code></pre></div><h3 id="输出样例-1">输出样例:</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span>
+</span></span></code></pre></div><h3 id="输出样例-1">输出样例:</h3>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ceylon" data-lang="ceylon"><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span>
-<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
-<span style="color:#bd93f9">2</span>
-</code></pre></div><p>作者<code> </code>谷方明<code> </code>单位<code> </code>吉林大学<code> </code>代码长度限制<code> </code>16 KB<code> </code>时间限制<code> </code>100 ms<code> </code>内存限制<code> </code>1 MB</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ceylon" data-lang="ceylon"><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span>
+</span></span></code></pre></div><p>作者 谷方明 单位 吉林大学 代码长度限制 16 KB 时间限制 100 ms 内存限制 1 MB</p>
 <p>思路：利用回溯算法，在calulate函数中，传入当前限定最大值Max，传入当前计算深度， 传入在减掉分解完成的数字，当深度达到所给k值时输出一组数据，然后回溯进行再次输出。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> n, k, sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-<span style="color:#8be9fd">int</span> numway[<span style="color:#bd93f9">51</span>]; <span style="color:#8be9fd">int</span> top <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">output</span>()
-{
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> k <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">++</span>)
-        printf(<span style="color:#f1fa8c">&#34;%d &#34;</span>, numway[i]);
-    printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, numway[k]);
-}
-<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">calulate</span>(<span style="color:#8be9fd">int</span> deep, <span style="color:#8be9fd">int</span> Max, <span style="color:#8be9fd">int</span> number)
-{
-    <span style="color:#8be9fd">int</span> t <span style="color:#ff79c6">=</span> number <span style="color:#ff79c6">/</span> (k <span style="color:#ff79c6">-</span> deep <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
-    <span style="color:#ff79c6">if</span> (deep <span style="color:#ff79c6">==</span> k) 
-    {
-        numway[deep] <span style="color:#ff79c6">=</span> number;
-        output();
-        sum<span style="color:#ff79c6">++</span>;
-    }
-    <span style="color:#ff79c6">else</span>        
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> Max; i <span style="color:#ff79c6">&lt;=</span> t; i<span style="color:#ff79c6">++</span>)
-    {
-            numway[top] <span style="color:#ff79c6">=</span> i;
-            top<span style="color:#ff79c6">++</span>;
-            calulate(deep <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, i, number <span style="color:#ff79c6">-</span> i);
-    }
-    top<span style="color:#ff79c6">--</span>;
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    <span style="color:#6272a4">//cin &gt;&gt; n &gt;&gt; k;
-</span><span style="color:#6272a4"></span>    scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n, <span style="color:#ff79c6">&amp;</span>k);
-    calulate(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, n);
-    printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, sum);
-}
-</code></pre></div><h2 id="7-3-数字变换-100-分">7-3 数字变换 (100 分)</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> n, k, sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> numway[<span style="color:#bd93f9">51</span>]; <span style="color:#8be9fd">int</span> top <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">output</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> k <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34;%d &#34;</span>, numway[i]);
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, numway[k]);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">calulate</span>(<span style="color:#8be9fd">int</span> deep, <span style="color:#8be9fd">int</span> Max, <span style="color:#8be9fd">int</span> number)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> t <span style="color:#ff79c6">=</span> number <span style="color:#ff79c6">/</span> (k <span style="color:#ff79c6">-</span> deep <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (deep <span style="color:#ff79c6">==</span> k) 
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        numway[deep] <span style="color:#ff79c6">=</span> number;
+</span></span><span style="display:flex;"><span>        output();
+</span></span><span style="display:flex;"><span>        sum<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> Max; i <span style="color:#ff79c6">&lt;=</span> t; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>            numway[top] <span style="color:#ff79c6">=</span> i;
+</span></span><span style="display:flex;"><span>            top<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>            calulate(deep <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, i, number <span style="color:#ff79c6">-</span> i);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    top<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//cin &gt;&gt; n &gt;&gt; k;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n, <span style="color:#ff79c6">&amp;</span>k);
+</span></span><span style="display:flex;"><span>    calulate(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, n);
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, sum);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="7-3-数字变换-100-分">7-3 数字变换 (100 分)</h2>
 <p>利用变换规则，一个数可以变换成另一个数。变换规则如下：（1）x 变为x+1；（2）x 变为2x；（3）x 变为 x-1。给定两个数x 和 y，至少经过几步变换能让 x 变换成 y.</p>
 <h3 id="输入格式-2">输入格式:</h3>
 <p>1行，2个整数x和y，用空格分隔， 1≤x,y≤100000.</p>
@@ -398,68 +443,68 @@ autocomplete('#aa-search-input',
 <p>第2行，s个数，用空格分隔，表示最少变换时每步变换的结果。规则使用优先级顺序: （1），（2），（3）。</p>
 <h2 id="输入样例-2">输入样例:</h2>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">14</span>
-</code></pre></div><h2 id="输出样例-2">输出样例:</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">14</span>
+</span></span></code></pre></div><h2 id="输出样例-2">输出样例:</h2>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">4</span>
-<span style="color:#bd93f9">3</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">7</span> <span style="color:#bd93f9">14</span>
-作者` `谷方明` `单位` `吉林大学` `代码长度限制` `16 KB` `时间限制` `100 ms` `内存限制` `5 MB
-</code></pre></div><p>思路：bfs的应用，比较抽象，也是每个数值出队入队一次，每次循环弹出头接结点，对 三种情况进行计算，在判断该元素是否入过队后，进行入队操作。 注意：入队元素定义为数对（当前元素值，计算出当前值的前一个值）方便寻找路径。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">3</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">7</span> <span style="color:#bd93f9">14</span>
+</span></span><span style="display:flex;"><span>作者` `谷方明` `单位` `吉林大学` `代码长度限制` `16 KB` `时间限制` `100 ms` `内存限制` `5 MB
+</span></span></code></pre></div><p>思路：bfs的应用，比较抽象，也是每个数值出队入队一次，每次循环弹出头接结点，对 三种情况进行计算，在判断该元素是否入过队后，进行入队操作。 注意：入队元素定义为数对（当前元素值，计算出当前值的前一个值）方便寻找路径。</p>
 <p>代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> mark[<span style="color:#bd93f9">200005</span>];<span style="color:#6272a4">//标记数组，标记是否已经被计算出来，放入过队列中
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> mark1[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//存取该下表值第一次被计算出来的值
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> stand[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//倒序存储每一步计算值的结果
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    <span style="color:#8be9fd">int</span> m, n;
-    scanf_s(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m, <span style="color:#ff79c6">&amp;</span>n);
-    queue<span style="color:#ff79c6">&lt;</span>pair<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&gt;</span>a;<span style="color:#6272a4">//建立队列。
-</span><span style="color:#6272a4"></span>    a.push(make_pair(m,m));
-    mark[m] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-    <span style="color:#ff79c6">while</span> (a.front().first <span style="color:#ff79c6">!=</span> n)
-    {
-        <span style="color:#8be9fd">int</span> step <span style="color:#ff79c6">=</span> a.front().second;
-        <span style="color:#8be9fd">int</span> num <span style="color:#ff79c6">=</span> a.front().first;
-        mark1[num] <span style="color:#ff79c6">=</span> step;
-        a.pop();
-        <span style="color:#ff79c6">if</span> (mark[num <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">&amp;&amp;</span>num<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&lt;</span><span style="color:#bd93f9">100001</span>)
-        {
-            a.push(make_pair(num <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>,num));
-            mark[num <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-        }
-        <span style="color:#ff79c6">if</span> (mark[num <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">&amp;&amp;</span>num<span style="color:#ff79c6">*</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">&lt;</span><span style="color:#bd93f9">100001</span>)
-        {
-            a.push(make_pair(num <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>,num));
-            mark[num <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-        }
-        <span style="color:#ff79c6">if</span> (mark[num<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">&amp;&amp;</span>num<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&gt;=</span><span style="color:#bd93f9">0</span>)
-        {
-            a.push(make_pair(num <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>, num));
-            mark[num <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-        }
-    }
-    <span style="color:#8be9fd">int</span> step <span style="color:#ff79c6">=</span> a.front().second;
-    <span style="color:#8be9fd">int</span> num <span style="color:#ff79c6">=</span> a.front().first;
-    mark1[num] <span style="color:#ff79c6">=</span> step;
-    mark[num] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-    <span style="color:#8be9fd">int</span> N <span style="color:#ff79c6">=</span> n;
-    <span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-    <span style="color:#ff79c6">while</span> (N <span style="color:#ff79c6">!=</span> m)
-    {
-        stand[j<span style="color:#ff79c6">++</span>] <span style="color:#ff79c6">=</span> N;
-        N <span style="color:#ff79c6">=</span> mark1[N];
-    }
-    printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, j <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>);
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> j <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">--</span>)
-    {
-        printf(<span style="color:#f1fa8c">&#34;%d%c&#34;</span>, stand[i],i<span style="color:#ff79c6">==</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">?</span><span style="color:#f1fa8c">&#39;\n&#39;</span><span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39; &#39;</span>);
-    }
-    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><h2 id="7-4-旅行-i-100-分">7-4 旅行 I (100 分)</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;queue&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> mark[<span style="color:#bd93f9">200005</span>];<span style="color:#6272a4">//标记数组，标记是否已经被计算出来，放入过队列中
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> mark1[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//存取该下表值第一次被计算出来的值
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> stand[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//倒序存储每一步计算值的结果
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> m, n;
+</span></span><span style="display:flex;"><span>    scanf_s(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>m, <span style="color:#ff79c6">&amp;</span>n);
+</span></span><span style="display:flex;"><span>    queue<span style="color:#ff79c6">&lt;</span>pair<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&gt;</span>a;<span style="color:#6272a4">//建立队列。
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    a.push(make_pair(m,m));
+</span></span><span style="display:flex;"><span>    mark[m] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (a.front().first <span style="color:#ff79c6">!=</span> n)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> step <span style="color:#ff79c6">=</span> a.front().second;
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> num <span style="color:#ff79c6">=</span> a.front().first;
+</span></span><span style="display:flex;"><span>        mark1[num] <span style="color:#ff79c6">=</span> step;
+</span></span><span style="display:flex;"><span>        a.pop();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (mark[num <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">&amp;&amp;</span>num<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&lt;</span><span style="color:#bd93f9">100001</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            a.push(make_pair(num <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>,num));
+</span></span><span style="display:flex;"><span>            mark[num <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (mark[num <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">&amp;&amp;</span>num<span style="color:#ff79c6">*</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">&lt;</span><span style="color:#bd93f9">100001</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            a.push(make_pair(num <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>,num));
+</span></span><span style="display:flex;"><span>            mark[num <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (mark[num<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">&amp;&amp;</span>num<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&gt;=</span><span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            a.push(make_pair(num <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>, num));
+</span></span><span style="display:flex;"><span>            mark[num <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> step <span style="color:#ff79c6">=</span> a.front().second;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> num <span style="color:#ff79c6">=</span> a.front().first;
+</span></span><span style="display:flex;"><span>    mark1[num] <span style="color:#ff79c6">=</span> step;
+</span></span><span style="display:flex;"><span>    mark[num] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> N <span style="color:#ff79c6">=</span> n;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (N <span style="color:#ff79c6">!=</span> m)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        stand[j<span style="color:#ff79c6">++</span>] <span style="color:#ff79c6">=</span> N;
+</span></span><span style="display:flex;"><span>        N <span style="color:#ff79c6">=</span> mark1[N];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, j <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> j <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">--</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34;%d%c&#34;</span>, stand[i],i<span style="color:#ff79c6">==</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">?</span><span style="color:#f1fa8c">&#39;\n&#39;</span><span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39; &#39;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="7-4-旅行-i-100-分">7-4 旅行 I (100 分)</h2>
 <p>五一要到了,来一场说走就走的旅行吧。当然，要关注旅行费用。由于从事计算机专业，你很容易就收集到一些城市之间的交通方式及相关费用。将所有城市编号为1到n，你出发的城市编号是s。你想知道，到其它城市的最小费用分别是多少。如果可能，你想途中多旅行一些城市，在最小费用情况下，到各个城市的途中最多能经过多少城市。</p>
 <h3 id="输入格式-3">输入格式:</h3>
 <p>第1行，3个整数n、m、s，用空格分隔，分别表示城市数、交通方式总数、出发城市编号， 1≤s≤n≤10000, 1≤m≤100000 。</p>
@@ -469,176 +514,176 @@ autocomplete('#aa-search-input',
 <p>第2行，若干个整数Ci，Ci表示在最小费用情况下，s到城市i的最多经过的城市数，1≤i≤n，按城市号递增顺序。</p>
 <h3 id="输入样例-3">输入样例:</h3>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">1</span>
-<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span>
-<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span>
-<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">4</span>
-<span style="color:#bd93f9">3</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">7</span>
-<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">8</span>
-</code></pre></div><h3 id="输出样例-3">输出样例:</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">3</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">7</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">8</span>
+</span></span></code></pre></div><h3 id="输出样例-3">输出样例:</h3>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">0</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">13</span>
-<span style="color:#bd93f9">0</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
-</code></pre></div><p>作者<code> </code>谷方明<code> </code>单位<code> </code>吉林大学<code> </code>代码长度限制<code> </code>16 KB<code> </code>时间限制<code> </code>1000 ms<code> </code>内存限制<code> </code>10 MB</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">0</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">13</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">0</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
+</span></span></code></pre></div><p>作者 谷方明 单位 吉林大学 代码长度限制 16 KB 时间限制 1000 ms 内存限制 10 MB</p>
 <p>思路：利用Dijstra算法来跑最短路，采用普通堆优化，经过的城市在松弛处更新。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> MAX <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1000000000</span>;
-<span style="color:#8be9fd">int</span> start;
-<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Edge</span>
-{
-    <span style="color:#8be9fd">int</span> VerAdj;
-    <span style="color:#8be9fd">int</span> money;
-    <span style="color:#8be9fd">int</span> cost;
-    Edge<span style="color:#ff79c6">*</span>link;
-};
-<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Vertex</span>
-{
-    <span style="color:#8be9fd">int</span> VerName;
-    Edge<span style="color:#ff79c6">*</span> adjacement;
-};
-<span style="color:#ff79c6">class</span> <span style="color:#50fa7b">Graph_list</span>
-{
-<span style="color:#ff79c6">private</span><span style="color:#ff79c6">:</span>
-    Vertex <span style="color:#ff79c6">*</span>head;
-    <span style="color:#8be9fd">int</span> graphsize;
-    <span style="color:#8be9fd">int</span> begin;
-    <span style="color:#8be9fd">int</span> after;
-<span style="color:#ff79c6">public</span><span style="color:#ff79c6">:</span>
-    Graph_list();
-    <span style="color:#ff79c6">~</span>Graph_list();
-    <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Djistra</span>();
-}; 
-Graph_list<span style="color:#ff79c6">::</span>Graph_list()<span style="color:#6272a4">//建图
-</span><span style="color:#6272a4"></span>{
-    head <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Vertex[<span style="color:#bd93f9">100001</span>];
-    <span style="color:#8be9fd">int</span> from, to;
-    <span style="color:#8be9fd">int</span> e, dist1, money;
-    cin <span style="color:#ff79c6">&gt;&gt;</span> graphsize;
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize; i<span style="color:#ff79c6">++</span>)
-    {
-        head[i].VerName <span style="color:#ff79c6">=</span> i;
-        head[i].adjacement <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
-    }
-    cin <span style="color:#ff79c6">&gt;&gt;</span> e;
-    <span style="color:#6272a4">//cin &gt;&gt; start;
-</span><span style="color:#6272a4"></span>    cin <span style="color:#ff79c6">&gt;&gt;</span> begin ;
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> e; i<span style="color:#ff79c6">++</span>)
-    {
-        cin <span style="color:#ff79c6">&gt;&gt;</span> from <span style="color:#ff79c6">&gt;&gt;</span> to <span style="color:#ff79c6">&gt;&gt;</span> dist1;
-        Edge<span style="color:#ff79c6">*</span>p <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Edge;
-        p<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
-        p<span style="color:#ff79c6">-&gt;</span>cost <span style="color:#ff79c6">=</span> dist1;
-        p<span style="color:#ff79c6">-&gt;</span>VerAdj <span style="color:#ff79c6">=</span> to;
-        Edge<span style="color:#ff79c6">*</span>p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Edge;
-        p1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
-        p1<span style="color:#ff79c6">-&gt;</span>cost <span style="color:#ff79c6">=</span> dist1;
-        p1<span style="color:#ff79c6">-&gt;</span>VerAdj <span style="color:#ff79c6">=</span> from;
-        Edge<span style="color:#ff79c6">*</span>q1 <span style="color:#ff79c6">=</span> head[from].adjacement;
-        Edge<span style="color:#ff79c6">*</span>q2 <span style="color:#ff79c6">=</span> head[to].adjacement;
-        <span style="color:#ff79c6">if</span> (q1 <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-        {
-            head[from].adjacement <span style="color:#ff79c6">=</span> p;
-        }
-        <span style="color:#ff79c6">else</span>
-        {
-            <span style="color:#ff79c6">while</span> (q1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-            {
-                q1 <span style="color:#ff79c6">=</span> q1<span style="color:#ff79c6">-&gt;</span>link;
-            }
-            q1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> p;
-        }
-        <span style="color:#ff79c6">if</span> (q2 <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-        {
-            head[to].adjacement <span style="color:#ff79c6">=</span> p1;
-        }
-        <span style="color:#ff79c6">else</span>
-        {
-            <span style="color:#ff79c6">while</span> (q2<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-            {
-                q2 <span style="color:#ff79c6">=</span> q2<span style="color:#ff79c6">-&gt;</span>link;
-            }
-            q2<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> p1;
-        }
-    }
-}
-Graph_list<span style="color:#ff79c6">::~</span>Graph_list()<span style="color:#6272a4">//析构
-</span><span style="color:#6272a4"></span>{
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span>graphsize; i<span style="color:#ff79c6">++</span>)
-    {
-        Edge<span style="color:#ff79c6">*</span>p <span style="color:#ff79c6">=</span> head[i].adjacement;
-        <span style="color:#ff79c6">while</span> (p <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-        {
-            head[i].adjacement <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>link;
-            <span style="color:#ff79c6">delete</span> p;
-            p <span style="color:#ff79c6">=</span> head[i].adjacement;
-        }
-    }
-    <span style="color:#ff79c6">delete</span>[] head;
-}
-<span style="color:#8be9fd">void</span> Graph_list<span style="color:#ff79c6">::</span>Djistra()<span style="color:#6272a4">//算法核心
-</span><span style="color:#6272a4"></span>{
-    <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> dist[<span style="color:#bd93f9">10001</span>];
-    <span style="color:#8be9fd">int</span> visited[<span style="color:#bd93f9">10001</span>] <span style="color:#ff79c6">=</span> { <span style="color:#bd93f9">0</span> };
-    <span style="color:#8be9fd">int</span> count1[<span style="color:#bd93f9">10001</span>] <span style="color:#ff79c6">=</span> { <span style="color:#bd93f9">0</span> };
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span>graphsize; i<span style="color:#ff79c6">++</span>)
-    {
-        dist[i] <span style="color:#ff79c6">=</span> MAX;
-    }
-    dist[begin] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-    <span style="color:#8be9fd">int</span> midest <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-    <span style="color:#8be9fd">int</span> u <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-    Edge<span style="color:#ff79c6">*</span>p <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
-    <span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-    priority_queue<span style="color:#ff79c6">&lt;</span>pair<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>, <span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&gt;</span>q;
-    q.push(make_pair(<span style="color:#bd93f9">0</span>,begin));
-    <span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">!</span>q.empty())
-    {
-        u <span style="color:#ff79c6">=</span> q.top().second;
-        q.pop();
-        <span style="color:#ff79c6">if</span> (visited[u])
-            <span style="color:#ff79c6">continue</span>;
-        visited[u] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">for</span> (p <span style="color:#ff79c6">=</span> head[u].adjacement; p; p <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>link)
-        {
-            k <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>VerAdj;
-            <span style="color:#ff79c6">if</span> (dist[k] <span style="color:#ff79c6">&gt;</span> dist[u] <span style="color:#ff79c6">+</span> p<span style="color:#ff79c6">-&gt;</span>cost)
-            {
-                dist[k] <span style="color:#ff79c6">=</span> dist[u] <span style="color:#ff79c6">+</span> p<span style="color:#ff79c6">-&gt;</span>cost;
-                <span style="color:#6272a4">//money_all[k] = money_all[u] + p-&gt;money;
-</span><span style="color:#6272a4"></span>                q.push(make_pair(<span style="color:#ff79c6">-</span>dist[k],k));
-                <span style="color:#ff79c6">if</span> (count1[k] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
-                    count1[k]<span style="color:#ff79c6">++</span>;
-                <span style="color:#6272a4">//(count1[k]&lt;=count1[u]+1)
-</span><span style="color:#6272a4"></span>                count1[k]<span style="color:#ff79c6">=</span>count1[u]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
-            }
-            <span style="color:#ff79c6">else</span> <span style="color:#50fa7b">if</span>(dist[k] <span style="color:#ff79c6">==</span> dist[u] <span style="color:#ff79c6">+</span> p<span style="color:#ff79c6">-&gt;</span>cost)
-            {
-                <span style="color:#ff79c6">if</span>(count1[k]<span style="color:#ff79c6">&lt;</span>count1[u]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>)
-                    count1[k]<span style="color:#ff79c6">=</span>count1[u]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
-            }
-        }
-    }
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">++</span>)
-    {
-        printf(<span style="color:#f1fa8c">&#34;%lld &#34;</span>, dist[i]);
-    }
-    printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, dist[graphsize]);
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">++</span>)
-    {
-        printf(<span style="color:#f1fa8c">&#34;%d &#34;</span>, count1[i]);
-    }
-    printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1[graphsize]);
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    Graph_list G;
-    G.Djistra();
-    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;iostream&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;queue&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">const</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> MAX <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1000000000</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> start;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Edge</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> VerAdj;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> money;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> cost;
+</span></span><span style="display:flex;"><span>    Edge<span style="color:#ff79c6">*</span>link;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Vertex</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> VerName;
+</span></span><span style="display:flex;"><span>    Edge<span style="color:#ff79c6">*</span> adjacement;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">Graph_list</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">private</span><span style="color:#ff79c6">:</span>
+</span></span><span style="display:flex;"><span>    Vertex <span style="color:#ff79c6">*</span>head;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> graphsize;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> begin;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> after;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">public</span><span style="color:#ff79c6">:</span>
+</span></span><span style="display:flex;"><span>    Graph_list();
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">~</span>Graph_list();
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Djistra</span>();
+</span></span><span style="display:flex;"><span>}; 
+</span></span><span style="display:flex;"><span>Graph_list<span style="color:#ff79c6">::</span>Graph_list()<span style="color:#6272a4">//建图
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>{
+</span></span><span style="display:flex;"><span>    head <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Vertex[<span style="color:#bd93f9">100001</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> from, to;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> e, dist1, money;
+</span></span><span style="display:flex;"><span>    cin <span style="color:#ff79c6">&gt;&gt;</span> graphsize;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        head[i].VerName <span style="color:#ff79c6">=</span> i;
+</span></span><span style="display:flex;"><span>        head[i].adjacement <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    cin <span style="color:#ff79c6">&gt;&gt;</span> e;
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//cin &gt;&gt; start;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    cin <span style="color:#ff79c6">&gt;&gt;</span> begin ;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> e; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        cin <span style="color:#ff79c6">&gt;&gt;</span> from <span style="color:#ff79c6">&gt;&gt;</span> to <span style="color:#ff79c6">&gt;&gt;</span> dist1;
+</span></span><span style="display:flex;"><span>        Edge<span style="color:#ff79c6">*</span>p <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Edge;
+</span></span><span style="display:flex;"><span>        p<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>        p<span style="color:#ff79c6">-&gt;</span>cost <span style="color:#ff79c6">=</span> dist1;
+</span></span><span style="display:flex;"><span>        p<span style="color:#ff79c6">-&gt;</span>VerAdj <span style="color:#ff79c6">=</span> to;
+</span></span><span style="display:flex;"><span>        Edge<span style="color:#ff79c6">*</span>p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Edge;
+</span></span><span style="display:flex;"><span>        p1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>        p1<span style="color:#ff79c6">-&gt;</span>cost <span style="color:#ff79c6">=</span> dist1;
+</span></span><span style="display:flex;"><span>        p1<span style="color:#ff79c6">-&gt;</span>VerAdj <span style="color:#ff79c6">=</span> from;
+</span></span><span style="display:flex;"><span>        Edge<span style="color:#ff79c6">*</span>q1 <span style="color:#ff79c6">=</span> head[from].adjacement;
+</span></span><span style="display:flex;"><span>        Edge<span style="color:#ff79c6">*</span>q2 <span style="color:#ff79c6">=</span> head[to].adjacement;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (q1 <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            head[from].adjacement <span style="color:#ff79c6">=</span> p;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">while</span> (q1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                q1 <span style="color:#ff79c6">=</span> q1<span style="color:#ff79c6">-&gt;</span>link;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            q1<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> p;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (q2 <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            head[to].adjacement <span style="color:#ff79c6">=</span> p1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">while</span> (q2<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                q2 <span style="color:#ff79c6">=</span> q2<span style="color:#ff79c6">-&gt;</span>link;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            q2<span style="color:#ff79c6">-&gt;</span>link <span style="color:#ff79c6">=</span> p1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>Graph_list<span style="color:#ff79c6">::~</span>Graph_list()<span style="color:#6272a4">//析构
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span>graphsize; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        Edge<span style="color:#ff79c6">*</span>p <span style="color:#ff79c6">=</span> head[i].adjacement;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> (p <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            head[i].adjacement <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>link;
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">delete</span> p;
+</span></span><span style="display:flex;"><span>            p <span style="color:#ff79c6">=</span> head[i].adjacement;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">delete</span>[] head;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> Graph_list<span style="color:#ff79c6">::</span>Djistra()<span style="color:#6272a4">//算法核心
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> dist[<span style="color:#bd93f9">10001</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> visited[<span style="color:#bd93f9">10001</span>] <span style="color:#ff79c6">=</span> { <span style="color:#bd93f9">0</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> count1[<span style="color:#bd93f9">10001</span>] <span style="color:#ff79c6">=</span> { <span style="color:#bd93f9">0</span> };
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span>graphsize; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        dist[i] <span style="color:#ff79c6">=</span> MAX;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    dist[begin] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> midest <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> u <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    Edge<span style="color:#ff79c6">*</span>p <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    priority_queue<span style="color:#ff79c6">&lt;</span>pair<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>, <span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&gt;</span>q;
+</span></span><span style="display:flex;"><span>    q.push(make_pair(<span style="color:#bd93f9">0</span>,begin));
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">!</span>q.empty())
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        u <span style="color:#ff79c6">=</span> q.top().second;
+</span></span><span style="display:flex;"><span>        q.pop();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (visited[u])
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">continue</span>;
+</span></span><span style="display:flex;"><span>        visited[u] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (p <span style="color:#ff79c6">=</span> head[u].adjacement; p; p <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>link)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            k <span style="color:#ff79c6">=</span> p<span style="color:#ff79c6">-&gt;</span>VerAdj;
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> (dist[k] <span style="color:#ff79c6">&gt;</span> dist[u] <span style="color:#ff79c6">+</span> p<span style="color:#ff79c6">-&gt;</span>cost)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                dist[k] <span style="color:#ff79c6">=</span> dist[u] <span style="color:#ff79c6">+</span> p<span style="color:#ff79c6">-&gt;</span>cost;
+</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">//money_all[k] = money_all[u] + p-&gt;money;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                q.push(make_pair(<span style="color:#ff79c6">-</span>dist[k],k));
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span> (count1[k] <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>                    count1[k]<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#6272a4">//(count1[k]&lt;=count1[u]+1)
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                count1[k]<span style="color:#ff79c6">=</span>count1[u]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">else</span> <span style="color:#50fa7b">if</span>(dist[k] <span style="color:#ff79c6">==</span> dist[u] <span style="color:#ff79c6">+</span> p<span style="color:#ff79c6">-&gt;</span>cost)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(count1[k]<span style="color:#ff79c6">&lt;</span>count1[u]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>                    count1[k]<span style="color:#ff79c6">=</span>count1[u]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34;%lld &#34;</span>, dist[i]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, dist[graphsize]);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> graphsize<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34;%d &#34;</span>, count1[i]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1[graphsize]);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    Graph_list G;
+</span></span><span style="display:flex;"><span>    G.Djistra();
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
 
                 
 
@@ -684,6 +729,8 @@ Graph_list<span style="color:#ff79c6">::~</span>Graph_list()<span style="color:#
 </div>
 
 
+
+
             </div>
 
             
@@ -698,9 +745,7 @@ Graph_list<span style="color:#ff79c6">::~</span>Graph_list()<span style="color:#
                     <h5>
                         <a class="catalog-toggle" href="#">CATALOG</a>
                     </h5>
-                    <ul class="catalog-body">
-
-                    </ul>
+                    <ul class="catalog-body"></ul>
                 </div>
             </div>
             
@@ -738,14 +783,14 @@ Graph_list<span style="color:#ff79c6">::~</span>Graph_list()<span style="color:#
                         
                         
                         
-                        <a href="/tags/deep-learning" title="deep-learning">
-                            deep-learning
+                        <a href="/tags/deep-learning" title="deep learning">
+                            deep learning
                         </a>
                         
                         
                         
-                        <a href="/tags/hsi-classification" title="hsi-classification">
-                            hsi-classification
+                        <a href="/tags/hsi-classification" title="hsi classification">
+                            hsi classification
                         </a>
                         
                         
@@ -764,6 +809,12 @@ Graph_list<span style="color:#ff79c6">::~</span>Graph_list()<span style="color:#
                         
                         <a href="/tags/oracle" title="oracle">
                             oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/rgb-t-detection" title="rgb-t detection">
+                            rgb-t detection
                         </a>
                         
                         
@@ -919,7 +970,7 @@ Graph_list<span style="color:#ff79c6">::~</span>Graph_list()<span style="color:#
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Linexus blog 2023
+                    Copyright &copy; Linexus blog 2025
                     <br>
                     <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
                         href="https://hhhhlkf.github.io">Linexus</a> |
@@ -1075,12 +1126,10 @@ Graph_list<span style="color:#ff79c6">::~</span>Graph_list()<span style="color:#
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
 <div id="sakana-widget-right"></div>
-<div id="sakana-widget-left"></div>
 <script>
     function initSakanaWidget() {
         new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
         
-        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
     }
 </script>
 <script async onload="initSakanaWidget()"

@@ -17,9 +17,9 @@
     
 
     
-    <meta name="title" content="HSI classification" />
-    <meta property="og:title" content="HSI classification" />
-    <meta property="twitter:title" content="HSI classification" />
+    <meta name="title" content="" />
+    <meta property="og:title" content="" />
+    <meta property="twitter:title" content="" />
     
 
     
@@ -36,7 +36,7 @@
     <meta name="keyword"  content="">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>HSI classification-LKF的博客 | Linexus&#39;s Blog</title>
+    <title>HSI Classification-LKF的博客 | Linexus&#39;s Blog</title>
 
     <link rel="canonical" href="/tags/hsi-classification/">
 
@@ -66,6 +66,7 @@
     <script src="//unpkg.com/element-plus"></script>
     
     
+    
 
     
     
@@ -86,8 +87,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},   // 块级公式
+                {left: '$', right: '$', display: false},    // 行内公式
+                {left: '\\(', right: '\\)', display: false} // 行内公式
+            ]
+        });">
+</script>
+
 
 </head>
 
@@ -200,19 +214,50 @@
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
 <script>
-var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
-var index = client.initIndex('blog');
-autocomplete('#aa-search-input',
-{ hint: false}, {
-  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
-  displayKey: 'name',
-  templates: {
-      suggestion: function(suggestion) {
-          console.log(suggestion);
-          return '<span>' + '<a href="' + suggestion.url + '">' +
-          suggestion._highlightResult.title.value + '</a></span>';
-      }
-  }
+var client = algoliasearch("601I7K6MCB", "2cec145d214a1ec8bbdfec33d0764bfc");
+var index = client.initIndex('linexus');
+
+
+
+function truncateContent(content, maxBytes = 9500) { 
+    let encoder = new TextEncoder();
+    let bytes = encoder.encode(content);
+    if (bytes.length <= maxBytes) return content;
+
+    let truncated = '';
+    for (let char of content) {
+        if (encoder.encode(truncated + char).length > maxBytes) break;
+        truncated += char;
+    }
+    return truncated + '...';
+}
+
+
+
+var records = posts.map(post => {
+    return {
+        objectID: post.url,
+        title: post.title,
+        url: post.url,
+        excerpt: truncateContent(post.content)
+    };
+});
+
+
+index.saveObjects(records)
+    .then(() => console.log('Algolia 索引上传完成 ✅'))
+    .catch(err => console.error('上传出错 ❌', err));
+
+
+autocomplete('#aa-search-input', { hint: false }, {
+    source: autocomplete.sources.hits(index, { hitsPerPage: 8 }),
+    displayKey: 'title',
+    templates: {
+        suggestion: function(suggestion) {
+            return '<span><a href="' + suggestion.url + '">' +
+                   suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
 });
 </script>
         </div>
@@ -342,14 +387,14 @@ autocomplete('#aa-search-input',
             
             
             
-            <a href="/tags/deep-learning" title="deep-learning">
-                deep-learning
+            <a href="/tags/deep-learning" title="deep learning">
+                deep learning
             </a>
             
             
             
-            <a href="/tags/hsi-classification" title="hsi-classification">
-                hsi-classification
+            <a href="/tags/hsi-classification" title="hsi classification">
+                hsi classification
             </a>
             
             
@@ -368,6 +413,12 @@ autocomplete('#aa-search-input',
             
             <a href="/tags/oracle" title="oracle">
                 oracle
+            </a>
+            
+            
+            
+            <a href="/tags/rgb-t-detection" title="rgb-t detection">
+                rgb-t detection
             </a>
             
             
@@ -403,10 +454,10 @@ autocomplete('#aa-search-input',
     
     <section class="visible-md visible-lg">
         <hr>
-        <h5><a href="/%20/top/about">ABOUT ME</a></h5>
+        <h5><a href="/top/about">ABOUT ME</a></h5>
         <div class="short-about">
             
-            <a href="/%20/top/about">
+            <a href="/top/about">
                 <img src="/img/nzk.jpg" alt="avatar" style="cursor: pointer" />
             </a>
             
@@ -632,7 +683,7 @@ autocomplete('#aa-search-input',
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Linexus blog 2023
+                    Copyright &copy; Linexus blog 2025
                     <br>
                     <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
                         href="https://hhhhlkf.github.io">Linexus</a> |
@@ -788,12 +839,10 @@ autocomplete('#aa-search-input',
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
 <div id="sakana-widget-right"></div>
-<div id="sakana-widget-left"></div>
 <script>
     function initSakanaWidget() {
         new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
         
-        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
     }
 </script>
 <script async onload="initSakanaWidget()"

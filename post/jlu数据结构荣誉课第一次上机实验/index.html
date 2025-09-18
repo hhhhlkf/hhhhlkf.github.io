@@ -66,6 +66,7 @@
     <script src="//unpkg.com/element-plus"></script>
     
     
+    
 
     
     
@@ -86,8 +87,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},   // 块级公式
+                {left: '$', right: '$', display: false},    // 行内公式
+                {left: '\\(', right: '\\)', display: false} // 行内公式
+            ]
+        });">
+</script>
+
 
 </head>
 
@@ -200,19 +214,50 @@
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
 <script>
-var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
-var index = client.initIndex('blog');
-autocomplete('#aa-search-input',
-{ hint: false}, {
-  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
-  displayKey: 'name',
-  templates: {
-      suggestion: function(suggestion) {
-          console.log(suggestion);
-          return '<span>' + '<a href="' + suggestion.url + '">' +
-          suggestion._highlightResult.title.value + '</a></span>';
-      }
-  }
+var client = algoliasearch("601I7K6MCB", "2cec145d214a1ec8bbdfec33d0764bfc");
+var index = client.initIndex('linexus');
+
+
+
+function truncateContent(content, maxBytes = 9500) { 
+    let encoder = new TextEncoder();
+    let bytes = encoder.encode(content);
+    if (bytes.length <= maxBytes) return content;
+
+    let truncated = '';
+    for (let char of content) {
+        if (encoder.encode(truncated + char).length > maxBytes) break;
+        truncated += char;
+    }
+    return truncated + '...';
+}
+
+
+
+var records = posts.map(post => {
+    return {
+        objectID: post.url,
+        title: post.title,
+        url: post.url,
+        excerpt: truncateContent(post.content)
+    };
+});
+
+
+index.saveObjects(records)
+    .then(() => console.log('Algolia 索引上传完成 ✅'))
+    .catch(err => console.error('上传出错 ❌', err));
+
+
+autocomplete('#aa-search-input', { hint: false }, {
+    source: autocomplete.sources.hits(index, { hitsPerPage: 8 }),
+    displayKey: 'title',
+    templates: {
+        suggestion: function(suggestion) {
+            return '<span><a href="' + suggestion.url + '">' +
+                   suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
 });
 </script>
         </div>
@@ -231,6 +276,7 @@ autocomplete('#aa-search-input',
         background-image: url('https://i.loli.net/2021/09/30/3bSAB6Fru9xCdh8.jpg')
     }
 </style>
+
 
 <header class="intro-header" >
 
@@ -291,54 +337,54 @@ autocomplete('#aa-search-input',
 <p>第2行，N个正整数，每个整数x 都满足 <code>1 ≤ x ≤2000000000</code>。</p>
 <p>输出格式: 若干行，每行两个用一个空格隔开的数，第一个是数列中出现的数，第二个是该数在序列中出现的次数。 输入样例:</p>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">12</span>
-<span style="color:#bd93f9">8</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">8</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">11</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">8</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">13</span> <span style="color:#bd93f9">13</span>
-</code></pre></div><p>输出样例:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">12</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">8</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">8</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">11</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">8</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">13</span> <span style="color:#bd93f9">13</span>
+</span></span></code></pre></div><p>输出样例:</p>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">8</span> <span style="color:#bd93f9">3</span>
-<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
-<span style="color:#bd93f9">11</span> <span style="color:#bd93f9">1</span>
-<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
-<span style="color:#bd93f9">13</span> <span style="color:#bd93f9">2</span>
-</code></pre></div><p>方法：</p>
-<p>这里直接推荐使用<code>C++STL</code>库中的map容器，数据在map容器中存储结构是红黑树，其操作函数中<code>find``count</code>在查找过程中均为<code>O(nlogn)</code> 不超出这道题的时间限制，且退化性不强，下面是代码：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;map&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">50010</span>];
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    <span style="color:#8be9fd">int</span> n;
-    cin<span style="color:#ff79c6">&gt;&gt;</span>n;
-    map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>m;<span style="color:#6272a4">//定义map容器，key值为所给数字值，value值为所给计数值
-</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> count1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-    <span style="color:#8be9fd">int</span> n1;
-    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;i<span style="color:#ff79c6">&lt;</span>n;i<span style="color:#ff79c6">++</span>)
-    {
-        cin<span style="color:#ff79c6">&gt;&gt;</span>n1;
-        map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;::</span>iterator pos<span style="color:#ff79c6">=</span>m.find(n1);
-        <span style="color:#ff79c6">if</span>(pos<span style="color:#ff79c6">!=</span>m.end())<span style="color:#6272a4">//没有该数字
-</span><span style="color:#6272a4"></span>        {
-            pos<span style="color:#ff79c6">-&gt;</span>second<span style="color:#ff79c6">++</span>;
-        }
-        <span style="color:#ff79c6">else</span>
-        {
-            m.insert(pair<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>(n1,<span style="color:#bd93f9">1</span>));
-            a[count1<span style="color:#ff79c6">++</span>]<span style="color:#ff79c6">=</span>n1;
-        }
-    }
-    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;i<span style="color:#ff79c6">&lt;</span>count1;i<span style="color:#ff79c6">++</span>)
-    {
-        map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;::</span>iterator p0<span style="color:#ff79c6">=</span>m.find(a[i]);<span style="color:#6272a4">//查找为O(nlogn)
-</span><span style="color:#6272a4"></span>        cout<span style="color:#ff79c6">&lt;&lt;</span>a[i]<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span><span style="color:#ff79c6">&lt;&lt;</span> (<span style="color:#ff79c6">*</span>p0).second ;
-        <span style="color:#ff79c6">if</span>(i<span style="color:#ff79c6">!=</span>count1<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
-            cout<span style="color:#ff79c6">&lt;&lt;</span>endl;
-    }
-    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-
-<span style="color:#6272a4">//本题目没有使用时间复杂度较低的扫描和打印就通过了.
-</span></code></pre></div><p>评价：没有像许多同学一样，开了数组存<code>value</code>,直接存到second中不香么。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">8</span> <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">11</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">13</span> <span style="color:#bd93f9">2</span>
+</span></span></code></pre></div><p>方法：</p>
+<p>这里直接推荐使用 <code>C++STL</code>库中的map容器，数据在map容器中存储结构是红黑树，其操作函数中 <code>find``count</code>在查找过程中均为 <code>O(nlogn)</code> 不超出这道题的时间限制，且退化性不强，下面是代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C++" data-lang="C++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;iostream&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;map&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">50010</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> n;
+</span></span><span style="display:flex;"><span>    cin<span style="color:#ff79c6">&gt;&gt;</span>n;
+</span></span><span style="display:flex;"><span>    map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>m;<span style="color:#6272a4">//定义map容器，key值为所给数字值，value值为所给计数值
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> count1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> n1;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;i<span style="color:#ff79c6">&lt;</span>n;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        cin<span style="color:#ff79c6">&gt;&gt;</span>n1;
+</span></span><span style="display:flex;"><span>        map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;::</span>iterator pos<span style="color:#ff79c6">=</span>m.find(n1);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(pos<span style="color:#ff79c6">!=</span>m.end())<span style="color:#6272a4">//没有该数字
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        {
+</span></span><span style="display:flex;"><span>            pos<span style="color:#ff79c6">-&gt;</span>second<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            m.insert(pair<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>(n1,<span style="color:#bd93f9">1</span>));
+</span></span><span style="display:flex;"><span>            a[count1<span style="color:#ff79c6">++</span>]<span style="color:#ff79c6">=</span>n1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;i<span style="color:#ff79c6">&lt;</span>count1;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        map<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,<span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;::</span>iterator p0<span style="color:#ff79c6">=</span>m.find(a[i]);<span style="color:#6272a4">//查找为O(nlogn)
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        cout<span style="color:#ff79c6">&lt;&lt;</span>a[i]<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span><span style="color:#ff79c6">&lt;&lt;</span> (<span style="color:#ff79c6">*</span>p0).second ;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(i<span style="color:#ff79c6">!=</span>count1<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>            cout<span style="color:#ff79c6">&lt;&lt;</span>endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//本题目没有使用时间复杂度较低的扫描和打印就通过了.
+</span></span></span></code></pre></div><p>评价：没有像许多同学一样，开了数组存 <code>value</code>,直接存到second中不香么。</p>
 <h2 id="二7-2报数游戏">二、7-2报数游戏</h2>
 <p>
   <img src="https://img-blog.csdnimg.cn/20210516203958460.png" alt="image">
@@ -348,61 +394,61 @@ autocomplete('#aa-search-input',
 <p>输入格式: 一行，两个整数n和m。n表示游戏的人数，m表示报数出圈的数字，<code>1≤n≤50000，1≤m≤100</code>.</p>
 <p>输出格式: 一行，<code>n</code>个用空格分隔的整数，表示所有人出圈的顺序</p>
 <p>输入样例: 在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span>
-</code></pre></div><p>输出样例: 在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">3</span>
-</code></pre></div><p>分析：约瑟夫问题，我认为这类题用循环链表实现最为直观，每次报数报到m-1个时，跳出循环，删去节点。具体代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Node</span>
-{
-    <span style="color:#8be9fd">int</span> n;
-    Node<span style="color:#ff79c6">*</span>next;
-};
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    <span style="color:#8be9fd">int</span> m,n;
-    cin<span style="color:#ff79c6">&gt;&gt;</span>m<span style="color:#ff79c6">&gt;&gt;</span>n;
-    <span style="color:#8be9fd">int</span> num<span style="color:#ff79c6">=</span>m;
-    Node<span style="color:#ff79c6">*</span>p<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;
-    Node<span style="color:#ff79c6">*</span>p1<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;
-    Node<span style="color:#ff79c6">*</span>head<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>,<span style="color:#ff79c6">*</span>rear<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;<span style="color:#6272a4">//用尾插法
-</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">while</span>(num<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
-    {
-        p<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> Node;
-        p<span style="color:#ff79c6">-&gt;</span>n<span style="color:#ff79c6">=</span>m<span style="color:#ff79c6">-</span>num<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
-        p<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;
-        <span style="color:#ff79c6">if</span>(head<span style="color:#ff79c6">==</span><span style="color:#8be9fd;font-style:italic">NULL</span>)
-            head<span style="color:#ff79c6">=</span>rear<span style="color:#ff79c6">=</span>p;
-        <span style="color:#ff79c6">else</span>
-        {
-            rear<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span>p;
-            rear<span style="color:#ff79c6">=</span>p;
-        }
-        num<span style="color:#ff79c6">--</span>;
-    }<span style="color:#6272a4">//建立链表
-</span><span style="color:#6272a4"></span>    rear<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span>head;
-    p<span style="color:#ff79c6">=</span>head;
-    p1<span style="color:#ff79c6">=</span>rear;
-    <span style="color:#ff79c6">while</span>(p<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">!=</span>p)
-    {
-        <span style="color:#8be9fd">int</span> num1<span style="color:#ff79c6">=</span>n<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">while</span>(num1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
-        {
-            p1<span style="color:#ff79c6">=</span>p;
-            <span style="color:#6272a4">//cout&lt;&lt;p-&gt;n;
-</span><span style="color:#6272a4"></span>            p<span style="color:#ff79c6">=</span>p<span style="color:#ff79c6">-&gt;</span>next;
-            num1<span style="color:#ff79c6">--</span>;
-        }
-        cout<span style="color:#ff79c6">&lt;&lt;</span>p<span style="color:#ff79c6">-&gt;</span>n<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span>;
-        p1<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span>p<span style="color:#ff79c6">-&gt;</span>next;
-        <span style="color:#ff79c6">delete</span> p;
-        p<span style="color:#ff79c6">=</span>p1<span style="color:#ff79c6">-&gt;</span>next;<span style="color:#6272a4">//删除操作
-</span><span style="color:#6272a4"></span>    }
-    cout <span style="color:#ff79c6">&lt;&lt;</span>p<span style="color:#ff79c6">-&gt;</span>n;
-    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><p>建议：这里建议使用<code>静态链表</code>，空间缩小的同时，操作和书写较为方便。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span>
+</span></span></code></pre></div><p>输出样例: 在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">3</span>
+</span></span></code></pre></div><p>分析：约瑟夫问题，我认为这类题用循环链表实现最为直观，每次报数报到m-1个时，跳出循环，删去节点。具体代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;iostream&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Node</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> n;
+</span></span><span style="display:flex;"><span>    Node<span style="color:#ff79c6">*</span>next;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> m,n;
+</span></span><span style="display:flex;"><span>    cin<span style="color:#ff79c6">&gt;&gt;</span>m<span style="color:#ff79c6">&gt;&gt;</span>n;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> num<span style="color:#ff79c6">=</span>m;
+</span></span><span style="display:flex;"><span>    Node<span style="color:#ff79c6">*</span>p<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>    Node<span style="color:#ff79c6">*</span>p1<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>    Node<span style="color:#ff79c6">*</span>head<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>,<span style="color:#ff79c6">*</span>rear<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;<span style="color:#6272a4">//用尾插法
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">while</span>(num<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        p<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> Node;
+</span></span><span style="display:flex;"><span>        p<span style="color:#ff79c6">-&gt;</span>n<span style="color:#ff79c6">=</span>m<span style="color:#ff79c6">-</span>num<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        p<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(head<span style="color:#ff79c6">==</span><span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>            head<span style="color:#ff79c6">=</span>rear<span style="color:#ff79c6">=</span>p;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            rear<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span>p;
+</span></span><span style="display:flex;"><span>            rear<span style="color:#ff79c6">=</span>p;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        num<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>    }<span style="color:#6272a4">//建立链表
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    rear<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span>head;
+</span></span><span style="display:flex;"><span>    p<span style="color:#ff79c6">=</span>head;
+</span></span><span style="display:flex;"><span>    p1<span style="color:#ff79c6">=</span>rear;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span>(p<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">!=</span>p)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> num1<span style="color:#ff79c6">=</span>n<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span>(num1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            p1<span style="color:#ff79c6">=</span>p;
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4">//cout&lt;&lt;p-&gt;n;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            p<span style="color:#ff79c6">=</span>p<span style="color:#ff79c6">-&gt;</span>next;
+</span></span><span style="display:flex;"><span>            num1<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        cout<span style="color:#ff79c6">&lt;&lt;</span>p<span style="color:#ff79c6">-&gt;</span>n<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span>;
+</span></span><span style="display:flex;"><span>        p1<span style="color:#ff79c6">-&gt;</span>next<span style="color:#ff79c6">=</span>p<span style="color:#ff79c6">-&gt;</span>next;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">delete</span> p;
+</span></span><span style="display:flex;"><span>        p<span style="color:#ff79c6">=</span>p1<span style="color:#ff79c6">-&gt;</span>next;<span style="color:#6272a4">//删除操作
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    }
+</span></span><span style="display:flex;"><span>    cout <span style="color:#ff79c6">&lt;&lt;</span>p<span style="color:#ff79c6">-&gt;</span>n;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>建议：这里建议使用 <code>静态链表</code>，空间缩小的同时，操作和书写较为方便。</p>
 <h2 id="三7-3-算术表达式计算">三、7-3 算术表达式计算</h2>
 <p>任务: 计算算术表达式的值。 算术表达式按中缀给出，以=号结束，包括+,-,/四种运算和(、)分隔符。运算数的范围是非负整数，没有正负符号，小于等于109 。</p>
 <p>
@@ -413,125 +459,125 @@ autocomplete('#aa-search-input',
 <p>思路：使用了双栈结构，典型的大模拟，麻烦不好调，但是冗长的代码，依旧可以写的很优美。用一个栈存储符号，用另一个栈存储数据，根据优先级进行评判出栈入栈顺序。</p>
 <p>注意：这道题的测试点给的非常刁钻，注意空廓号，和单括号的处理，以及多种符号的评判。</p>
 <p>代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;stack&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdlib&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">bool</span> <span style="color:#50fa7b">level</span>(<span style="color:#8be9fd">char</span> <span style="color:#ff79c6">&amp;</span>ch1,<span style="color:#8be9fd">char</span> <span style="color:#ff79c6">&amp;</span>ch2);<span style="color:#6272a4">//比较优先级函数
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">givelevel</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> ch);<span style="color:#6272a4">//评级函数
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">calculate</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num1,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num2,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> operator_ch);<span style="color:#6272a4">//计算函数
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">bool</span> <span style="color:#50fa7b">checklevel</span>(<span style="color:#8be9fd">int</span> n1,<span style="color:#8be9fd">int</span> n2);<span style="color:#6272a4">//显示等级函数
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">do_calculate</span>();<span style="color:#6272a4">//单步计算函数
-</span><span style="color:#6272a4"></span>stack<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">char</span><span style="color:#ff79c6">&gt;</span>Cstack;<span style="color:#6272a4">//符号栈
-</span><span style="color:#6272a4"></span>stack<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>Istack;<span style="color:#6272a4">//数字栈
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-
-    <span style="color:#8be9fd">char</span> ch;
-    <span style="color:#8be9fd">int</span> num1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-    cin<span style="color:#ff79c6">&gt;&gt;</span>ch;
-    <span style="color:#ff79c6">while</span>(<span style="color:#bd93f9">1</span>)
-    {
-        <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">&gt;=</span><span style="color:#f1fa8c">&#39;0&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>ch<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;9&#39;</span>)
-        {
-            <span style="color:#ff79c6">while</span>(ch<span style="color:#ff79c6">&gt;=</span><span style="color:#f1fa8c">&#39;0&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>ch<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;9&#39;</span>)
-            {
-                num1<span style="color:#ff79c6">=</span>num1<span style="color:#ff79c6">*</span><span style="color:#bd93f9">10</span><span style="color:#ff79c6">+</span>(ch<span style="color:#ff79c6">-</span><span style="color:#f1fa8c">&#39;0&#39;</span>);
-                cin<span style="color:#ff79c6">&gt;&gt;</span>ch;
-            }
-        Istack.push(num1);
-        num1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-        }
-        <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">!=</span><span style="color:#f1fa8c">&#39;=&#39;</span>)
-        {
-            <span style="color:#ff79c6">if</span>(Cstack.empty())
-            {
-                 Cstack.push(ch);
-            }
-            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;)&#39;</span>)
-            {
-                <span style="color:#ff79c6">while</span>(Cstack.top()<span style="color:#ff79c6">!=</span><span style="color:#f1fa8c">&#39;(&#39;</span>)
-                {
-                    do_calculate();
-                }
-                Cstack.pop();
-            }
-            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;(&#39;</span><span style="color:#ff79c6">||</span>
-            checklevel(givelevel(ch),givelevel(Cstack.top())))
-            {
-                Cstack.push(ch);
-            }
-            <span style="color:#ff79c6">else</span>
-            {
-                <span style="color:#ff79c6">while</span>(<span style="color:#ff79c6">!</span>Cstack.empty()<span style="color:#ff79c6">&amp;&amp;</span>
-                (<span style="color:#ff79c6">!</span>checklevel(givelevel(ch),givelevel(Cstack.top()))))
-                      {
-                          do_calculate();
-                      }
-                      Cstack.push(ch);
-            }
-        }
-        <span style="color:#ff79c6">else</span>
-        {
-            <span style="color:#ff79c6">while</span>(<span style="color:#ff79c6">!</span>Cstack.empty())
-            {
-                 do_calculate();
-            }
-            <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>Istack.empty())
-            cout <span style="color:#ff79c6">&lt;&lt;</span> Istack.top();
-            <span style="color:#ff79c6">else</span>
-            cout<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#39;0&#39;</span>;
-            <span style="color:#ff79c6">break</span>;
-        }
-        cin<span style="color:#ff79c6">&gt;&gt;</span>ch;
-    }
-    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-<span style="color:#8be9fd">bool</span> <span style="color:#50fa7b">checklevel</span>(<span style="color:#8be9fd">int</span> n1,<span style="color:#8be9fd">int</span> n2)
-{
-    <span style="color:#ff79c6">if</span>(n1<span style="color:#ff79c6">&gt;</span>n2)
-        <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">true</span>;
-    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">false</span>;
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">givelevel</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> ch)
-{
-    <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;*&#39;</span><span style="color:#ff79c6">||</span>ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;/&#39;</span>)
-        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">2</span>;
-    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;+&#39;</span><span style="color:#ff79c6">||</span>ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;-&#39;</span>)
-        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">calculate</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num1,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num2,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> operator_ch)
-{
-    <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;*&#39;</span>)
-        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">*</span>num2;
-    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;/&#39;</span>)
-        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">/</span>num2;
-    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;+&#39;</span>)
-        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">+</span>num2;
-    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;-&#39;</span>)
-        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">-</span>num2;
-    <span style="color:#ff79c6">else</span>
-        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-}
-<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">do_calculate</span>()
-{
-    <span style="color:#8be9fd">char</span> ch1<span style="color:#ff79c6">=</span>Cstack.top();
-    Cstack.pop();
-    <span style="color:#8be9fd">int</span> num1<span style="color:#ff79c6">=</span>Istack.top();
-    Istack.pop();
-    <span style="color:#8be9fd">int</span> num2<span style="color:#ff79c6">=</span>Istack.top();
-    Istack.pop();
-    <span style="color:#ff79c6">if</span>(num1<span style="color:#ff79c6">==</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">&amp;&amp;</span>ch1<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;/&#39;</span>)
-    {
-        cout <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#f1fa8c">&#34;NaN&#34;</span><span style="color:#ff79c6">&lt;&lt;</span>endl;
-        exit(<span style="color:#bd93f9">0</span>);
-    }
-    <span style="color:#ff79c6">else</span>
-    Istack.push(calculate(num2,num1,ch1));
-}
-</code></pre></div><h2 id="四7-4-最喜爱的序列">四、7-4 最喜爱的序列</h2>
-<p>小唐这段时间在研究序列。拿来N个整数的序列，他给序列中的每个整数都赋予一个喜爱值。喜爱值也是整数，有正有负，越大表明越喜欢。他想知道，如何从序列中连续取最多m个数，他获得喜爱值最大。<code>1≤N≤500000，1≤m≤N</code>。 输入格式: 第一行是两个整数<code>N,m</code>。分别代表序列中数的个数以及能取的最多个数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C++" data-lang="C++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;iostream&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;stack&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdlib&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">bool</span> <span style="color:#50fa7b">level</span>(<span style="color:#8be9fd">char</span> <span style="color:#ff79c6">&amp;</span>ch1,<span style="color:#8be9fd">char</span> <span style="color:#ff79c6">&amp;</span>ch2);<span style="color:#6272a4">//比较优先级函数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">givelevel</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> ch);<span style="color:#6272a4">//评级函数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">calculate</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num1,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num2,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> operator_ch);<span style="color:#6272a4">//计算函数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">bool</span> <span style="color:#50fa7b">checklevel</span>(<span style="color:#8be9fd">int</span> n1,<span style="color:#8be9fd">int</span> n2);<span style="color:#6272a4">//显示等级函数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">do_calculate</span>();<span style="color:#6272a4">//单步计算函数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>stack<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">char</span><span style="color:#ff79c6">&gt;</span>Cstack;<span style="color:#6272a4">//符号栈
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>stack<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>Istack;<span style="color:#6272a4">//数字栈
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">char</span> ch;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> num1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    cin<span style="color:#ff79c6">&gt;&gt;</span>ch;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span>(<span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">&gt;=</span><span style="color:#f1fa8c">&#39;0&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>ch<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;9&#39;</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">while</span>(ch<span style="color:#ff79c6">&gt;=</span><span style="color:#f1fa8c">&#39;0&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>ch<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;9&#39;</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                num1<span style="color:#ff79c6">=</span>num1<span style="color:#ff79c6">*</span><span style="color:#bd93f9">10</span><span style="color:#ff79c6">+</span>(ch<span style="color:#ff79c6">-</span><span style="color:#f1fa8c">&#39;0&#39;</span>);
+</span></span><span style="display:flex;"><span>                cin<span style="color:#ff79c6">&gt;&gt;</span>ch;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        Istack.push(num1);
+</span></span><span style="display:flex;"><span>        num1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">!=</span><span style="color:#f1fa8c">&#39;=&#39;</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(Cstack.empty())
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                 Cstack.push(ch);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;)&#39;</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">while</span>(Cstack.top()<span style="color:#ff79c6">!=</span><span style="color:#f1fa8c">&#39;(&#39;</span>)
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>                    do_calculate();
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                Cstack.pop();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;(&#39;</span><span style="color:#ff79c6">||</span>
+</span></span><span style="display:flex;"><span>            checklevel(givelevel(ch),givelevel(Cstack.top())))
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                Cstack.push(ch);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">while</span>(<span style="color:#ff79c6">!</span>Cstack.empty()<span style="color:#ff79c6">&amp;&amp;</span>
+</span></span><span style="display:flex;"><span>                (<span style="color:#ff79c6">!</span>checklevel(givelevel(ch),givelevel(Cstack.top()))))
+</span></span><span style="display:flex;"><span>                      {
+</span></span><span style="display:flex;"><span>                          do_calculate();
+</span></span><span style="display:flex;"><span>                      }
+</span></span><span style="display:flex;"><span>                      Cstack.push(ch);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">while</span>(<span style="color:#ff79c6">!</span>Cstack.empty())
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                 do_calculate();
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>Istack.empty())
+</span></span><span style="display:flex;"><span>            cout <span style="color:#ff79c6">&lt;&lt;</span> Istack.top();
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>            cout<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#39;0&#39;</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        cin<span style="color:#ff79c6">&gt;&gt;</span>ch;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">bool</span> <span style="color:#50fa7b">checklevel</span>(<span style="color:#8be9fd">int</span> n1,<span style="color:#8be9fd">int</span> n2)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span>(n1<span style="color:#ff79c6">&gt;</span>n2)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">true</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">false</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">givelevel</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> ch)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;*&#39;</span><span style="color:#ff79c6">||</span>ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;/&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">2</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;+&#39;</span><span style="color:#ff79c6">||</span>ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;-&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">calculate</span>(<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num1,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> num2,<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">char</span> operator_ch)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;*&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">*</span>num2;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;/&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">/</span>num2;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;+&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">+</span>num2;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(operator_ch<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;-&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> num1<span style="color:#ff79c6">-</span>num2;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">do_calculate</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">char</span> ch1<span style="color:#ff79c6">=</span>Cstack.top();
+</span></span><span style="display:flex;"><span>    Cstack.pop();
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> num1<span style="color:#ff79c6">=</span>Istack.top();
+</span></span><span style="display:flex;"><span>    Istack.pop();
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> num2<span style="color:#ff79c6">=</span>Istack.top();
+</span></span><span style="display:flex;"><span>    Istack.pop();
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span>(num1<span style="color:#ff79c6">==</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">&amp;&amp;</span>ch1<span style="color:#ff79c6">==</span><span style="color:#f1fa8c">&#39;/&#39;</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        cout <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#f1fa8c">&#34;NaN&#34;</span><span style="color:#ff79c6">&lt;&lt;</span>endl;
+</span></span><span style="display:flex;"><span>        exit(<span style="color:#bd93f9">0</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>    Istack.push(calculate(num2,num1,ch1));
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="四7-4-最喜爱的序列">四、7-4 最喜爱的序列</h2>
+<p>小唐这段时间在研究序列。拿来N个整数的序列，他给序列中的每个整数都赋予一个喜爱值。喜爱值也是整数，有正有负，越大表明越喜欢。他想知道，如何从序列中连续取最多m个数，他获得喜爱值最大。<code>1≤N≤500000，1≤m≤N</code>。 输入格式: 第一行是两个整数 <code>N,m</code>。分别代表序列中数的个数以及能取的最多个数。</p>
 <p>
   <img src="https://img-blog.csdnimg.cn/20210516205348714.png" alt="image">
 
@@ -539,50 +585,50 @@ autocomplete('#aa-search-input',
 <p>第二行用空格隔开的N个整数，第i个整数Li代表他对第i个数的喜爱值。<code>│Li│≤1000</code></p>
 <p>输出格式: 一行，三个数，表示获得最大喜爱值，及第一个取最大喜爱值的区间。</p>
 <p>输入样例: 在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span>
-<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
-</code></pre></div><p>输出样例: 在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">9</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
-</code></pre></div><p>思路：一开始一看没时间了，直接暴力了，不出所料，给了60，<del>哎，要是我看错了题多好😂🤣</del>,仔细一想，并看到大佬们的做法，豁然开朗，不就是单调队列+前缀和么，维护一个前缀和序列，维护一个给定区间，让队列保持递增，即最前者所代表前缀和在给定区间最小。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+</span></span></code></pre></div><p>输出样例: 在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">9</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+</span></span></code></pre></div><p>思路：一开始一看没时间了，直接暴力了，不出所料，给了60，<del>哎，要是我看错了题多好😂🤣</del>,仔细一想，并看到大佬们的做法，豁然开朗，不就是单调队列+前缀和么，维护一个前缀和序列，维护一个给定区间，让队列保持递增，即最前者所代表前缀和在给定区间最小。</p>
 <p>单调队列部分：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">while(head&lt;rear&amp;&amp;sum[i]&lt;sum[que[rear-1]])rear--;
-que[++rear]=i;
-while(que[head]&lt;i-m+1&amp;&amp;head&lt;rear)head++;
-</code></pre></div><p>代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdlib&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> ans[<span style="color:#bd93f9">500010</span>];
-<span style="color:#8be9fd">int</span> sum[<span style="color:#bd93f9">500010</span>];
-<span style="color:#8be9fd">int</span> que[<span style="color:#bd93f9">500010</span>];
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    <span style="color:#8be9fd">int</span> N,m;
-    cin<span style="color:#ff79c6">&gt;&gt;</span>N<span style="color:#ff79c6">&gt;&gt;</span>m;
-<span style="color:#ff79c6">for</span>(<span style="color:#ff79c6">register</span> <span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;i<span style="color:#ff79c6">&lt;</span>N;i<span style="color:#ff79c6">++</span>)
-{
-    cin<span style="color:#ff79c6">&gt;&gt;</span>ans[i];
-    sum[i]<span style="color:#ff79c6">=</span>sum[i<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">+</span>ans[i];
-}
-<span style="color:#8be9fd">int</span> score[<span style="color:#bd93f9">3</span>]<span style="color:#ff79c6">=</span>{<span style="color:#bd93f9">0</span>};
-score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>sum[<span style="color:#bd93f9">0</span>];
-<span style="color:#8be9fd">int</span> head<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>,rear<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;</span>N;i<span style="color:#ff79c6">++</span>)
-{
-    <span style="color:#ff79c6">if</span>(score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">&lt;</span>sum[i]<span style="color:#ff79c6">-</span>sum[que[head]])
-    {
-         score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>sum[i]<span style="color:#ff79c6">-</span>sum[que[head]];
-         score[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">=</span>que[head]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
-         score[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">=</span>i;
-    }<span style="color:#6272a4">//每次判断存储最大差值。
-</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">while</span>(head<span style="color:#ff79c6">&lt;</span>rear<span style="color:#ff79c6">&amp;&amp;</span>sum[i]<span style="color:#ff79c6">&lt;</span>sum[que[rear<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]])rear<span style="color:#ff79c6">--</span>;
-    que[<span style="color:#ff79c6">++</span>rear]<span style="color:#ff79c6">=</span>i;
-    <span style="color:#ff79c6">while</span>(que[head]<span style="color:#ff79c6">&lt;</span>i<span style="color:#ff79c6">-</span>m<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&amp;&amp;</span>head<span style="color:#ff79c6">&lt;</span>rear)head<span style="color:#ff79c6">++</span>;
-}
-cout<span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span><span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span><span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
-<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><h3 id="还是太菜继续努力qwq">还是太菜，继续努力qwq。</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>while(head&lt;rear&amp;&amp;sum[i]&lt;sum[que[rear-1]])rear--;
+</span></span><span style="display:flex;"><span>que[++rear]=i;
+</span></span><span style="display:flex;"><span>while(que[head]&lt;i-m+1&amp;&amp;head&lt;rear)head++;
+</span></span></code></pre></div><p>代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;iostream&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdlib&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> ans[<span style="color:#bd93f9">500010</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> sum[<span style="color:#bd93f9">500010</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> que[<span style="color:#bd93f9">500010</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> N,m;
+</span></span><span style="display:flex;"><span>    cin<span style="color:#ff79c6">&gt;&gt;</span>N<span style="color:#ff79c6">&gt;&gt;</span>m;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span>(<span style="color:#ff79c6">register</span> <span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;i<span style="color:#ff79c6">&lt;</span>N;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    cin<span style="color:#ff79c6">&gt;&gt;</span>ans[i];
+</span></span><span style="display:flex;"><span>    sum[i]<span style="color:#ff79c6">=</span>sum[i<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">+</span>ans[i];
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> score[<span style="color:#bd93f9">3</span>]<span style="color:#ff79c6">=</span>{<span style="color:#bd93f9">0</span>};
+</span></span><span style="display:flex;"><span>score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>sum[<span style="color:#bd93f9">0</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> head<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>,rear<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;</span>N;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span>(score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">&lt;</span>sum[i]<span style="color:#ff79c6">-</span>sum[que[head]])
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>         score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>sum[i]<span style="color:#ff79c6">-</span>sum[que[head]];
+</span></span><span style="display:flex;"><span>         score[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">=</span>que[head]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>         score[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">=</span>i;
+</span></span><span style="display:flex;"><span>    }<span style="color:#6272a4">//每次判断存储最大差值。
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">while</span>(head<span style="color:#ff79c6">&lt;</span>rear<span style="color:#ff79c6">&amp;&amp;</span>sum[i]<span style="color:#ff79c6">&lt;</span>sum[que[rear<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]])rear<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>    que[<span style="color:#ff79c6">++</span>rear]<span style="color:#ff79c6">=</span>i;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span>(que[head]<span style="color:#ff79c6">&lt;</span>i<span style="color:#ff79c6">-</span>m<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&amp;&amp;</span>head<span style="color:#ff79c6">&lt;</span>rear)head<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>cout<span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span><span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&lt;&lt;</span><span style="color:#f1fa8c">&#34; &#34;</span><span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="还是太菜继续努力qwq">还是太菜，继续努力qwq。</h3>
 
 
                 
@@ -629,6 +675,8 @@ cout<span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9"
 </div>
 
 
+
+
             </div>
 
             
@@ -643,9 +691,7 @@ cout<span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9"
                     <h5>
                         <a class="catalog-toggle" href="#">CATALOG</a>
                     </h5>
-                    <ul class="catalog-body">
-
-                    </ul>
+                    <ul class="catalog-body"></ul>
                 </div>
             </div>
             
@@ -683,14 +729,14 @@ cout<span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9"
                         
                         
                         
-                        <a href="/tags/deep-learning" title="deep-learning">
-                            deep-learning
+                        <a href="/tags/deep-learning" title="deep learning">
+                            deep learning
                         </a>
                         
                         
                         
-                        <a href="/tags/hsi-classification" title="hsi-classification">
-                            hsi-classification
+                        <a href="/tags/hsi-classification" title="hsi classification">
+                            hsi classification
                         </a>
                         
                         
@@ -709,6 +755,12 @@ cout<span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9"
                         
                         <a href="/tags/oracle" title="oracle">
                             oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/rgb-t-detection" title="rgb-t detection">
+                            rgb-t detection
                         </a>
                         
                         
@@ -864,7 +916,7 @@ cout<span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9"
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Linexus blog 2023
+                    Copyright &copy; Linexus blog 2025
                     <br>
                     <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
                         href="https://hhhhlkf.github.io">Linexus</a> |
@@ -1020,12 +1072,10 @@ cout<span style="color:#ff79c6">&lt;&lt;</span>score[<span style="color:#bd93f9"
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
 <div id="sakana-widget-right"></div>
-<div id="sakana-widget-left"></div>
 <script>
     function initSakanaWidget() {
         new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
         
-        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
     }
 </script>
 <script async onload="initSakanaWidget()"

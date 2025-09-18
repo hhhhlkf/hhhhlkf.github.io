@@ -66,6 +66,7 @@
     <script src="//unpkg.com/element-plus"></script>
     
     
+    
 
     
     
@@ -86,8 +87,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},   // 块级公式
+                {left: '$', right: '$', display: false},    // 行内公式
+                {left: '\\(', right: '\\)', display: false} // 行内公式
+            ]
+        });">
+</script>
+
 
 </head>
 
@@ -200,19 +214,50 @@
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
 <script>
-var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
-var index = client.initIndex('blog');
-autocomplete('#aa-search-input',
-{ hint: false}, {
-  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
-  displayKey: 'name',
-  templates: {
-      suggestion: function(suggestion) {
-          console.log(suggestion);
-          return '<span>' + '<a href="' + suggestion.url + '">' +
-          suggestion._highlightResult.title.value + '</a></span>';
-      }
-  }
+var client = algoliasearch("601I7K6MCB", "2cec145d214a1ec8bbdfec33d0764bfc");
+var index = client.initIndex('linexus');
+
+
+
+function truncateContent(content, maxBytes = 9500) { 
+    let encoder = new TextEncoder();
+    let bytes = encoder.encode(content);
+    if (bytes.length <= maxBytes) return content;
+
+    let truncated = '';
+    for (let char of content) {
+        if (encoder.encode(truncated + char).length > maxBytes) break;
+        truncated += char;
+    }
+    return truncated + '...';
+}
+
+
+
+var records = posts.map(post => {
+    return {
+        objectID: post.url,
+        title: post.title,
+        url: post.url,
+        excerpt: truncateContent(post.content)
+    };
+});
+
+
+index.saveObjects(records)
+    .then(() => console.log('Algolia 索引上传完成 ✅'))
+    .catch(err => console.error('上传出错 ❌', err));
+
+
+autocomplete('#aa-search-input', { hint: false }, {
+    source: autocomplete.sources.hits(index, { hitsPerPage: 8 }),
+    displayKey: 'title',
+    templates: {
+        suggestion: function(suggestion) {
+            return '<span><a href="' + suggestion.url + '">' +
+                   suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
 });
 </script>
         </div>
@@ -231,6 +276,7 @@ autocomplete('#aa-search-input',
         background-image: url('https://i.loli.net/2021/09/30/o7FWDmbLwxrYzAd.jpg')
     }
 </style>
+
 
 <header class="intro-header" >
 
@@ -298,12 +344,12 @@ autocomplete('#aa-search-input',
   <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94scott%e7%94%a8%e6%88%b7%e7%9a%84%e5%88%9b%e5%bb%ba/image-20230108220630940.png" alt="image-20230108220630940">
 
 </p>
-<p>使用<code>sys /as sysdba</code>后输入用户名和密码，其中用户名使用Oracle的超级管理员用户sys，下图为登陆成功界面:</p>
+<p>使用 <code>sys /as sysdba</code>后输入用户名和密码，其中用户名使用Oracle的超级管理员用户sys，下图为登陆成功界面:</p>
 <p>
   <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94scott%e7%94%a8%e6%88%b7%e7%9a%84%e5%88%9b%e5%bb%ba/image-20230108220749293.png" alt="image-20230108220749293">
 
 </p>
-<p>其中<code>/as sysdba</code>的含义是作为超级管理员登录，当用户拥有超级管理员的权限时，就必须这样登录。密码口令则为安装时设置的密码。</p>
+<p>其中 <code>/as sysdba</code>的含义是作为超级管理员登录，当用户拥有超级管理员的权限时，就必须这样登录。密码口令则为安装时设置的密码。</p>
 <h3 id="查询可读写数据库">查询可读写数据库</h3>
 <p>使用命令：<code>show pdbs;</code> 查询你的可读写库：</p>
 <p>
@@ -313,30 +359,30 @@ autocomplete('#aa-search-input',
 <p>可以看到当前ORCLPDB可插入数据库目前符合写要求，但是有可能没有打开。</p>
 <h3 id="打开orclpdb数据库">打开ORCLPDB数据库</h3>
 <p>通过命令打开：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#ff79c6">alter</span> pluggable <span style="color:#ff79c6">database</span> ORCLPDB <span style="color:#ff79c6">open</span>;
-</code></pre></div><p>打开后可以开始创建scott用户了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">alter</span> pluggable <span style="color:#ff79c6">database</span> ORCLPDB <span style="color:#ff79c6">open</span>;
+</span></span></code></pre></div><p>打开后可以开始创建scott用户了。</p>
 <h3 id="修改scottsql">修改scott.sql</h3>
 <p>文件路径在：<code>你的21c_home\rdbms\admin\</code> 下，需要修改指定到你的可读写库里：</p>
 <p>
   <img src="/img/oracle%e6%95%b0%e6%8d%ae%e5%ba%93%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e2%80%94%e2%80%94scott%e7%94%a8%e6%88%b7%e7%9a%84%e5%88%9b%e5%bb%ba/image-20230108221843793.png" alt="image-20230108221843793">
 
 </p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#6272a4">#将 CONNECT SCOTT/TIGER</span>
-
-<span style="color:#6272a4">#更改为</span>
-CONNECT SCOTT/TIGER@你的主机名:监听端口/你的可读写库
-
-<span style="color:#6272a4">#如：CONNECT SCOTT/TIGER@192.168.56.1:1521/orclpdb</span>
-</code></pre></div><h3 id="导入scottsql">导入scott.sql</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#6272a4">#将 CONNECT SCOTT/TIGER</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">#更改为</span>
+</span></span><span style="display:flex;"><span>CONNECT SCOTT/TIGER@你的主机名:监听端口/你的可读写库
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">#如：CONNECT SCOTT/TIGER@192.168.56.1:1521/orclpdb</span>
+</span></span></code></pre></div><h3 id="导入scottsql">导入scott.sql</h3>
 <p>直接使用 <code>@+你的scott.sql文件路径</code> ，如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#ff79c6">@</span><span style="color:#ff79c6">C</span>:\Users\Administrator\Desktop\<span style="color:#bd93f9">21</span><span style="color:#ff79c6">C</span>\rdbms\<span style="color:#ff79c6">admin</span>\scott.<span style="color:#ff79c6">sql</span>;
-</code></pre></div><h3 id="解锁scott">解锁scott</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">@</span><span style="color:#ff79c6">C</span>:\Users\Administrator\Desktop\<span style="color:#bd93f9">21</span><span style="color:#ff79c6">C</span>\rdbms\<span style="color:#ff79c6">admin</span>\scott.<span style="color:#ff79c6">sql</span>;
+</span></span></code></pre></div><h3 id="解锁scott">解锁scott</h3>
 <p>查询下当前用户：<code>show user;</code></p>
 <p>导入之后，可以查询一下是否成功创建scott用户：<code>select username from all_users;</code></p>
 <p>若创建成功，可以再次查看当前用户：<code>show user;</code></p>
 <p>然后新开个窗口，或者直接当前窗口conn连接到sysdba上。再然后？对scott进行解锁：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#ff79c6">alter</span> <span style="color:#ff79c6">user</span> scott identified <span style="color:#ff79c6">by</span> tiger account unlock;
-</code></pre></div><h3 id="后记">后记</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#ff79c6">alter</span> <span style="color:#ff79c6">user</span> scott identified <span style="color:#ff79c6">by</span> tiger account unlock;
+</span></span></code></pre></div><h3 id="后记">后记</h3>
 <p><strong>scott用户</strong>可以用于后续的登录，其密码为<strong>tiger</strong>。登陆后可以对齐账户中的表进行<strong>sql</strong>语句练习。</p>
 
 
@@ -384,6 +430,8 @@ CONNECT SCOTT/TIGER@你的主机名:监听端口/你的可读写库
 </div>
 
 
+
+
             </div>
 
             
@@ -398,9 +446,7 @@ CONNECT SCOTT/TIGER@你的主机名:监听端口/你的可读写库
                     <h5>
                         <a class="catalog-toggle" href="#">CATALOG</a>
                     </h5>
-                    <ul class="catalog-body">
-
-                    </ul>
+                    <ul class="catalog-body"></ul>
                 </div>
             </div>
             
@@ -438,14 +484,14 @@ CONNECT SCOTT/TIGER@你的主机名:监听端口/你的可读写库
                         
                         
                         
-                        <a href="/tags/deep-learning" title="deep-learning">
-                            deep-learning
+                        <a href="/tags/deep-learning" title="deep learning">
+                            deep learning
                         </a>
                         
                         
                         
-                        <a href="/tags/hsi-classification" title="hsi-classification">
-                            hsi-classification
+                        <a href="/tags/hsi-classification" title="hsi classification">
+                            hsi classification
                         </a>
                         
                         
@@ -464,6 +510,12 @@ CONNECT SCOTT/TIGER@你的主机名:监听端口/你的可读写库
                         
                         <a href="/tags/oracle" title="oracle">
                             oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/rgb-t-detection" title="rgb-t detection">
+                            rgb-t detection
                         </a>
                         
                         
@@ -619,7 +671,7 @@ CONNECT SCOTT/TIGER@你的主机名:监听端口/你的可读写库
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Linexus blog 2023
+                    Copyright &copy; Linexus blog 2025
                     <br>
                     <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
                         href="https://hhhhlkf.github.io">Linexus</a> |
@@ -775,12 +827,10 @@ CONNECT SCOTT/TIGER@你的主机名:监听端口/你的可读写库
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
 <div id="sakana-widget-right"></div>
-<div id="sakana-widget-left"></div>
 <script>
     function initSakanaWidget() {
         new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
         
-        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
     }
 </script>
 <script async onload="initSakanaWidget()"

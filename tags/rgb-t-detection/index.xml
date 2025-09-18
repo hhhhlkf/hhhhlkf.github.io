@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rgb-T Detection on Linexus blog</title>
+    <link>https://hhhhlkf.github.io/tags/rgb-t-detection/</link>
+    <description>Recent content in Rgb-T Detection on Linexus blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 17 Sep 2025 21:00:06 +0800</lastBuildDate>
+    <atom:link href="https://hhhhlkf.github.io/tags/rgb-t-detection/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>When Pedestrian Detection Meets Multi Modal Learning Generalist Model and Benchmark Dataset</title>
+      <link>https://hhhhlkf.github.io/post/when-pedestrian-detection-meets-multi-modal-learning-generalist-model-and-benchmark-dataset/</link>
+      <pubDate>Wed, 17 Sep 2025 21:00:06 +0800</pubDate>
+      <guid>https://hhhhlkf.github.io/post/when-pedestrian-detection-meets-multi-modal-learning-generalist-model-and-benchmark-dataset/</guid>
+      <description>&lt;h1 id=&#34;mmpedestron论文分析&#34;&gt;MMPedestron论文分析&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;论文标题：When Pedestrian Detection Meets Multi Modal Learning Generalist Model and Benchmark Dataset&lt;/li&gt;&#xA;&lt;li&gt;作者：Yi Zhang , Wang Zeng , Sheng Jin , Chen Qian Ping Luo , and Wentao Liu&lt;/li&gt;&#xA;&lt;li&gt;单位：Tsinghua University，SenseTime Research and Tetras.AI，The University of Hong Kong，Shanghai AI Laboratory&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;研究动机&#34;&gt;研究动机&lt;/h2&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;多模态感知的潜力与挑战：现有方法大多是“专科型模型”（specialist models），只针对单一模态或某一对模态设计，缺乏统一的、通用的“全科型模型”（generalist model）。&lt;/li&gt;&#xA;&lt;li&gt;缺乏通用模型的问题：需要一种能够 统一处理多种模态及其动态组合 的检测模型。&lt;/li&gt;&#xA;&lt;li&gt;数据基准不足：多模态、特别是包含事件相机（Event）的综合大规模基准数据集缺失。没有系统性的数据基准，也限制了多模态行人检测的研究发展。&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;&lt;strong&gt;为克服现有行人检测方法对单一或有限模态的依赖，构建一个能够处理多模态输入并适应不同模态组合的通用模型，同时弥补缺乏多模态大规模基准数据集的问题。&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;文章贡献&#34;&gt;文章贡献&lt;/h2&gt;&#xA;&lt;img src=&#34;https://hhhhlkf.github.io/img/MMPedestron/image-20250918111434038.png&#34; alt=&#34;image-20250918111434038&#34; style=&#34;zoom:50%;&#34; /&gt;&#xD;&#xA;&lt;p&gt;上图可以看到MMPedestron统一了多种模态输入，包括RGB、IR、Event、Depth和LiDAR，用于行人检测。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;提出了 MMPD 数据集&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;构建了首个大规模、多模态行人检测基准数据集，整合了现有公开数据集（RGB、IR、Depth、LiDAR 等），并新采集了 &lt;strong&gt;EventPed 数据集&lt;/strong&gt; 以弥补社区缺乏 RGB-Event 数据的空缺。&lt;/li&gt;&#xA;&lt;li&gt;数据集在 &lt;strong&gt;模态多样性&lt;/strong&gt;（RGB、IR、Depth、LiDAR、Event 及其组合）和 &lt;strong&gt;场景多样性&lt;/strong&gt;（监控、自动驾驶、机器人、室内外场景）两方面均具备丰富性，从而支持对通用模型的系统性评估。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;&lt;strong&gt;首次提出了“通用多模态行人检测模型”概念&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;提出了 &lt;strong&gt;MMPedestron 模型&lt;/strong&gt;，能够处理多种输入模态及其动态组合，而不仅仅局限于单模态或固定模态对。&lt;/li&gt;&#xA;&lt;li&gt;模型在设计上强调 &lt;strong&gt;灵活性（flexibility）&lt;/strong&gt;、&lt;strong&gt;可扩展性（scalability）&lt;/strong&gt; 和 &lt;strong&gt;跨场景泛化能力（generalization ability）&lt;/strong&gt;。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;&lt;strong&gt;显著的性能提升&lt;/strong&gt;&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

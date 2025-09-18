@@ -66,6 +66,7 @@
     <script src="//unpkg.com/element-plus"></script>
     
     
+    
 
     
     
@@ -86,8 +87,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},   // 块级公式
+                {left: '$', right: '$', display: false},    // 行内公式
+                {left: '\\(', right: '\\)', display: false} // 行内公式
+            ]
+        });">
+</script>
+
 
 </head>
 
@@ -200,19 +214,50 @@
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
 <script>
-var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
-var index = client.initIndex('blog');
-autocomplete('#aa-search-input',
-{ hint: false}, {
-  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
-  displayKey: 'name',
-  templates: {
-      suggestion: function(suggestion) {
-          console.log(suggestion);
-          return '<span>' + '<a href="' + suggestion.url + '">' +
-          suggestion._highlightResult.title.value + '</a></span>';
-      }
-  }
+var client = algoliasearch("601I7K6MCB", "2cec145d214a1ec8bbdfec33d0764bfc");
+var index = client.initIndex('linexus');
+
+
+
+function truncateContent(content, maxBytes = 9500) { 
+    let encoder = new TextEncoder();
+    let bytes = encoder.encode(content);
+    if (bytes.length <= maxBytes) return content;
+
+    let truncated = '';
+    for (let char of content) {
+        if (encoder.encode(truncated + char).length > maxBytes) break;
+        truncated += char;
+    }
+    return truncated + '...';
+}
+
+
+
+var records = posts.map(post => {
+    return {
+        objectID: post.url,
+        title: post.title,
+        url: post.url,
+        excerpt: truncateContent(post.content)
+    };
+});
+
+
+index.saveObjects(records)
+    .then(() => console.log('Algolia 索引上传完成 ✅'))
+    .catch(err => console.error('上传出错 ❌', err));
+
+
+autocomplete('#aa-search-input', { hint: false }, {
+    source: autocomplete.sources.hits(index, { hitsPerPage: 8 }),
+    displayKey: 'title',
+    templates: {
+        suggestion: function(suggestion) {
+            return '<span><a href="' + suggestion.url + '">' +
+                   suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
 });
 </script>
         </div>
@@ -231,6 +276,7 @@ autocomplete('#aa-search-input',
         background-image: url('https://i.loli.net/2021/09/30/uDASrq42lRX6Z8J.jpg')
     }
 </style>
+
 
 <header class="intro-header" >
 
@@ -312,77 +358,77 @@ autocomplete('#aa-search-input',
 8
 20
 </code></pre><h3 id="线段树的关键数据结构">线段树的关键数据结构：</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">num[MAX]
-ans[MAX <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">2</span>]
-lazy[MAX <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">2</span>]
-</code></pre></div><p>其中num作为输入的数字集合，ans作为线段树的集合，lazy作为懒标记，懒记录了当前区间的更新值。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>num[MAX]
+</span></span><span style="display:flex;"><span>ans[MAX <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">2</span>]
+</span></span><span style="display:flex;"><span>lazy[MAX <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">2</span>]
+</span></span></code></pre></div><p>其中num作为输入的数字集合，ans作为线段树的集合，lazy作为懒标记，懒记录了当前区间的更新值。</p>
 <h4 id="update操作">update操作</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#6272a4">//其中x-y是当前更新区间，l-r是当前划分区间的两端，k是更新值，p是区间段值
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">update</span>(<span style="color:#8be9fd">int</span> x, <span style="color:#8be9fd">int</span> y, <span style="color:#8be9fd">int</span> l, <span style="color:#8be9fd">int</span> r, <span style="color:#8be9fd">int</span> k, <span style="color:#8be9fd">int</span> p)
-{
-    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> l <span style="color:#ff79c6">&amp;&amp;</span> y <span style="color:#ff79c6">&gt;=</span> r)
-    {
-        <span style="color:#6272a4">//更新当前区间值，并阻断下方的更新，做到懒更新
-</span><span style="color:#6272a4"></span>        ans[p] <span style="color:#ff79c6">+=</span> (ll)k <span style="color:#ff79c6">*</span> (r <span style="color:#ff79c6">-</span> l <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
-        lazy[p] <span style="color:#ff79c6">+=</span> k;
-        <span style="color:#ff79c6">return</span>;
-    }
-    <span style="color:#6272a4">//伸展操作，如果当前层不是更新的最底层，则向下伸展更新下一层
-</span><span style="color:#6272a4"></span>    spread(p, r, l);
-    <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> r <span style="color:#ff79c6">+</span> l <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
-    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> mid)
-        update(x, y, l, mid, k, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>);
-    <span style="color:#ff79c6">if</span> (y <span style="color:#ff79c6">&gt;</span> mid)
-        update(x, y, mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, r, k, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">1</span>);
-    <span style="color:#6272a4">//更新时只有最底层在更新，递归返回后更新上层
-</span><span style="color:#6272a4"></span>    ans[p] <span style="color:#ff79c6">=</span> ans[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+</span> ans[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>];
-}
-</code></pre></div><h4 id="spread操作">spread操作</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#6272a4">//伸展操作，将lazy[p]传递给子结点，并更新子结点
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">spread</span>(<span style="color:#8be9fd">int</span> p, <span style="color:#8be9fd">int</span> r, <span style="color:#8be9fd">int</span> l)
-{
-    <span style="color:#ff79c6">if</span> (lazy[p] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
-    {
-        <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> (r <span style="color:#ff79c6">+</span> l) <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
-        ans[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p] <span style="color:#ff79c6">*</span> (mid <span style="color:#ff79c6">-</span> l <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
-        ans[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p] <span style="color:#ff79c6">*</span> (r <span style="color:#ff79c6">-</span> mid);
-        lazy[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p];
-        lazy[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p];
-        lazy[p] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-    }
-}
-</code></pre></div><h4 id="read操作">read操作</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++">ll <span style="color:#50fa7b">read</span>(<span style="color:#8be9fd">int</span> x, <span style="color:#8be9fd">int</span> y, <span style="color:#8be9fd">int</span> l, <span style="color:#8be9fd">int</span> r, <span style="color:#8be9fd">int</span> p)
-{
-    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> l <span style="color:#ff79c6">&amp;&amp;</span> y <span style="color:#ff79c6">&gt;=</span> r)
-    {
-        <span style="color:#ff79c6">return</span> ans[p];
-    }
-    <span style="color:#6272a4">//有时候需要读入未更新的底层，所以需要伸展
-</span><span style="color:#6272a4"></span>    spread(p, r, l);
-    <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> r <span style="color:#ff79c6">+</span> l <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
-    ll sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> mid)
-        sum <span style="color:#ff79c6">+=</span> read(x, y, l, mid, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>);
-    <span style="color:#ff79c6">if</span> (y <span style="color:#ff79c6">&gt;=</span> mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>)
-        sum <span style="color:#ff79c6">+=</span> read(x, y, mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, r, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">|</span><span style="color:#bd93f9">1</span>);
-    <span style="color:#ff79c6">return</span> sum;
-}
-</code></pre></div><h4 id="建树操作">建树操作</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#6272a4">//建立线段树
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">build</span>(<span style="color:#8be9fd">int</span> p, <span style="color:#8be9fd">int</span> l, <span style="color:#8be9fd">int</span> r)
-{
-    <span style="color:#ff79c6">if</span> (l <span style="color:#ff79c6">==</span> r)
-    {
-        ans[p] <span style="color:#ff79c6">=</span> num[l];
-        <span style="color:#ff79c6">return</span>;
-    }
-    <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> l <span style="color:#ff79c6">+</span> r <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
-    build((p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>), l, mid);
-    build((p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, r);
-    ans[p] <span style="color:#ff79c6">=</span> ans[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+</span> ans[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>];
-}
-</code></pre></div><h2 id="树状数组">树状数组</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#6272a4">//其中x-y是当前更新区间，l-r是当前划分区间的两端，k是更新值，p是区间段值
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">update</span>(<span style="color:#8be9fd">int</span> x, <span style="color:#8be9fd">int</span> y, <span style="color:#8be9fd">int</span> l, <span style="color:#8be9fd">int</span> r, <span style="color:#8be9fd">int</span> k, <span style="color:#8be9fd">int</span> p)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> l <span style="color:#ff79c6">&amp;&amp;</span> y <span style="color:#ff79c6">&gt;=</span> r)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//更新当前区间值，并阻断下方的更新，做到懒更新
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        ans[p] <span style="color:#ff79c6">+=</span> (ll)k <span style="color:#ff79c6">*</span> (r <span style="color:#ff79c6">-</span> l <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>        lazy[p] <span style="color:#ff79c6">+=</span> k;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//伸展操作，如果当前层不是更新的最底层，则向下伸展更新下一层
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    spread(p, r, l);
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> r <span style="color:#ff79c6">+</span> l <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> mid)
+</span></span><span style="display:flex;"><span>        update(x, y, l, mid, k, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (y <span style="color:#ff79c6">&gt;</span> mid)
+</span></span><span style="display:flex;"><span>        update(x, y, mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, r, k, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//更新时只有最底层在更新，递归返回后更新上层
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    ans[p] <span style="color:#ff79c6">=</span> ans[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+</span> ans[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>];
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="spread操作">spread操作</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#6272a4">//伸展操作，将lazy[p]传递给子结点，并更新子结点
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">spread</span>(<span style="color:#8be9fd">int</span> p, <span style="color:#8be9fd">int</span> r, <span style="color:#8be9fd">int</span> l)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (lazy[p] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> (r <span style="color:#ff79c6">+</span> l) <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        ans[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p] <span style="color:#ff79c6">*</span> (mid <span style="color:#ff79c6">-</span> l <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>        ans[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p] <span style="color:#ff79c6">*</span> (r <span style="color:#ff79c6">-</span> mid);
+</span></span><span style="display:flex;"><span>        lazy[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p];
+</span></span><span style="display:flex;"><span>        lazy[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">|</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+=</span> lazy[p];
+</span></span><span style="display:flex;"><span>        lazy[p] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="read操作">read操作</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C++" data-lang="C++"><span style="display:flex;"><span>ll <span style="color:#50fa7b">read</span>(<span style="color:#8be9fd">int</span> x, <span style="color:#8be9fd">int</span> y, <span style="color:#8be9fd">int</span> l, <span style="color:#8be9fd">int</span> r, <span style="color:#8be9fd">int</span> p)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> l <span style="color:#ff79c6">&amp;&amp;</span> y <span style="color:#ff79c6">&gt;=</span> r)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> ans[p];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//有时候需要读入未更新的底层，所以需要伸展
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    spread(p, r, l);
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> r <span style="color:#ff79c6">+</span> l <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    ll sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;=</span> mid)
+</span></span><span style="display:flex;"><span>        sum <span style="color:#ff79c6">+=</span> read(x, y, l, mid, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (y <span style="color:#ff79c6">&gt;=</span> mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>        sum <span style="color:#ff79c6">+=</span> read(x, y, mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, r, p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span><span style="color:#ff79c6">|</span><span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> sum;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="建树操作">建树操作</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C++" data-lang="C++"><span style="display:flex;"><span><span style="color:#6272a4">//建立线段树
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">build</span>(<span style="color:#8be9fd">int</span> p, <span style="color:#8be9fd">int</span> l, <span style="color:#8be9fd">int</span> r)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (l <span style="color:#ff79c6">==</span> r)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        ans[p] <span style="color:#ff79c6">=</span> num[l];
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> mid <span style="color:#ff79c6">=</span> l <span style="color:#ff79c6">+</span> r <span style="color:#ff79c6">&gt;&gt;</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    build((p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>), l, mid);
+</span></span><span style="display:flex;"><span>    build((p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, mid <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, r);
+</span></span><span style="display:flex;"><span>    ans[p] <span style="color:#ff79c6">=</span> ans[p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">+</span> ans[(p <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>];
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="树状数组">树状数组</h2>
 <h2 id="题目描述-1">题目描述</h2>
 <p>如题，已知一个数列，你需要进行下面两种操作：</p>
 <ul>
@@ -413,103 +459,101 @@ lazy[MAX <span style="color:#ff79c6">&lt;&lt;</span> <span style="color:#bd93f9"
 16
 </code></pre><p>参考博客，讲的非常好</p>
 <p><a href="https://blog.csdn.net/TheWayForDream/article/details/118436732">https://blog.csdn.net/TheWayForDream/article/details/118436732</a></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstring&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#define lowbit(x) (x&amp;(-x)) 
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ll;
-<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> Maxn<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1e6</span><span style="color:#ff79c6">+</span><span style="color:#bd93f9">5</span>;
-<span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">500005</span>];
-<span style="color:#8be9fd">int</span> d[Maxn]<span style="color:#ff79c6">=</span>{<span style="color:#bd93f9">0</span>};<span style="color:#6272a4">//d[i]的值，d[i]表示第i和i-1个数的差值
-</span><span style="color:#6272a4"></span>ll c[Maxn]; 
-<span style="color:#8be9fd">int</span> n,m;
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">update</span>(<span style="color:#8be9fd">int</span> pos,<span style="color:#8be9fd">int</span> k)<span style="color:#6272a4">//pos表示修改点的位置,K表示修改的值也即+K操作
-</span><span style="color:#6272a4"></span>{
-	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>pos;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">+=</span>lowbit(i))
-	c[i]<span style="color:#ff79c6">+=</span>k;
-	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-ll <span style="color:#50fa7b">ask_qujian</span>(<span style="color:#8be9fd">int</span> pos)<span style="color:#6272a4">//返回区间pos到1的总和
-</span><span style="color:#6272a4"></span>{
-	ll ans<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>pos;i;i<span style="color:#ff79c6">-=</span>lowbit(i)) ans<span style="color:#ff79c6">+=</span>c[i];
-	<span style="color:#ff79c6">return</span> ans;
-} 
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-	memset(c,<span style="color:#bd93f9">0</span>,<span style="color:#ff79c6">sizeof</span>(c));
-	scanf(<span style="color:#f1fa8c">&#34;%d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n,<span style="color:#ff79c6">&amp;</span>m);
-	a[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
-	{
-		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>a[i]);
-		d[i]<span style="color:#ff79c6">=</span>a[i]<span style="color:#ff79c6">-</span>a[i<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>];
-		update(i,d[i]);
-	}
-	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>m;i<span style="color:#ff79c6">++</span>)
-	{
-		<span style="color:#8be9fd">int</span> choice,x,y,k;
-		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>choice);
-		<span style="color:#ff79c6">if</span>(choice<span style="color:#ff79c6">==</span><span style="color:#bd93f9">1</span>)
-		{
-			scanf(<span style="color:#f1fa8c">&#34;%d %d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>x,<span style="color:#ff79c6">&amp;</span>y,<span style="color:#ff79c6">&amp;</span>k);
-			update(x,k);
-			update(y<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>,<span style="color:#ff79c6">-</span>k);
-		}
-		<span style="color:#ff79c6">else</span>
-		{
-			scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>x);
-			printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,ask_qujian(x));
-		}
-	}
-	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#define lowbit(x) (x&amp;(-x))
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ll; 
-<span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> c[<span style="color:#bd93f9">2000006</span>];
-<span style="color:#8be9fd">int</span> n,m;
-ll ans;
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">add_dandian</span>(<span style="color:#8be9fd">int</span> x,<span style="color:#8be9fd">int</span> k)
-{
-	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>x;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">+=</span>lowbit(i))
-	c[i]<span style="color:#ff79c6">+=</span>k;
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">search</span>(<span style="color:#8be9fd">int</span> begin,<span style="color:#8be9fd">int</span> end)
-{
-	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>end;i;i<span style="color:#ff79c6">-=</span>lowbit(i))
-	ans<span style="color:#ff79c6">+=</span>c[i];
-	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>begin<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;i;i<span style="color:#ff79c6">-=</span>lowbit(i))
-	ans<span style="color:#ff79c6">-=</span>c[i];
-	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-	scanf(<span style="color:#f1fa8c">&#34;%d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n,<span style="color:#ff79c6">&amp;</span>m);
-	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
-	{
-		<span style="color:#8be9fd">int</span> number;
-		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>number);
-		add_dandian(i,number);
-	}
-	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>m;i<span style="color:#ff79c6">++</span>)
-	{
-		<span style="color:#8be9fd">int</span> choice,x,y;
-		scanf(<span style="color:#f1fa8c">&#34;%d %d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>choice,<span style="color:#ff79c6">&amp;</span>x,<span style="color:#ff79c6">&amp;</span>y);
-		<span style="color:#ff79c6">if</span>(choice<span style="color:#ff79c6">==</span><span style="color:#bd93f9">1</span>) add_dandian(x,y);
-		<span style="color:#ff79c6">else</span>
-		{
-			ans<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-			search(x,y);
-			printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,ans);
-		}
-	}
-	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;iostream&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstring&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#define lowbit(x) (x&amp;(-x)) 
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ll;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> Maxn<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1e6</span><span style="color:#ff79c6">+</span><span style="color:#bd93f9">5</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">500005</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> d[Maxn]<span style="color:#ff79c6">=</span>{<span style="color:#bd93f9">0</span>};<span style="color:#6272a4">//d[i]的值，d[i]表示第i和i-1个数的差值
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>ll c[Maxn]; 
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> n,m;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">update</span>(<span style="color:#8be9fd">int</span> pos,<span style="color:#8be9fd">int</span> k)<span style="color:#6272a4">//pos表示修改点的位置,K表示修改的值也即+K操作
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>pos;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">+=</span>lowbit(i))
+</span></span><span style="display:flex;"><span>	c[i]<span style="color:#ff79c6">+=</span>k;
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>ll <span style="color:#50fa7b">ask_qujian</span>(<span style="color:#8be9fd">int</span> pos)<span style="color:#6272a4">//返回区间pos到1的总和
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>{
+</span></span><span style="display:flex;"><span>	ll ans<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>pos;i;i<span style="color:#ff79c6">-=</span>lowbit(i)) ans<span style="color:#ff79c6">+=</span>c[i];
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> ans;
+</span></span><span style="display:flex;"><span>} 
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	memset(c,<span style="color:#bd93f9">0</span>,<span style="color:#ff79c6">sizeof</span>(c));
+</span></span><span style="display:flex;"><span>	scanf(<span style="color:#f1fa8c">&#34;%d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n,<span style="color:#ff79c6">&amp;</span>m);
+</span></span><span style="display:flex;"><span>	a[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>a[i]);
+</span></span><span style="display:flex;"><span>		d[i]<span style="color:#ff79c6">=</span>a[i]<span style="color:#ff79c6">-</span>a[i<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>];
+</span></span><span style="display:flex;"><span>		update(i,d[i]);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>m;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd">int</span> choice,x,y,k;
+</span></span><span style="display:flex;"><span>		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>choice);
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span>(choice<span style="color:#ff79c6">==</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			scanf(<span style="color:#f1fa8c">&#34;%d %d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>x,<span style="color:#ff79c6">&amp;</span>y,<span style="color:#ff79c6">&amp;</span>k);
+</span></span><span style="display:flex;"><span>			update(x,k);
+</span></span><span style="display:flex;"><span>			update(y<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>,<span style="color:#ff79c6">-</span>k);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>x);
+</span></span><span style="display:flex;"><span>			printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,ask_qujian(x));
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;iostream&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#define lowbit(x) (x&amp;(-x))
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ll; 
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> c[<span style="color:#bd93f9">2000006</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> n,m;
+</span></span><span style="display:flex;"><span>ll ans;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">add_dandian</span>(<span style="color:#8be9fd">int</span> x,<span style="color:#8be9fd">int</span> k)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>x;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">+=</span>lowbit(i))
+</span></span><span style="display:flex;"><span>	c[i]<span style="color:#ff79c6">+=</span>k;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">search</span>(<span style="color:#8be9fd">int</span> begin,<span style="color:#8be9fd">int</span> end)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>end;i;i<span style="color:#ff79c6">-=</span>lowbit(i))
+</span></span><span style="display:flex;"><span>	ans<span style="color:#ff79c6">+=</span>c[i];
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>begin<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;i;i<span style="color:#ff79c6">-=</span>lowbit(i))
+</span></span><span style="display:flex;"><span>	ans<span style="color:#ff79c6">-=</span>c[i];
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	scanf(<span style="color:#f1fa8c">&#34;%d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n,<span style="color:#ff79c6">&amp;</span>m);
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd">int</span> number;
+</span></span><span style="display:flex;"><span>		scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>number);
+</span></span><span style="display:flex;"><span>		add_dandian(i,number);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>m;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd">int</span> choice,x,y;
+</span></span><span style="display:flex;"><span>		scanf(<span style="color:#f1fa8c">&#34;%d %d %d&#34;</span>,<span style="color:#ff79c6">&amp;</span>choice,<span style="color:#ff79c6">&amp;</span>x,<span style="color:#ff79c6">&amp;</span>y);
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">if</span>(choice<span style="color:#ff79c6">==</span><span style="color:#bd93f9">1</span>) add_dandian(x,y);
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			ans<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>			search(x,y);
+</span></span><span style="display:flex;"><span>			printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,ans);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
 
                 
 
@@ -555,6 +599,8 @@ ll ans;
 </div>
 
 
+
+
             </div>
 
             
@@ -569,9 +615,7 @@ ll ans;
                     <h5>
                         <a class="catalog-toggle" href="#">CATALOG</a>
                     </h5>
-                    <ul class="catalog-body">
-
-                    </ul>
+                    <ul class="catalog-body"></ul>
                 </div>
             </div>
             
@@ -609,14 +653,14 @@ ll ans;
                         
                         
                         
-                        <a href="/tags/deep-learning" title="deep-learning">
-                            deep-learning
+                        <a href="/tags/deep-learning" title="deep learning">
+                            deep learning
                         </a>
                         
                         
                         
-                        <a href="/tags/hsi-classification" title="hsi-classification">
-                            hsi-classification
+                        <a href="/tags/hsi-classification" title="hsi classification">
+                            hsi classification
                         </a>
                         
                         
@@ -635,6 +679,12 @@ ll ans;
                         
                         <a href="/tags/oracle" title="oracle">
                             oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/rgb-t-detection" title="rgb-t detection">
+                            rgb-t detection
                         </a>
                         
                         
@@ -790,7 +840,7 @@ ll ans;
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Linexus blog 2023
+                    Copyright &copy; Linexus blog 2025
                     <br>
                     <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
                         href="https://hhhhlkf.github.io">Linexus</a> |
@@ -946,12 +996,10 @@ ll ans;
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
 <div id="sakana-widget-right"></div>
-<div id="sakana-widget-left"></div>
 <script>
     function initSakanaWidget() {
         new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
         
-        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
     }
 </script>
 <script async onload="initSakanaWidget()"

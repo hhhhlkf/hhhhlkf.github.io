@@ -66,6 +66,7 @@
     <script src="//unpkg.com/element-plus"></script>
     
     
+    
 
     
     
@@ -86,8 +87,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},   // 块级公式
+                {left: '$', right: '$', display: false},    // 行内公式
+                {left: '\\(', right: '\\)', display: false} // 行内公式
+            ]
+        });">
+</script>
+
 
 </head>
 
@@ -200,19 +214,50 @@
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
 <script>
-var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
-var index = client.initIndex('blog');
-autocomplete('#aa-search-input',
-{ hint: false}, {
-  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
-  displayKey: 'name',
-  templates: {
-      suggestion: function(suggestion) {
-          console.log(suggestion);
-          return '<span>' + '<a href="' + suggestion.url + '">' +
-          suggestion._highlightResult.title.value + '</a></span>';
-      }
-  }
+var client = algoliasearch("601I7K6MCB", "2cec145d214a1ec8bbdfec33d0764bfc");
+var index = client.initIndex('linexus');
+
+
+
+function truncateContent(content, maxBytes = 9500) { 
+    let encoder = new TextEncoder();
+    let bytes = encoder.encode(content);
+    if (bytes.length <= maxBytes) return content;
+
+    let truncated = '';
+    for (let char of content) {
+        if (encoder.encode(truncated + char).length > maxBytes) break;
+        truncated += char;
+    }
+    return truncated + '...';
+}
+
+
+
+var records = posts.map(post => {
+    return {
+        objectID: post.url,
+        title: post.title,
+        url: post.url,
+        excerpt: truncateContent(post.content)
+    };
+});
+
+
+index.saveObjects(records)
+    .then(() => console.log('Algolia 索引上传完成 ✅'))
+    .catch(err => console.error('上传出错 ❌', err));
+
+
+autocomplete('#aa-search-input', { hint: false }, {
+    source: autocomplete.sources.hits(index, { hitsPerPage: 8 }),
+    displayKey: 'title',
+    templates: {
+        suggestion: function(suggestion) {
+            return '<span><a href="' + suggestion.url + '">' +
+                   suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
 });
 </script>
         </div>
@@ -231,6 +276,7 @@ autocomplete('#aa-search-input',
         background-image: url('https://i.loli.net/2021/09/30/o7FWDmbLwxrYzAd.jpg')
     }
 </style>
+
 
 <header class="intro-header" >
 
@@ -283,47 +329,47 @@ autocomplete('#aa-search-input',
                 <h1 id="jlu数据结构荣誉课第二次上机实验">JLU数据结构荣誉课——第二次上机实验</h1>
 <h2 id="7-1-数列查询">7-1 数列查询</h2>
 <p>已知数列的通项公式为:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">f(n) = f(n-1)*11/10，f[1]=10. 
-</code></pre></div><p>通项从左向右计算，*和/分别表示整数乘法和除法。 现在，要多次查询数列项的值。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>f(n) = f(n-1)*11/10，f[1]=10. 
+</span></span></code></pre></div><p>通项从左向右计算，*和/分别表示整数乘法和除法。 现在，要多次查询数列项的值。</p>
 <h3 id="输入格式">输入格式:</h3>
-<p>第1行，1个整数q，表示查询的次数， <code>1≤q≤10000</code>. 第2至<code>q+1</code>行，每行1个整数i，表示要查询f(i)的值。</p>
+<p>第1行，1个整数q，表示查询的次数， <code>1≤q≤10000</code>. 第2至 <code>q+1</code>行，每行1个整数i，表示要查询f(i)的值。</p>
 <h3 id="输入样例">输入样例:</h3>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">3</span>
-<span style="color:#bd93f9">1</span>
-<span style="color:#bd93f9">2</span>
-<span style="color:#bd93f9">3</span>
-</code></pre></div><h3 id="输出样例">输出样例：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">3</span>
+</span></span></code></pre></div><h3 id="输出样例">输出样例：</h3>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">10</span>
-<span style="color:#bd93f9">11</span>
-<span style="color:#bd93f9">12</span>
-</code></pre></div><p><code>作者 谷方明</code> <code>单位 吉林大学</code> <code>代码长度限制 16 KB</code> <code>时间限制 10 ms</code> <code>内存限制 1 MB</code> 解法一： 在考场上时，没有考虑到这数字乘起来会有那么大，因此我直接开数组去存每个数量级的(11⁄10)^10，并且竟然把上式看成是double类型😅😅😅。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">11</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">12</span>
+</span></span></code></pre></div><p><code>作者 谷方明</code> <code>单位 吉林大学</code> <code>代码长度限制 16 KB</code> <code>时间限制 10 ms</code> <code>内存限制 1 MB</code> 解法一： 在考场上时，没有考虑到这数字乘起来会有那么大，因此我直接开数组去存每个数量级的(11⁄10)^10，并且竟然把上式看成是double类型😅😅😅。</p>
 <p>解法二： 和上种方法类似，考虑到数字较大我们不妨试一试，f[202]=195422668， f[203]=-214531794 好家伙😏 只要202位的数组就行， 那么，不妨循环存入相应次方的下标数组中，之后直接查找，代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> num[<span style="color:#bd93f9">10003</span>];
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-
-    <span style="color:#8be9fd">int</span> n;
-    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n);
-    <span style="color:#8be9fd">int</span> sum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">10</span>;
-    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span><span style="color:#bd93f9">190</span>;i<span style="color:#ff79c6">++</span>)
-    {
-        num[i]<span style="color:#ff79c6">=</span>sum;
-        sum<span style="color:#ff79c6">*=</span><span style="color:#bd93f9">11</span>;
-        sum<span style="color:#ff79c6">/=</span><span style="color:#bd93f9">10</span>;
-    }<span style="color:#6272a4">//循环计数
-</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> num1;
-    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
-    {
-        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>num1);
-        printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,num[num1]);
-    }<span style="color:#6272a4">//查找输出
-</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><h2 id="7-2-稀疏矩阵之和">7-2 稀疏矩阵之和</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> num[<span style="color:#bd93f9">10003</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> n;
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n);
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> sum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">10</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span><span style="color:#bd93f9">190</span>;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        num[i]<span style="color:#ff79c6">=</span>sum;
+</span></span><span style="display:flex;"><span>        sum<span style="color:#ff79c6">*=</span><span style="color:#bd93f9">11</span>;
+</span></span><span style="display:flex;"><span>        sum<span style="color:#ff79c6">/=</span><span style="color:#bd93f9">10</span>;
+</span></span><span style="display:flex;"><span>    }<span style="color:#6272a4">//循环计数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> num1;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>num1);
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,num[num1]);
+</span></span><span style="display:flex;"><span>    }<span style="color:#6272a4">//查找输出
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="7-2-稀疏矩阵之和">7-2 稀疏矩阵之和</h2>
 <p>矩阵A和B都是稀疏矩阵。请计算矩阵的和A+B.如果A、B不能做和，输出“Illegal！”</p>
 <h3 id="输入格式-1">输入格式:</h3>
 <p>矩阵的输入采用三元组表示，先A后B。对每个矩阵：</p>
@@ -332,134 +378,134 @@ autocomplete('#aa-search-input',
 <h3 id="输出格式">输出格式：</h3>
 <p>矩阵A+B，采用三元组表示，默认按行列排序，非零项也在32位有符号整型范围内。</p>
 <h3 id="输入样例-1">输入样例:</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">10</span> <span style="color:#bd93f9">10</span> <span style="color:#bd93f9">3</span>
-<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span>
-<span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span>
-<span style="color:#bd93f9">10</span> <span style="color:#bd93f9">10</span> <span style="color:#bd93f9">20</span>
-<span style="color:#bd93f9">10</span> <span style="color:#bd93f9">10</span> <span style="color:#bd93f9">2</span>
-<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">1</span>
-<span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span>
-</code></pre></div><h3 id="输出样例-1">输出样例:</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">10</span> <span style="color:#bd93f9">10</span> <span style="color:#bd93f9">4</span>
-<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
-<span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span>
-<span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span>
-<span style="color:#bd93f9">10</span> <span style="color:#bd93f9">10</span> <span style="color:#bd93f9">20</span>
-作者 谷方明` `单位 吉林大学` `代码长度限制 16 KB` `时间限制 100 ms` `内存限制 10 MB
-</code></pre></div><p>思路：三元组题目，但是坑太多了(对我来说)，首先是求和之后如果为零就删去不要，考场上没想到的我， 只有Illegal有分，其次是cin,cout卡了我时间。 下面是三元组代码：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">struct Vertex
-{
-    int r;
-    int c;
-    int weight;
-}a[50001],b[50001],c[50001];
-</code></pre></div><p>最核心的比较相加算法则采用双指针思想，让相加时指针随着在两数组所到位置移动，再最后将未加完的数组，按照顺序接到尾部。 代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Vertex</span>
-{
-    <span style="color:#8be9fd">int</span> r;
-    <span style="color:#8be9fd">int</span> c;
-    <span style="color:#8be9fd">int</span> weight;
-}a[<span style="color:#bd93f9">50001</span>],b[<span style="color:#bd93f9">50001</span>],c[<span style="color:#bd93f9">50001</span>];
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-   <span style="color:#8be9fd">int</span> r1,c1,num1;
-   scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>r1,<span style="color:#ff79c6">&amp;</span>c1,<span style="color:#ff79c6">&amp;</span>num1);
-   <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>num1;i<span style="color:#ff79c6">++</span>)
-   {
-       scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>a[i].r,<span style="color:#ff79c6">&amp;</span>a[i].c,<span style="color:#ff79c6">&amp;</span>a[i].weight);
-   }
-   <span style="color:#8be9fd">int</span> r2,c2,num2;
-   scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>r2,<span style="color:#ff79c6">&amp;</span>c2,<span style="color:#ff79c6">&amp;</span>num2);
-   <span style="color:#ff79c6">if</span>(r2<span style="color:#ff79c6">!=</span>r1<span style="color:#ff79c6">||</span>c2<span style="color:#ff79c6">!=</span>c1)
-   {
-       printf(<span style="color:#f1fa8c">&#34;Illegal!&#34;</span>);
-       <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-   }
-   <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>num2;i<span style="color:#ff79c6">++</span>)
-   {
-       scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>b[i].r,<span style="color:#ff79c6">&amp;</span>b[i].c,<span style="color:#ff79c6">&amp;</span>b[i].weight);
-   }
-   <span style="color:#8be9fd">int</span> n1<span style="color:#ff79c6">=</span>num1,n2<span style="color:#ff79c6">=</span>num2,n3<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;
-   <span style="color:#8be9fd">int</span> i1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,i2<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;
-   <span style="color:#ff79c6">while</span>(n1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">||</span>n2<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)<span style="color:#6272a4">//循环到一个数组加完为止
-</span><span style="color:#6272a4"></span>   {
-       <span style="color:#ff79c6">if</span>(n1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">&amp;&amp;</span>n2<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
-       {
-       <span style="color:#ff79c6">if</span>(a[i1].r<span style="color:#ff79c6">&lt;</span>b[i2].r)
-       {
-           c[n3].r<span style="color:#ff79c6">=</span>a[i1].r;
-           c[n3].c<span style="color:#ff79c6">=</span>a[i1].c;
-           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>a[i1<span style="color:#ff79c6">++</span>].weight;
-           n1<span style="color:#ff79c6">--</span>;
-       }<span style="color:#6272a4">//a数组种数字充当元素
-</span><span style="color:#6272a4"></span>       <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(a[i1].r<span style="color:#ff79c6">&gt;</span>b[i2].r)
-       {
-           c[n3].r<span style="color:#ff79c6">=</span>b[i2].r;
-           c[n3].c<span style="color:#ff79c6">=</span>b[i2].c;
-           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>b[i2<span style="color:#ff79c6">++</span>].weight;
-           n2<span style="color:#ff79c6">--</span>;
-       }<span style="color:#6272a4">//b数组中数字充当元素
-</span><span style="color:#6272a4"></span>       <span style="color:#ff79c6">else</span>
-       {
-           <span style="color:#ff79c6">if</span>(a[i1].c<span style="color:#ff79c6">&lt;</span>b[i2].c)
-           {
-           c[n3].r<span style="color:#ff79c6">=</span>a[i1].r;
-           c[n3].c<span style="color:#ff79c6">=</span>a[i1].c;
-           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>a[i1<span style="color:#ff79c6">++</span>].weight;
-           n1<span style="color:#ff79c6">--</span>;
-           }
-            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(a[i1].c<span style="color:#ff79c6">&gt;</span>b[i2].c)
-           {
-           c[n3].r<span style="color:#ff79c6">=</span>b[i2].r;
-           c[n3].c<span style="color:#ff79c6">=</span>b[i2].c;
-           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>b[i2<span style="color:#ff79c6">++</span>].weight;
-           n2<span style="color:#ff79c6">--</span>;
-           }
-           <span style="color:#ff79c6">else</span>
-           {
-            <span style="color:#ff79c6">if</span>(b[i2].weight<span style="color:#ff79c6">+</span>a[i1].weight<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
-            {
-           c[n3].r<span style="color:#ff79c6">=</span>a[i1].r;
-           c[n3].c<span style="color:#ff79c6">=</span>a[i1].c;
-           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>b[i2].weight<span style="color:#ff79c6">+</span>a[i1].weight;
-            }
-            n2<span style="color:#ff79c6">--</span>;n1<span style="color:#ff79c6">--</span>;i1<span style="color:#ff79c6">++</span>;i2<span style="color:#ff79c6">++</span>;
-          }
-       }
-    }<span style="color:#6272a4">//a,b相加的元素充当元素，然后进行特判
-</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(n1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">&amp;&amp;</span>n2<span style="color:#ff79c6">==</span><span style="color:#bd93f9">0</span>)
-    {
-        <span style="color:#ff79c6">while</span>(n1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
-        {
-           c[n3].r<span style="color:#ff79c6">=</span>a[i1].r;
-           c[n3].c<span style="color:#ff79c6">=</span>a[i1].c;
-           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>a[i1<span style="color:#ff79c6">++</span>].weight;
-           n1<span style="color:#ff79c6">--</span>;
-        }
-    }
-    <span style="color:#ff79c6">else</span>
-    {
-        <span style="color:#ff79c6">while</span>(n2<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
-        {
-           c[n3].r<span style="color:#ff79c6">=</span>b[i2].r;
-           c[n3].c<span style="color:#ff79c6">=</span>b[i2].c;
-           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>b[i2<span style="color:#ff79c6">++</span>].weight;
-           n2<span style="color:#ff79c6">--</span>;
-        }
-    }
-   }
-   printf(<span style="color:#f1fa8c">&#34;%d %d %d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,r1,c1,n3<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>);
-   <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> k<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;k<span style="color:#ff79c6">&lt;</span>n3;k<span style="color:#ff79c6">++</span>)
-   {
-       printf(<span style="color:#f1fa8c">&#34;%d %d %d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,c[k].r,c[k].c,c[k].weight);
-   }
-   <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><p>注意：本方法是在三元组排好序的情况下输出的</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">10</span> <span style="color:#bd93f9">10</span> <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">10</span> <span style="color:#bd93f9">10</span> <span style="color:#bd93f9">20</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">10</span> <span style="color:#bd93f9">10</span> <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span>
+</span></span></code></pre></div><h3 id="输出样例-1">输出样例:</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">10</span> <span style="color:#bd93f9">10</span> <span style="color:#bd93f9">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">10</span> <span style="color:#bd93f9">10</span> <span style="color:#bd93f9">20</span>
+</span></span><span style="display:flex;"><span>作者 谷方明` `单位 吉林大学` `代码长度限制 16 KB` `时间限制 100 ms` `内存限制 10 MB
+</span></span></code></pre></div><p>思路：三元组题目，但是坑太多了(对我来说)，首先是求和之后如果为零就删去不要，考场上没想到的我， 只有Illegal有分，其次是cin,cout卡了我时间。 下面是三元组代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>struct Vertex
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    int r;
+</span></span><span style="display:flex;"><span>    int c;
+</span></span><span style="display:flex;"><span>    int weight;
+</span></span><span style="display:flex;"><span>}a[50001],b[50001],c[50001];
+</span></span></code></pre></div><p>最核心的比较相加算法则采用双指针思想，让相加时指针随着在两数组所到位置移动，再最后将未加完的数组，按照顺序接到尾部。 代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">Vertex</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> r;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> c;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> weight;
+</span></span><span style="display:flex;"><span>}a[<span style="color:#bd93f9">50001</span>],b[<span style="color:#bd93f9">50001</span>],c[<span style="color:#bd93f9">50001</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">int</span> r1,c1,num1;
+</span></span><span style="display:flex;"><span>   scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>r1,<span style="color:#ff79c6">&amp;</span>c1,<span style="color:#ff79c6">&amp;</span>num1);
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>num1;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>   {
+</span></span><span style="display:flex;"><span>       scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>a[i].r,<span style="color:#ff79c6">&amp;</span>a[i].c,<span style="color:#ff79c6">&amp;</span>a[i].weight);
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">int</span> r2,c2,num2;
+</span></span><span style="display:flex;"><span>   scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>r2,<span style="color:#ff79c6">&amp;</span>c2,<span style="color:#ff79c6">&amp;</span>num2);
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">if</span>(r2<span style="color:#ff79c6">!=</span>r1<span style="color:#ff79c6">||</span>c2<span style="color:#ff79c6">!=</span>c1)
+</span></span><span style="display:flex;"><span>   {
+</span></span><span style="display:flex;"><span>       printf(<span style="color:#f1fa8c">&#34;Illegal!&#34;</span>);
+</span></span><span style="display:flex;"><span>       <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>num2;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>   {
+</span></span><span style="display:flex;"><span>       scanf(<span style="color:#f1fa8c">&#34;%d%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>b[i].r,<span style="color:#ff79c6">&amp;</span>b[i].c,<span style="color:#ff79c6">&amp;</span>b[i].weight);
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">int</span> n1<span style="color:#ff79c6">=</span>num1,n2<span style="color:#ff79c6">=</span>num2,n3<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">int</span> i1<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,i2<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">while</span>(n1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">||</span>n2<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)<span style="color:#6272a4">//循环到一个数组加完为止
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>   {
+</span></span><span style="display:flex;"><span>       <span style="color:#ff79c6">if</span>(n1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">&amp;&amp;</span>n2<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>       {
+</span></span><span style="display:flex;"><span>       <span style="color:#ff79c6">if</span>(a[i1].r<span style="color:#ff79c6">&lt;</span>b[i2].r)
+</span></span><span style="display:flex;"><span>       {
+</span></span><span style="display:flex;"><span>           c[n3].r<span style="color:#ff79c6">=</span>a[i1].r;
+</span></span><span style="display:flex;"><span>           c[n3].c<span style="color:#ff79c6">=</span>a[i1].c;
+</span></span><span style="display:flex;"><span>           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>a[i1<span style="color:#ff79c6">++</span>].weight;
+</span></span><span style="display:flex;"><span>           n1<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>       }<span style="color:#6272a4">//a数组种数字充当元素
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>       <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(a[i1].r<span style="color:#ff79c6">&gt;</span>b[i2].r)
+</span></span><span style="display:flex;"><span>       {
+</span></span><span style="display:flex;"><span>           c[n3].r<span style="color:#ff79c6">=</span>b[i2].r;
+</span></span><span style="display:flex;"><span>           c[n3].c<span style="color:#ff79c6">=</span>b[i2].c;
+</span></span><span style="display:flex;"><span>           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>b[i2<span style="color:#ff79c6">++</span>].weight;
+</span></span><span style="display:flex;"><span>           n2<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>       }<span style="color:#6272a4">//b数组中数字充当元素
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>       <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>       {
+</span></span><span style="display:flex;"><span>           <span style="color:#ff79c6">if</span>(a[i1].c<span style="color:#ff79c6">&lt;</span>b[i2].c)
+</span></span><span style="display:flex;"><span>           {
+</span></span><span style="display:flex;"><span>           c[n3].r<span style="color:#ff79c6">=</span>a[i1].r;
+</span></span><span style="display:flex;"><span>           c[n3].c<span style="color:#ff79c6">=</span>a[i1].c;
+</span></span><span style="display:flex;"><span>           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>a[i1<span style="color:#ff79c6">++</span>].weight;
+</span></span><span style="display:flex;"><span>           n1<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>           }
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(a[i1].c<span style="color:#ff79c6">&gt;</span>b[i2].c)
+</span></span><span style="display:flex;"><span>           {
+</span></span><span style="display:flex;"><span>           c[n3].r<span style="color:#ff79c6">=</span>b[i2].r;
+</span></span><span style="display:flex;"><span>           c[n3].c<span style="color:#ff79c6">=</span>b[i2].c;
+</span></span><span style="display:flex;"><span>           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>b[i2<span style="color:#ff79c6">++</span>].weight;
+</span></span><span style="display:flex;"><span>           n2<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>           }
+</span></span><span style="display:flex;"><span>           <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>           {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(b[i2].weight<span style="color:#ff79c6">+</span>a[i1].weight<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>           c[n3].r<span style="color:#ff79c6">=</span>a[i1].r;
+</span></span><span style="display:flex;"><span>           c[n3].c<span style="color:#ff79c6">=</span>a[i1].c;
+</span></span><span style="display:flex;"><span>           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>b[i2].weight<span style="color:#ff79c6">+</span>a[i1].weight;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            n2<span style="color:#ff79c6">--</span>;n1<span style="color:#ff79c6">--</span>;i1<span style="color:#ff79c6">++</span>;i2<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>       }
+</span></span><span style="display:flex;"><span>    }<span style="color:#6272a4">//a,b相加的元素充当元素，然后进行特判
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(n1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">&amp;&amp;</span>n2<span style="color:#ff79c6">==</span><span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span>(n1<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>           c[n3].r<span style="color:#ff79c6">=</span>a[i1].r;
+</span></span><span style="display:flex;"><span>           c[n3].c<span style="color:#ff79c6">=</span>a[i1].c;
+</span></span><span style="display:flex;"><span>           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>a[i1<span style="color:#ff79c6">++</span>].weight;
+</span></span><span style="display:flex;"><span>           n1<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span>(n2<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>           c[n3].r<span style="color:#ff79c6">=</span>b[i2].r;
+</span></span><span style="display:flex;"><span>           c[n3].c<span style="color:#ff79c6">=</span>b[i2].c;
+</span></span><span style="display:flex;"><span>           c[n3<span style="color:#ff79c6">++</span>].weight<span style="color:#ff79c6">=</span>b[i2<span style="color:#ff79c6">++</span>].weight;
+</span></span><span style="display:flex;"><span>           n2<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   printf(<span style="color:#f1fa8c">&#34;%d %d %d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,r1,c1,n3<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>);
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> k<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;k<span style="color:#ff79c6">&lt;</span>n3;k<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>   {
+</span></span><span style="display:flex;"><span>       printf(<span style="color:#f1fa8c">&#34;%d %d %d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,c[k].r,c[k].c,c[k].weight);
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>注意：本方法是在三元组排好序的情况下输出的</p>
 <h2 id="7-3-文字编辑">7-3 文字编辑</h2>
-<p>一篇文章由n个汉字构成，汉字从前到后依次编号为<code>1，2，……，n</code>。 有四种操作：</p>
+<p>一篇文章由n个汉字构成，汉字从前到后依次编号为 <code>1，2，……，n</code>。 有四种操作：</p>
 <p>A i j表示把编号为i的汉字移动编号为j的汉字之前；</p>
 <p>B i j表示把编号为i的汉字移动编号为j的汉字之后；</p>
 <p>Q 0 i为询问编号为i的汉字之前的汉字的编号；</p>
@@ -472,89 +518,89 @@ autocomplete('#aa-search-input',
 <p>若干行，每行1个整数，对应每个询问的结果汉字编号。</p>
 <h3 id="输入样例-2">输入样例:</h3>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">1</span> 
-<span style="color:#bd93f9">9999</span> <span style="color:#bd93f9">4</span> 
-B 1 2  
-A 3 9999
-Q 1 1
-Q 0 3
-</code></pre></div><p>输出样例: 在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">4</span>
-<span style="color:#bd93f9">9998</span>
-</code></pre></div><p><code>作者 谷方明</code> <code>单位 吉林大学</code> <code>代码长度限制 16 KB</code> <code>时间限制 1000 ms</code> <code>内存限制 2 MB</code> 思路：Donald E.Knuth的跳舞链，但是时间不够没调出来😫，这道题没啥大坑，对我来说比较友好，核心思想还是数据结构中的静态链表。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">1</span> 
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">9999</span> <span style="color:#bd93f9">4</span> 
+</span></span><span style="display:flex;"><span>B 1 2  
+</span></span><span style="display:flex;"><span>A 3 9999
+</span></span><span style="display:flex;"><span>Q 1 1
+</span></span><span style="display:flex;"><span>Q 0 3
+</span></span></code></pre></div><p>输出样例: 在这里给出相应的输出。例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">9998</span>
+</span></span></code></pre></div><p><code>作者 谷方明</code> <code>单位 吉林大学</code> <code>代码长度限制 16 KB</code> <code>时间限制 1000 ms</code> <code>内存限制 2 MB</code> 思路：Donald E.Knuth的跳舞链，但是时间不够没调出来😫，这道题没啥大坑，对我来说比较友好，核心思想还是数据结构中的静态链表。</p>
 <h3 id="跳舞链">跳舞链：</h3>
 <pre tabindex="0"><code>left_[right_[num1]] = left_[num1];
 right_[left_[num1]] = right_[num1];
 </code></pre><h3 id="用两个数组模拟静态链表">用两个数组模拟静态链表：</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">int right_[10000];
-int left_[10000];
-</code></pre></div><h3 id="交换算法跳舞">交换算法(跳舞)</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">left_[right_[num1]] = left_[num1];
-right_[left_[num1]] = right_[num1];
-left_[num1] = num2;
-right_[num1] = right_[num2];
-left_[right_[num2]] = num1;
-right_[num2] = num1;
-</code></pre></div><p>代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#8be9fd">int</span> right_[<span style="color:#bd93f9">10000</span>];
-<span style="color:#8be9fd">int</span> left_[<span style="color:#bd93f9">10000</span>];
-<span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-	<span style="color:#8be9fd">int</span> num;
-	scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>num);
-	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> num; i<span style="color:#ff79c6">++</span>)
-	{
-
-		<span style="color:#8be9fd">int</span> n, m;
-		scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n,<span style="color:#ff79c6">&amp;</span>m);
-		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
-		{
-			<span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">!=</span> n)
-				right_[i] <span style="color:#ff79c6">=</span> i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
-			<span style="color:#ff79c6">else</span>
-				right_[i] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-			<span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">1</span>)
-				left_[i] <span style="color:#ff79c6">=</span> i <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>;
-			<span style="color:#ff79c6">else</span>
-				left_[i] <span style="color:#ff79c6">=</span> n;
-		}
-		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; j <span style="color:#ff79c6">&lt;=</span> m; j<span style="color:#ff79c6">++</span>)
-		{
-			<span style="color:#8be9fd">char</span> A;
-			<span style="color:#8be9fd">int</span> num1;
-			<span style="color:#8be9fd">int</span> num2;
-			scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>,<span style="color:#ff79c6">&amp;</span>A);
-			<span style="color:#ff79c6">while</span>(<span style="color:#ff79c6">!</span>(A<span style="color:#ff79c6">&gt;=</span><span style="color:#f1fa8c">&#39;A&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>A<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;Z&#39;</span>))scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>,<span style="color:#ff79c6">&amp;</span>A);
-			scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>num1,<span style="color:#ff79c6">&amp;</span>num2);
-			<span style="color:#ff79c6">if</span> (A <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;Q&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>num1 <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span>)
-                printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,right_[num2]);
-			<span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (A <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;Q&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>num1 <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
-			    printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,left_[num2]);
-			<span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (A <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;B&#39;</span>)
-			{
-				left_[right_[num1]] <span style="color:#ff79c6">=</span> left_[num1];
-				right_[left_[num1]] <span style="color:#ff79c6">=</span> right_[num1];
-				left_[num1] <span style="color:#ff79c6">=</span> num2;
-				right_[num1] <span style="color:#ff79c6">=</span> right_[num2];
-				left_[right_[num2]] <span style="color:#ff79c6">=</span> num1;
-				right_[num2] <span style="color:#ff79c6">=</span> num1;
-			}
-			<span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (A <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;A&#39;</span>)
-			{
-				left_[right_[num1]] <span style="color:#ff79c6">=</span> left_[num1];
-				right_[left_[num1]] <span style="color:#ff79c6">=</span> right_[num1];
-				right_[num1] <span style="color:#ff79c6">=</span> num2;
-				left_[num1] <span style="color:#ff79c6">=</span> left_[num2];
-				right_[left_[num2]] <span style="color:#ff79c6">=</span> num1;
-				left_[num2] <span style="color:#ff79c6">=</span> num1;
-			}
-		}
-	}
-	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><h2 id="7-4-幸福指数">7-4 幸福指数</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>int right_[10000];
+</span></span><span style="display:flex;"><span>int left_[10000];
+</span></span></code></pre></div><h3 id="交换算法跳舞">交换算法(跳舞)</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>left_[right_[num1]] = left_[num1];
+</span></span><span style="display:flex;"><span>right_[left_[num1]] = right_[num1];
+</span></span><span style="display:flex;"><span>left_[num1] = num2;
+</span></span><span style="display:flex;"><span>right_[num1] = right_[num2];
+</span></span><span style="display:flex;"><span>left_[right_[num2]] = num1;
+</span></span><span style="display:flex;"><span>right_[num2] = num1;
+</span></span></code></pre></div><p>代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#8be9fd">int</span> right_[<span style="color:#bd93f9">10000</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> left_[<span style="color:#bd93f9">10000</span>];
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#8be9fd">int</span> num;
+</span></span><span style="display:flex;"><span>	scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>num);
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> num; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#8be9fd">int</span> n, m;
+</span></span><span style="display:flex;"><span>		scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n,<span style="color:#ff79c6">&amp;</span>m);
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> n; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">!=</span> n)
+</span></span><span style="display:flex;"><span>				right_[i] <span style="color:#ff79c6">=</span> i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>				right_[i] <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>				left_[i] <span style="color:#ff79c6">=</span> i <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>				left_[i] <span style="color:#ff79c6">=</span> n;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; j <span style="color:#ff79c6">&lt;=</span> m; j<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#8be9fd">char</span> A;
+</span></span><span style="display:flex;"><span>			<span style="color:#8be9fd">int</span> num1;
+</span></span><span style="display:flex;"><span>			<span style="color:#8be9fd">int</span> num2;
+</span></span><span style="display:flex;"><span>			scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>,<span style="color:#ff79c6">&amp;</span>A);
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">while</span>(<span style="color:#ff79c6">!</span>(A<span style="color:#ff79c6">&gt;=</span><span style="color:#f1fa8c">&#39;A&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>A<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;Z&#39;</span>))scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>,<span style="color:#ff79c6">&amp;</span>A);
+</span></span><span style="display:flex;"><span>			scanf(<span style="color:#f1fa8c">&#34;%d%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>num1,<span style="color:#ff79c6">&amp;</span>num2);
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">if</span> (A <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;Q&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>num1 <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>                printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,right_[num2]);
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (A <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;Q&#39;</span><span style="color:#ff79c6">&amp;&amp;</span>num1 <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>			    printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,left_[num2]);
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (A <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;B&#39;</span>)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				left_[right_[num1]] <span style="color:#ff79c6">=</span> left_[num1];
+</span></span><span style="display:flex;"><span>				right_[left_[num1]] <span style="color:#ff79c6">=</span> right_[num1];
+</span></span><span style="display:flex;"><span>				left_[num1] <span style="color:#ff79c6">=</span> num2;
+</span></span><span style="display:flex;"><span>				right_[num1] <span style="color:#ff79c6">=</span> right_[num2];
+</span></span><span style="display:flex;"><span>				left_[right_[num2]] <span style="color:#ff79c6">=</span> num1;
+</span></span><span style="display:flex;"><span>				right_[num2] <span style="color:#ff79c6">=</span> num1;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (A <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;A&#39;</span>)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				left_[right_[num1]] <span style="color:#ff79c6">=</span> left_[num1];
+</span></span><span style="display:flex;"><span>				right_[left_[num1]] <span style="color:#ff79c6">=</span> right_[num1];
+</span></span><span style="display:flex;"><span>				right_[num1] <span style="color:#ff79c6">=</span> num2;
+</span></span><span style="display:flex;"><span>				left_[num1] <span style="color:#ff79c6">=</span> left_[num2];
+</span></span><span style="display:flex;"><span>				right_[left_[num2]] <span style="color:#ff79c6">=</span> num1;
+</span></span><span style="display:flex;"><span>				left_[num2] <span style="color:#ff79c6">=</span> num1;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="7-4-幸福指数">7-4 幸福指数</h2>
 <p>人生中哪段时间最幸福?幸福指数可能会帮你发现。幸福指数要求：对自己每天的生活赋予一个幸福值，幸福值越大表示越幸福。一段时间的幸福指数就是：这段时间的幸福值的和乘以这段时间的幸福值的最小值。幸福指数最大的那段时间，可能就是人生中最幸福的时光。</p>
 <h3 id="输入格式-3">输入格式:</h3>
 <p>第1行，1个整数n，， <code>1≤n≤100000</code>,表示要考察的天数。</p>
@@ -564,85 +610,85 @@ right_[num2] = num1;
 <p>第2行，2个整数l和r，用空格分隔，表示最大幸福指数对应的区间[l,r]。如果有多个这样的区间，输出最长最左区间。</p>
 <h3 id="输入样例-3">输入样例:</h3>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">7</span>
-<span style="color:#bd93f9">6</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">6</span>
-</code></pre></div><h3 id="输出样例-2">输出样例:</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">7</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">6</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">6</span>
+</span></span></code></pre></div><h3 id="输出样例-2">输出样例:</h3>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">60</span>
-<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
-</code></pre></div><p><code>作者 谷方明</code> <code>单位 吉林大学</code> <code>代码长度限制 16 KB</code> <code>时间限制 100 ms</code> <code>内存限制 64 MB</code> 思路：上机的时候不会做，但是听了思路后，会敲了，但是为什么会有那么多的坑😭。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">60</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span>
+</span></span></code></pre></div><p><code>作者 谷方明</code> <code>单位 吉林大学</code> <code>代码长度限制 16 KB</code> <code>时间限制 100 ms</code> <code>内存限制 64 MB</code> 思路：上机的时候不会做，但是听了思路后，会敲了，但是为什么会有那么多的坑😭。</p>
 <p>实现原理还是单调栈，但是这次不同，需要从左向右，从右向左寻找每个数的以自己为最小值邻域的区间，这是算法的关键。</p>
 <p>错误：1.是要把数组范围看准，开的稍微大一点；2.要注意题中最长左序列，然后进行特判。3.最小值临界判断。4.int会爆掉，开long long</p>
 <p>代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> M<span style="color:#ff79c6">=</span><span style="color:#bd93f9">2100000000</span>;
-<span style="color:#8be9fd">int</span> left[<span style="color:#bd93f9">100101</span>];<span style="color:#6272a4">//左端极限位置
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> right[<span style="color:#bd93f9">100101</span>];<span style="color:#6272a4">//右端极限位置
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> day[<span style="color:#bd93f9">100101</span>];<span style="color:#6272a4">//前缀序列和
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> s_day[<span style="color:#bd93f9">100101</span>];<span style="color:#6272a4">//每一天的
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> Stack[<span style="color:#bd93f9">100101</span>];<span style="color:#6272a4">//单调栈——一栈多用，注意清空
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    <span style="color:#8be9fd">int</span> n;
-    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n);
-    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
-    {
-        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>s_day[i]);
-        day[i]<span style="color:#ff79c6">=</span>day[i<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">+</span>s_day[i];
-    }<span style="color:#6272a4">//维护前缀和
-</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> ltop<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-    <span style="color:#8be9fd">int</span> rtop<span style="color:#ff79c6">=</span>n<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
-    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
-    {
-        <span style="color:#ff79c6">while</span>(ltop<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">&amp;&amp;</span>s_day[Stack[ltop]]<span style="color:#ff79c6">&gt;=</span>s_day[i])
-            ltop<span style="color:#ff79c6">--</span>;
-        left[i]<span style="color:#ff79c6">=</span>Stack[ltop];
-        Stack[<span style="color:#ff79c6">++</span>ltop]<span style="color:#ff79c6">=</span>i;
-    }<span style="color:#6272a4">//单调栈从左往右
-</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
-        Stack[i]<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>n;i<span style="color:#ff79c6">&gt;=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">--</span>)
-    {
-        <span style="color:#ff79c6">while</span>(rtop<span style="color:#ff79c6">!=</span>(n<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>)<span style="color:#ff79c6">&amp;&amp;</span>s_day[Stack[rtop]]<span style="color:#ff79c6">&gt;=</span>s_day[i])
-            rtop<span style="color:#ff79c6">++</span>;
-            <span style="color:#ff79c6">if</span>(rtop<span style="color:#ff79c6">!=</span>(n<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>))
-        right[i]<span style="color:#ff79c6">=</span>Stack[rtop];
-        <span style="color:#ff79c6">else</span>
-            right[i]<span style="color:#ff79c6">=</span>n<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
-        Stack[<span style="color:#ff79c6">--</span>rtop]<span style="color:#ff79c6">=</span>i;
-    }<span style="color:#6272a4">//单调栈从右往左
-</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> MAX[<span style="color:#bd93f9">3</span>]<span style="color:#ff79c6">=</span>{<span style="color:#bd93f9">0</span>};
-    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
-    {
-        <span style="color:#ff79c6">if</span>(MAX[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">&lt;</span>(<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span>)(day[right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">-</span>day[left[i]])<span style="color:#ff79c6">*</span>s_day[i])
-        {
-            MAX[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>(day[right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">-</span>day[left[i]])<span style="color:#ff79c6">*</span>s_day[i];
-            MAX[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">=</span>left[i]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
-            MAX[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">=</span>right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-        }
-        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(MAX[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">==</span>(<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span>)(day[right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">-</span>day[left[i]])<span style="color:#ff79c6">*</span>s_day[i])
-        {
-                <span style="color:#ff79c6">if</span>(right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">-</span>left[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&gt;</span>MAX[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">-</span>MAX[<span style="color:#bd93f9">1</span>])
-                {
-            MAX[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>(day[right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">-</span>day[left[i]])<span style="color:#ff79c6">*</span>s_day[i];
-            MAX[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">=</span>left[i]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
-            MAX[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">=</span>right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-                }
-                <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(left[i]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&lt;</span>MAX[<span style="color:#bd93f9">1</span>])
-                {
-            MAX[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>(day[right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">-</span>day[left[i]])<span style="color:#ff79c6">*</span>s_day[i];
-            MAX[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">=</span>left[i]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
-            MAX[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">=</span>right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-                }
-
-        }
-        <span style="color:#6272a4">//特判，比较
-</span><span style="color:#6272a4"></span>    }
-    printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">%lld %lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,MAX[<span style="color:#bd93f9">0</span>],MAX[<span style="color:#bd93f9">1</span>],MAX[<span style="color:#bd93f9">2</span>]);
-    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><p><del>太弱↭小了，没↑有力↓量</del></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">const</span> <span style="color:#8be9fd">int</span> M<span style="color:#ff79c6">=</span><span style="color:#bd93f9">2100000000</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> left[<span style="color:#bd93f9">100101</span>];<span style="color:#6272a4">//左端极限位置
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> right[<span style="color:#bd93f9">100101</span>];<span style="color:#6272a4">//右端极限位置
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> day[<span style="color:#bd93f9">100101</span>];<span style="color:#6272a4">//前缀序列和
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> s_day[<span style="color:#bd93f9">100101</span>];<span style="color:#6272a4">//每一天的
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> Stack[<span style="color:#bd93f9">100101</span>];<span style="color:#6272a4">//单调栈——一栈多用，注意清空
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> n;
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>n);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>s_day[i]);
+</span></span><span style="display:flex;"><span>        day[i]<span style="color:#ff79c6">=</span>day[i<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">+</span>s_day[i];
+</span></span><span style="display:flex;"><span>    }<span style="color:#6272a4">//维护前缀和
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> ltop<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> rtop<span style="color:#ff79c6">=</span>n<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span>(ltop<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">0</span><span style="color:#ff79c6">&amp;&amp;</span>s_day[Stack[ltop]]<span style="color:#ff79c6">&gt;=</span>s_day[i])
+</span></span><span style="display:flex;"><span>            ltop<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>        left[i]<span style="color:#ff79c6">=</span>Stack[ltop];
+</span></span><span style="display:flex;"><span>        Stack[<span style="color:#ff79c6">++</span>ltop]<span style="color:#ff79c6">=</span>i;
+</span></span><span style="display:flex;"><span>    }<span style="color:#6272a4">//单调栈从左往右
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>        Stack[i]<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span>n;i<span style="color:#ff79c6">&gt;=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">--</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span>(rtop<span style="color:#ff79c6">!=</span>(n<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>)<span style="color:#ff79c6">&amp;&amp;</span>s_day[Stack[rtop]]<span style="color:#ff79c6">&gt;=</span>s_day[i])
+</span></span><span style="display:flex;"><span>            rtop<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>(rtop<span style="color:#ff79c6">!=</span>(n<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>))
+</span></span><span style="display:flex;"><span>        right[i]<span style="color:#ff79c6">=</span>Stack[rtop];
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>            right[i]<span style="color:#ff79c6">=</span>n<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        Stack[<span style="color:#ff79c6">--</span>rtop]<span style="color:#ff79c6">=</span>i;
+</span></span><span style="display:flex;"><span>    }<span style="color:#6272a4">//单调栈从右往左
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> MAX[<span style="color:#bd93f9">3</span>]<span style="color:#ff79c6">=</span>{<span style="color:#bd93f9">0</span>};
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>;i<span style="color:#ff79c6">&lt;=</span>n;i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span>(MAX[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">&lt;</span>(<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span>)(day[right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">-</span>day[left[i]])<span style="color:#ff79c6">*</span>s_day[i])
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            MAX[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>(day[right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">-</span>day[left[i]])<span style="color:#ff79c6">*</span>s_day[i];
+</span></span><span style="display:flex;"><span>            MAX[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">=</span>left[i]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>            MAX[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">=</span>right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(MAX[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">==</span>(<span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span>)(day[right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">-</span>day[left[i]])<span style="color:#ff79c6">*</span>s_day[i])
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">if</span>(right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">-</span>left[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&gt;</span>MAX[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">-</span>MAX[<span style="color:#bd93f9">1</span>])
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>            MAX[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>(day[right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">-</span>day[left[i]])<span style="color:#ff79c6">*</span>s_day[i];
+</span></span><span style="display:flex;"><span>            MAX[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">=</span>left[i]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>            MAX[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">=</span>right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(left[i]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span><span style="color:#ff79c6">&lt;</span>MAX[<span style="color:#bd93f9">1</span>])
+</span></span><span style="display:flex;"><span>                {
+</span></span><span style="display:flex;"><span>            MAX[<span style="color:#bd93f9">0</span>]<span style="color:#ff79c6">=</span>(day[right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">-</span>day[left[i]])<span style="color:#ff79c6">*</span>s_day[i];
+</span></span><span style="display:flex;"><span>            MAX[<span style="color:#bd93f9">1</span>]<span style="color:#ff79c6">=</span>left[i]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>            MAX[<span style="color:#bd93f9">2</span>]<span style="color:#ff79c6">=</span>right[i]<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">//特判，比较
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    }
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">%lld %lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>,MAX[<span style="color:#bd93f9">0</span>],MAX[<span style="color:#bd93f9">1</span>],MAX[<span style="color:#bd93f9">2</span>]);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><del>太弱↭小了，没↑有力↓量</del></p>
 
 
                 
@@ -689,6 +735,8 @@ right_[num2] = num1;
 </div>
 
 
+
+
             </div>
 
             
@@ -703,9 +751,7 @@ right_[num2] = num1;
                     <h5>
                         <a class="catalog-toggle" href="#">CATALOG</a>
                     </h5>
-                    <ul class="catalog-body">
-
-                    </ul>
+                    <ul class="catalog-body"></ul>
                 </div>
             </div>
             
@@ -743,14 +789,14 @@ right_[num2] = num1;
                         
                         
                         
-                        <a href="/tags/deep-learning" title="deep-learning">
-                            deep-learning
+                        <a href="/tags/deep-learning" title="deep learning">
+                            deep learning
                         </a>
                         
                         
                         
-                        <a href="/tags/hsi-classification" title="hsi-classification">
-                            hsi-classification
+                        <a href="/tags/hsi-classification" title="hsi classification">
+                            hsi classification
                         </a>
                         
                         
@@ -769,6 +815,12 @@ right_[num2] = num1;
                         
                         <a href="/tags/oracle" title="oracle">
                             oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/rgb-t-detection" title="rgb-t detection">
+                            rgb-t detection
                         </a>
                         
                         
@@ -924,7 +976,7 @@ right_[num2] = num1;
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Linexus blog 2023
+                    Copyright &copy; Linexus blog 2025
                     <br>
                     <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
                         href="https://hhhhlkf.github.io">Linexus</a> |
@@ -1080,12 +1132,10 @@ right_[num2] = num1;
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
 <div id="sakana-widget-right"></div>
-<div id="sakana-widget-left"></div>
 <script>
     function initSakanaWidget() {
         new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
         
-        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
     }
 </script>
 <script async onload="initSakanaWidget()"

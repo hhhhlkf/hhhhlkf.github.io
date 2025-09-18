@@ -66,6 +66,7 @@
     <script src="//unpkg.com/element-plus"></script>
     
     
+    
 
     
     
@@ -86,8 +87,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},   // 块级公式
+                {left: '$', right: '$', display: false},    // 行内公式
+                {left: '\\(', right: '\\)', display: false} // 行内公式
+            ]
+        });">
+</script>
+
 
 </head>
 
@@ -200,19 +214,50 @@
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
 <script>
-var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
-var index = client.initIndex('blog');
-autocomplete('#aa-search-input',
-{ hint: false}, {
-  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
-  displayKey: 'name',
-  templates: {
-      suggestion: function(suggestion) {
-          console.log(suggestion);
-          return '<span>' + '<a href="' + suggestion.url + '">' +
-          suggestion._highlightResult.title.value + '</a></span>';
-      }
-  }
+var client = algoliasearch("601I7K6MCB", "2cec145d214a1ec8bbdfec33d0764bfc");
+var index = client.initIndex('linexus');
+
+
+
+function truncateContent(content, maxBytes = 9500) { 
+    let encoder = new TextEncoder();
+    let bytes = encoder.encode(content);
+    if (bytes.length <= maxBytes) return content;
+
+    let truncated = '';
+    for (let char of content) {
+        if (encoder.encode(truncated + char).length > maxBytes) break;
+        truncated += char;
+    }
+    return truncated + '...';
+}
+
+
+
+var records = posts.map(post => {
+    return {
+        objectID: post.url,
+        title: post.title,
+        url: post.url,
+        excerpt: truncateContent(post.content)
+    };
+});
+
+
+index.saveObjects(records)
+    .then(() => console.log('Algolia 索引上传完成 ✅'))
+    .catch(err => console.error('上传出错 ❌', err));
+
+
+autocomplete('#aa-search-input', { hint: false }, {
+    source: autocomplete.sources.hits(index, { hitsPerPage: 8 }),
+    displayKey: 'title',
+    templates: {
+        suggestion: function(suggestion) {
+            return '<span><a href="' + suggestion.url + '">' +
+                   suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
 });
 </script>
         </div>
@@ -231,6 +276,7 @@ autocomplete('#aa-search-input',
         background-image: url('https://i.loli.net/2021/09/30/3bSAB6Fru9xCdh8.jpg')
     }
 </style>
+
 
 <header class="intro-header" >
 
@@ -291,161 +337,161 @@ autocomplete('#aa-search-input',
 <p>第2行，length+1个整数，用空格分隔，表示最右侧的最长路径。</p>
 <h3 id="输入样例">输入样例:</h3>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">5</span>
-<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> -<span style="color:#bd93f9">1</span> -<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">4</span> -<span style="color:#bd93f9">1</span> -<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">5</span> -<span style="color:#bd93f9">1</span> -<span style="color:#bd93f9">1</span>
-</code></pre></div><h3 id="输出样例">输出样例:</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">2</span> -<span style="color:#bd93f9">1</span> -<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">4</span> -<span style="color:#bd93f9">1</span> -<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">5</span> -<span style="color:#bd93f9">1</span> -<span style="color:#bd93f9">1</span>
+</span></span></code></pre></div><h3 id="输出样例">输出样例:</h3>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">2</span>
-<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">5</span>
-</code></pre></div><p>考察方法： 本题考查树的基本运算，包括： <code>建立一棵二叉树``遍历树``求树的深度</code> 思路：题中所给按照先根遍历建树，然后按照递归遍历求出高度，这里是可以用递归的，只要先求出每个结点的高度 再存入数组下标为树节点data所对应的值，即可保存在之后输出路径的时候可以直接查找比较。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">5</span>
+</span></span></code></pre></div><p>考察方法： 本题考查树的基本运算，包括： <code>建立一棵二叉树``遍历树``求树的深度</code> 思路：题中所给按照先根遍历建树，然后按照递归遍历求出高度，这里是可以用递归的，只要先求出每个结点的高度 再存入数组下标为树节点data所对应的值，即可保存在之后输出路径的时候可以直接查找比较。</p>
 <p>下面就是代码：</p>
 <h4 id="建树">建树：</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">TNode</span> {
-    ElementType Data;
-    BinTree Left;
-    BinTree Right;
-};<span style="color:#6272a4">//树节点
-</span><span style="color:#6272a4"></span>BinTree <span style="color:#50fa7b">CreatBinTree</span>()
-{
-    <span style="color:#8be9fd">int</span> num;
-    BinTree t <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
-    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
-    <span style="color:#ff79c6">if</span> (num <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
-    {
-        <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
-    }<span style="color:#6272a4">//递归出口
-</span><span style="color:#6272a4"></span>    t <span style="color:#ff79c6">=</span> (BinTree)malloc(<span style="color:#ff79c6">sizeof</span>(<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">TNode</span>));
-    t<span style="color:#ff79c6">-&gt;</span>Data <span style="color:#ff79c6">=</span> num;
-    t<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">=</span> CreatBinTree();<span style="color:#6272a4">//创建左子树
-</span><span style="color:#6272a4"></span>    t<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">=</span> CreatBinTree();<span style="color:#6272a4">//创建右子树
-</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">return</span> t;
-}
-</code></pre></div><h4 id="求深度">求深度：</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">height</span>(BinTree T)
-{
-    <span style="color:#ff79c6">if</span> (T <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-    {
-        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-    }
-    <span style="color:#8be9fd">int</span> hl <span style="color:#ff79c6">=</span> height(T<span style="color:#ff79c6">-&gt;</span>Left);<span style="color:#6272a4">//求取左子树
-</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> hr <span style="color:#ff79c6">=</span> height(T<span style="color:#ff79c6">-&gt;</span>Right);<span style="color:#6272a4">//求取右子树
-</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> (hl <span style="color:#ff79c6">&gt;</span> hr)
-    {
-        d[T<span style="color:#ff79c6">-&gt;</span>Data] <span style="color:#ff79c6">=</span> hl <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">return</span> hl <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
-    }
-    <span style="color:#ff79c6">else</span>
-    {
-        d[T<span style="color:#ff79c6">-&gt;</span>Data] <span style="color:#ff79c6">=</span> hr <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">return</span> hr <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
-    }
-}
-</code></pre></div><h4 id="求路径">求路径：</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">path</span>(BinTree T)
-{
-    <span style="color:#ff79c6">while</span> (T <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-    {
-        <span style="color:#8be9fd">int</span> hl<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>, hr<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-            hl <span style="color:#ff79c6">=</span> d[(T<span style="color:#ff79c6">-&gt;</span>Left)<span style="color:#ff79c6">-&gt;</span>Data];
-        <span style="color:#ff79c6">else</span>
-            hl <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-            hr <span style="color:#ff79c6">=</span> d[(T<span style="color:#ff79c6">-&gt;</span>Right)<span style="color:#ff79c6">-&gt;</span>Data];
-        <span style="color:#ff79c6">else</span>
-            hr <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">if</span> (count1 <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&amp;&amp;</span> hl <span style="color:#ff79c6">&gt;</span> hr) { count1 <span style="color:#ff79c6">=</span> hl; printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>); }
-        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (count1 <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&amp;&amp;</span> hl <span style="color:#ff79c6">&lt;=</span> hr) { count1 <span style="color:#ff79c6">=</span> hr; printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>); }
-        printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, T<span style="color:#ff79c6">-&gt;</span>Data);
-        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span> <span style="color:#ff79c6">||</span> T<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-            printf(<span style="color:#f1fa8c">&#34; &#34;</span>);
-        <span style="color:#ff79c6">if</span> (hl <span style="color:#ff79c6">&gt;</span> hr) T <span style="color:#ff79c6">=</span> T<span style="color:#ff79c6">-&gt;</span>Left;
-        <span style="color:#ff79c6">else</span> T <span style="color:#ff79c6">=</span> T<span style="color:#ff79c6">-&gt;</span>Right;
-    }
-}
-</code></pre></div><h3 id="原程序">原程序：</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdlib&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">int</span> ElementType;
-<span style="color:#ff79c6">typedef</span> <span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">TNode</span> <span style="color:#ff79c6">*</span>Position;
-<span style="color:#ff79c6">typedef</span> Position BinTree;
-<span style="color:#8be9fd">int</span> d[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//存路径长度数组
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> count1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">TNode</span> {
-    ElementType Data;
-    BinTree Left;
-    BinTree Right;
-};
-BinTree <span style="color:#50fa7b">CreatBinTree</span>()
-{
-    <span style="color:#8be9fd">int</span> num;
-    BinTree t <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
-    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
-    <span style="color:#ff79c6">if</span> (num <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
-    {
-        <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
-    }
-    t <span style="color:#ff79c6">=</span> (BinTree)malloc(<span style="color:#ff79c6">sizeof</span>(<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">TNode</span>));
-    t<span style="color:#ff79c6">-&gt;</span>Data <span style="color:#ff79c6">=</span> num;
-    t<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">=</span> CreatBinTree();
-    t<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">=</span> CreatBinTree();
-    <span style="color:#ff79c6">return</span> t;
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">height</span>(BinTree T)
-{
-    <span style="color:#ff79c6">if</span> (T <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-    {
-        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-    }
-    <span style="color:#8be9fd">int</span> hl <span style="color:#ff79c6">=</span> height(T<span style="color:#ff79c6">-&gt;</span>Left);
-    <span style="color:#8be9fd">int</span> hr <span style="color:#ff79c6">=</span> height(T<span style="color:#ff79c6">-&gt;</span>Right);
-    <span style="color:#ff79c6">if</span> (hl <span style="color:#ff79c6">&gt;</span> hr)
-    {
-        d[T<span style="color:#ff79c6">-&gt;</span>Data] <span style="color:#ff79c6">=</span> hl <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">return</span> hl <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
-    }
-    <span style="color:#ff79c6">else</span>
-    {
-        d[T<span style="color:#ff79c6">-&gt;</span>Data] <span style="color:#ff79c6">=</span> hr <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">return</span> hr <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
-    }
-
-    <span style="color:#6272a4">//return 1+max(height(T-&gt;Left),height(T-&gt;Right));
-</span><span style="color:#6272a4"></span>}
-<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">path</span>(BinTree T)
-{
-    <span style="color:#ff79c6">while</span> (T <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-    {
-        <span style="color:#8be9fd">int</span> hl<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>, hr<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-            hl <span style="color:#ff79c6">=</span> d[(T<span style="color:#ff79c6">-&gt;</span>Left)<span style="color:#ff79c6">-&gt;</span>Data];
-        <span style="color:#ff79c6">else</span>
-            hl <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-            hr <span style="color:#ff79c6">=</span> d[(T<span style="color:#ff79c6">-&gt;</span>Right)<span style="color:#ff79c6">-&gt;</span>Data];
-        <span style="color:#ff79c6">else</span>
-            hr <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-        <span style="color:#ff79c6">if</span> (count1 <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&amp;&amp;</span> hl <span style="color:#ff79c6">&gt;</span> hr) { count1 <span style="color:#ff79c6">=</span> hl; printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>); }
-        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (count1 <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&amp;&amp;</span> hl <span style="color:#ff79c6">&lt;=</span> hr) { count1 <span style="color:#ff79c6">=</span> hr; printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>); }
-        printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, T<span style="color:#ff79c6">-&gt;</span>Data);
-        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span> <span style="color:#ff79c6">||</span> T<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
-            printf(<span style="color:#f1fa8c">&#34; &#34;</span>);
-        <span style="color:#ff79c6">if</span> (hl <span style="color:#ff79c6">&gt;</span> hr) T <span style="color:#ff79c6">=</span> T<span style="color:#ff79c6">-&gt;</span>Left;
-        <span style="color:#ff79c6">else</span> T <span style="color:#ff79c6">=</span> T<span style="color:#ff79c6">-&gt;</span>Right;
-    }
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    <span style="color:#8be9fd">int</span> num;
-    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
-    BinTree T <span style="color:#ff79c6">=</span> CreatBinTree();
-    height(T);
-    path(T);
-    printf(<span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>);
-    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><p>反思：上机考试的时候被卡空间了，但是没想那么多，但其实节省空间的方法有很多。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">TNode</span> {
+</span></span><span style="display:flex;"><span>    ElementType Data;
+</span></span><span style="display:flex;"><span>    BinTree Left;
+</span></span><span style="display:flex;"><span>    BinTree Right;
+</span></span><span style="display:flex;"><span>};<span style="color:#6272a4">//树节点
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>BinTree <span style="color:#50fa7b">CreatBinTree</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> num;
+</span></span><span style="display:flex;"><span>    BinTree t <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (num <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>    }<span style="color:#6272a4">//递归出口
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    t <span style="color:#ff79c6">=</span> (BinTree)malloc(<span style="color:#ff79c6">sizeof</span>(<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">TNode</span>));
+</span></span><span style="display:flex;"><span>    t<span style="color:#ff79c6">-&gt;</span>Data <span style="color:#ff79c6">=</span> num;
+</span></span><span style="display:flex;"><span>    t<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">=</span> CreatBinTree();<span style="color:#6272a4">//创建左子树
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    t<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">=</span> CreatBinTree();<span style="color:#6272a4">//创建右子树
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">return</span> t;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="求深度">求深度：</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">height</span>(BinTree T)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (T <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> hl <span style="color:#ff79c6">=</span> height(T<span style="color:#ff79c6">-&gt;</span>Left);<span style="color:#6272a4">//求取左子树
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#8be9fd">int</span> hr <span style="color:#ff79c6">=</span> height(T<span style="color:#ff79c6">-&gt;</span>Right);<span style="color:#6272a4">//求取右子树
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> (hl <span style="color:#ff79c6">&gt;</span> hr)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        d[T<span style="color:#ff79c6">-&gt;</span>Data] <span style="color:#ff79c6">=</span> hl <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> hl <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        d[T<span style="color:#ff79c6">-&gt;</span>Data] <span style="color:#ff79c6">=</span> hr <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> hr <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="求路径">求路径：</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">path</span>(BinTree T)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (T <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> hl<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>, hr<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>            hl <span style="color:#ff79c6">=</span> d[(T<span style="color:#ff79c6">-&gt;</span>Left)<span style="color:#ff79c6">-&gt;</span>Data];
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>            hl <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>            hr <span style="color:#ff79c6">=</span> d[(T<span style="color:#ff79c6">-&gt;</span>Right)<span style="color:#ff79c6">-&gt;</span>Data];
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>            hr <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (count1 <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&amp;&amp;</span> hl <span style="color:#ff79c6">&gt;</span> hr) { count1 <span style="color:#ff79c6">=</span> hl; printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>); }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (count1 <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&amp;&amp;</span> hl <span style="color:#ff79c6">&lt;=</span> hr) { count1 <span style="color:#ff79c6">=</span> hr; printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>); }
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, T<span style="color:#ff79c6">-&gt;</span>Data);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span> <span style="color:#ff79c6">||</span> T<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>            printf(<span style="color:#f1fa8c">&#34; &#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (hl <span style="color:#ff79c6">&gt;</span> hr) T <span style="color:#ff79c6">=</span> T<span style="color:#ff79c6">-&gt;</span>Left;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span> T <span style="color:#ff79c6">=</span> T<span style="color:#ff79c6">-&gt;</span>Right;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="原程序">原程序：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdlib&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">int</span> ElementType;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">typedef</span> <span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">TNode</span> <span style="color:#ff79c6">*</span>Position;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">typedef</span> Position BinTree;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> d[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//存路径长度数组
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> count1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">TNode</span> {
+</span></span><span style="display:flex;"><span>    ElementType Data;
+</span></span><span style="display:flex;"><span>    BinTree Left;
+</span></span><span style="display:flex;"><span>    BinTree Right;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>BinTree <span style="color:#50fa7b">CreatBinTree</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> num;
+</span></span><span style="display:flex;"><span>    BinTree t <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (num <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">NULL</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    t <span style="color:#ff79c6">=</span> (BinTree)malloc(<span style="color:#ff79c6">sizeof</span>(<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">TNode</span>));
+</span></span><span style="display:flex;"><span>    t<span style="color:#ff79c6">-&gt;</span>Data <span style="color:#ff79c6">=</span> num;
+</span></span><span style="display:flex;"><span>    t<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">=</span> CreatBinTree();
+</span></span><span style="display:flex;"><span>    t<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">=</span> CreatBinTree();
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> t;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">height</span>(BinTree T)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (T <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> hl <span style="color:#ff79c6">=</span> height(T<span style="color:#ff79c6">-&gt;</span>Left);
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> hr <span style="color:#ff79c6">=</span> height(T<span style="color:#ff79c6">-&gt;</span>Right);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> (hl <span style="color:#ff79c6">&gt;</span> hr)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        d[T<span style="color:#ff79c6">-&gt;</span>Data] <span style="color:#ff79c6">=</span> hl <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> hl <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        d[T<span style="color:#ff79c6">-&gt;</span>Data] <span style="color:#ff79c6">=</span> hr <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> hr <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//return 1+max(height(T-&gt;Left),height(T-&gt;Right));
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">path</span>(BinTree T)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (T <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> hl<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>, hr<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>            hl <span style="color:#ff79c6">=</span> d[(T<span style="color:#ff79c6">-&gt;</span>Left)<span style="color:#ff79c6">-&gt;</span>Data];
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>            hl <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>            hr <span style="color:#ff79c6">=</span> d[(T<span style="color:#ff79c6">-&gt;</span>Right)<span style="color:#ff79c6">-&gt;</span>Data];
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>
+</span></span><span style="display:flex;"><span>            hr <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (count1 <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&amp;&amp;</span> hl <span style="color:#ff79c6">&gt;</span> hr) { count1 <span style="color:#ff79c6">=</span> hl; printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>); }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (count1 <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&amp;&amp;</span> hl <span style="color:#ff79c6">&lt;=</span> hr) { count1 <span style="color:#ff79c6">=</span> hr; printf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, count1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>); }
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, T<span style="color:#ff79c6">-&gt;</span>Data);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (T<span style="color:#ff79c6">-&gt;</span>Left <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span> <span style="color:#ff79c6">||</span> T<span style="color:#ff79c6">-&gt;</span>Right <span style="color:#ff79c6">!=</span> <span style="color:#8be9fd;font-style:italic">NULL</span>)
+</span></span><span style="display:flex;"><span>            printf(<span style="color:#f1fa8c">&#34; &#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (hl <span style="color:#ff79c6">&gt;</span> hr) T <span style="color:#ff79c6">=</span> T<span style="color:#ff79c6">-&gt;</span>Left;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span> T <span style="color:#ff79c6">=</span> T<span style="color:#ff79c6">-&gt;</span>Right;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> num;
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
+</span></span><span style="display:flex;"><span>    BinTree T <span style="color:#ff79c6">=</span> CreatBinTree();
+</span></span><span style="display:flex;"><span>    height(T);
+</span></span><span style="display:flex;"><span>    path(T);
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>反思：上机考试的时候被卡空间了，但是没想那么多，但其实节省空间的方法有很多。</p>
 <h2 id="7-2-森林的层次遍历-100-分">7-2 森林的层次遍历 (100 分)</h2>
 <p>给定一个森林F，求F的层次遍历序列。森林由其先根序列及序列中每个结点的度给出。</p>
 <h3 id="输入格式-1">输入格式:</h3>
@@ -456,186 +502,186 @@ BinTree <span style="color:#50fa7b">CreatBinTree</span>()
 <p>1行，n个字符，用空格分隔，表示森林F的层次遍历序列。</p>
 <h3 id="输入样例-1">输入样例:</h3>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">14</span>
-A B C D E F G H I J K L M N
-<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">0</span>
-</code></pre></div><h3 id="输出样例-1">输出样例:</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">14</span>
+</span></span><span style="display:flex;"><span>A B C D E F G H I J K L M N
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">4</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">1</span> <span style="color:#bd93f9">0</span>
+</span></span></code></pre></div><h3 id="输出样例-1">输出样例:</h3>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">A M B C G H N D E F I L J K
-</code></pre></div><h3 id="解法一">解法一：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>A M B C G H N D E F I L J K
+</span></span></code></pre></div><h3 id="解法一">解法一：</h3>
 <p>思路：本题使用原始方法，包括: <code>分为森林的建立``森林的层次遍历</code> 解法：运用递归来建立树(树用三个数组来模拟，未建立结构体)，其中引入虚根来使整个森林变成一棵树，然后通过队列结构进行遍历输出， 在虚根处引入特判。</p>
 <h4 id="建树-1">建树：</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Createforest</span>()<span style="color:#6272a4">//是原森林中的每一棵树的创建
-</span><span style="color:#6272a4"></span>{
-    <span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> num2;
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> data1[j]; i<span style="color:#ff79c6">++</span>)
-    {
-        child[j].push_back(<span style="color:#ff79c6">++</span>num2);
-        <span style="color:#ff79c6">if</span> (data1[num2] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
-        {
-            Createforest();
-        }
-    }
-}
-<span style="color:#ff79c6">inline</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Createforest1</span>()<span style="color:#6272a4">//调用Createforest,将每次生成的树连到虚根(这里记为全局数组统一标号为[0]的结点)
-</span><span style="color:#6272a4"></span>{
-    <span style="color:#ff79c6">while</span> (num2 <span style="color:#ff79c6">&lt;=</span> num1)
-    {
-        child[<span style="color:#bd93f9">0</span>].push_back(num2);
-        Createforest();
-        num2<span style="color:#ff79c6">++</span>;
-    }
-}
-</code></pre></div><h4 id="遍历树">遍历树：</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">inline</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">printforest</span>()
-{
-    <span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">!</span>Q.empty())
-    {
-        <span style="color:#8be9fd">int</span> n <span style="color:#ff79c6">=</span> Q.front();
-        Q.pop();
-        <span style="color:#8be9fd">int</span> size <span style="color:#ff79c6">=</span> child[n].size();
-        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> size; i<span style="color:#ff79c6">++</span>)<span style="color:#6272a4">//该结点的子结点全部入队
-</span><span style="color:#6272a4"></span>        {
-            Q.push(child[n][i]);<span style="color:#6272a4">//这里把字符数组标号压入
-</span><span style="color:#6272a4"></span>        }<span style="color:#6272a4">//进队操作
-</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span> (n <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)<span style="color:#6272a4">//特判：不能把虚根的数据输出来
-</span><span style="color:#6272a4"></span>        {
-            printf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, ch[n]);
-            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>Q.empty())
-                printf(<span style="color:#f1fa8c">&#34; &#34;</span>);
-        }
-    }
-}
-</code></pre></div><h3 id="代码">代码：</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> data1[<span style="color:#bd93f9">100002</span>];<span style="color:#6272a4">//存放每个字符对应的子结点数
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">char</span> ch[<span style="color:#bd93f9">100002</span>];<span style="color:#6272a4">//存放每个字符
-</span><span style="color:#6272a4"></span>vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>child[<span style="color:#bd93f9">100002</span>];<span style="color:#6272a4">//存放每个结点的子结点标号，child[x].size()为子结点数
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> num2 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-<span style="color:#8be9fd">int</span>  num1;
-queue<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>Q;
-<span style="color:#ff79c6">inline</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">printforest</span>()
-{
-    <span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">!</span>Q.empty())
-    {
-        <span style="color:#8be9fd">int</span> n <span style="color:#ff79c6">=</span> Q.front();
-        Q.pop();
-        <span style="color:#8be9fd">int</span> size <span style="color:#ff79c6">=</span> child[n].size();
-        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> size; i<span style="color:#ff79c6">++</span>)
-        {
-            Q.push(child[n][i]);
-        }
-        <span style="color:#ff79c6">if</span> (n <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
-        {
-            printf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, ch[n]);
-            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>Q.empty())
-                printf(<span style="color:#f1fa8c">&#34; &#34;</span>);
-        }
-    }
-}
-<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Createforest</span>()
-{
-    <span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> num2;
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> data1[j]; i<span style="color:#ff79c6">++</span>)
-    {
-        child[j].push_back(<span style="color:#ff79c6">++</span>num2);
-        <span style="color:#ff79c6">if</span> (data1[num2] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
-        {
-            Createforest();
-        }
-    }
-}
-<span style="color:#ff79c6">inline</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Createforest1</span>()
-{
-    <span style="color:#ff79c6">while</span> (num2 <span style="color:#ff79c6">&lt;=</span> num1)
-    {
-        child[<span style="color:#bd93f9">0</span>].push_back(num2);
-        Createforest();
-        num2<span style="color:#ff79c6">++</span>;
-    }
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    scanf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, <span style="color:#ff79c6">&amp;</span>num1);
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> num1; i<span style="color:#ff79c6">++</span>)
-    {
-        scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, <span style="color:#ff79c6">&amp;</span>ch[i]);
-        getchar();
-    }
-    <span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-    <span style="color:#ff79c6">for</span> (; i <span style="color:#ff79c6">&lt;=</span> num1; i<span style="color:#ff79c6">++</span>)
-    {
-        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>data1[i]);
-    }
-    Createforest1();
-    Q.push(<span style="color:#bd93f9">0</span>);
-    printforest();
-    <span style="color:#6272a4">//printf(&#34;\n&#34;);
-</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><p>反思：效率还行，空间复杂度可以达到O(n)，但是要是直接开成直观的结点结构体，会显示内存超限，因此不是最优解。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Createforest</span>()<span style="color:#6272a4">//是原森林中的每一棵树的创建
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> num2;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> data1[j]; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        child[j].push_back(<span style="color:#ff79c6">++</span>num2);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (data1[num2] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            Createforest();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">inline</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Createforest1</span>()<span style="color:#6272a4">//调用Createforest,将每次生成的树连到虚根(这里记为全局数组统一标号为[0]的结点)
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (num2 <span style="color:#ff79c6">&lt;=</span> num1)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        child[<span style="color:#bd93f9">0</span>].push_back(num2);
+</span></span><span style="display:flex;"><span>        Createforest();
+</span></span><span style="display:flex;"><span>        num2<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="遍历树">遍历树：</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">inline</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">printforest</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">!</span>Q.empty())
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> n <span style="color:#ff79c6">=</span> Q.front();
+</span></span><span style="display:flex;"><span>        Q.pop();
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> size <span style="color:#ff79c6">=</span> child[n].size();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> size; i<span style="color:#ff79c6">++</span>)<span style="color:#6272a4">//该结点的子结点全部入队
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        {
+</span></span><span style="display:flex;"><span>            Q.push(child[n][i]);<span style="color:#6272a4">//这里把字符数组标号压入
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        }<span style="color:#6272a4">//进队操作
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span> (n <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)<span style="color:#6272a4">//特判：不能把虚根的数据输出来
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        {
+</span></span><span style="display:flex;"><span>            printf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, ch[n]);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>Q.empty())
+</span></span><span style="display:flex;"><span>                printf(<span style="color:#f1fa8c">&#34; &#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="代码">代码：</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;queue&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;vector&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> data1[<span style="color:#bd93f9">100002</span>];<span style="color:#6272a4">//存放每个字符对应的子结点数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">char</span> ch[<span style="color:#bd93f9">100002</span>];<span style="color:#6272a4">//存放每个字符
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>child[<span style="color:#bd93f9">100002</span>];<span style="color:#6272a4">//存放每个结点的子结点标号，child[x].size()为子结点数
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> num2 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span>  num1;
+</span></span><span style="display:flex;"><span>queue<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>Q;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">inline</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">printforest</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">!</span>Q.empty())
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> n <span style="color:#ff79c6">=</span> Q.front();
+</span></span><span style="display:flex;"><span>        Q.pop();
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> size <span style="color:#ff79c6">=</span> child[n].size();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> size; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            Q.push(child[n][i]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (n <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            printf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, ch[n]);
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>Q.empty())
+</span></span><span style="display:flex;"><span>                printf(<span style="color:#f1fa8c">&#34; &#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Createforest</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> num2;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> data1[j]; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        child[j].push_back(<span style="color:#ff79c6">++</span>num2);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (data1[num2] <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            Createforest();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">inline</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Createforest1</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (num2 <span style="color:#ff79c6">&lt;=</span> num1)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        child[<span style="color:#bd93f9">0</span>].push_back(num2);
+</span></span><span style="display:flex;"><span>        Createforest();
+</span></span><span style="display:flex;"><span>        num2<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#f1fa8c">&#34;%d</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, <span style="color:#ff79c6">&amp;</span>num1);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> num1; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, <span style="color:#ff79c6">&amp;</span>ch[i]);
+</span></span><span style="display:flex;"><span>        getchar();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (; i <span style="color:#ff79c6">&lt;=</span> num1; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>data1[i]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    Createforest1();
+</span></span><span style="display:flex;"><span>    Q.push(<span style="color:#bd93f9">0</span>);
+</span></span><span style="display:flex;"><span>    printforest();
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">//printf(&#34;\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>反思：效率还行，空间复杂度可以达到O(n)，但是要是直接开成直观的结点结构体，会显示内存超限，因此不是最优解。</p>
 <h3 id="方法二">方法二：</h3>
 <p>思路：通过栈来存储，在压栈的过程中，可以通过栈的深度来确定树的层数(深度)，然后将每个结点压入所在层的容器中 然后在层次遍历中及直接遍历各层的容器就可以得到层次遍历效果。</p>
 <p>比较：与方法一比较，时间复杂度未变，空间复杂度降为O(1)值得使用。</p>
 <h4 id="代码如下">代码如下：</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;stack&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;list&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;algorithm&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;map&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;iostream&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-map <span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,list<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">char</span><span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&gt;</span>p;
-<span style="color:#8be9fd">char</span> m[<span style="color:#bd93f9">100005</span>];<span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">100005</span>];
-<span style="color:#8be9fd">int</span> top<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>() {
-    <span style="color:#8be9fd">int</span> n, i, j, k, l;
-    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n);
-    <span style="color:#8be9fd">char</span> c;
-    <span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;i <span style="color:#ff79c6">&lt;</span> n;<span style="color:#ff79c6">++</span>i) {
-        scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, <span style="color:#ff79c6">&amp;</span>c);
-        <span style="color:#ff79c6">while</span> (<span style="color:#bd93f9">1</span>) {
-            <span style="color:#ff79c6">if</span>((c <span style="color:#ff79c6">&gt;=</span> <span style="color:#f1fa8c">&#39;0&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> c<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;9&#39;</span>) <span style="color:#ff79c6">||</span> (c <span style="color:#ff79c6">&gt;=</span> <span style="color:#f1fa8c">&#39;a&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> c<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;z&#39;</span>) <span style="color:#ff79c6">||</span> (c <span style="color:#ff79c6">&gt;=</span> <span style="color:#f1fa8c">&#39;A&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> c<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;Z&#39;</span>))
-                <span style="color:#ff79c6">break</span>;     <span style="color:#6272a4">//读取字符的时候可能有换行或者空格
-</span><span style="color:#6272a4"></span>            scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, <span style="color:#ff79c6">&amp;</span>c);
-        }
-        m[i] <span style="color:#ff79c6">=</span> c;
-    }
-    <span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;i <span style="color:#ff79c6">&lt;</span> n;<span style="color:#ff79c6">++</span>i) {
-        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>a[i]);
-    }
-    stack<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>q;<span style="color:#6272a4">//存储其下标
-</span><span style="color:#6272a4"></span>    top <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-    <span style="color:#ff79c6">while</span> (top <span style="color:#ff79c6">&lt;</span> n) {<span style="color:#6272a4">//使每一个元素都入栈一次
-</span><span style="color:#6272a4"></span>        q.push(top);
-        <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>q.empty()) {<span style="color:#6272a4">//由于是多棵树所以我们要判栈空
-</span><span style="color:#6272a4"></span>            i <span style="color:#ff79c6">=</span> q.top();<span style="color:#6272a4">//取出第一个元素
-</span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">!</span>a[i]) {<span style="color:#6272a4">//度为0则出栈然后使其父结点度-1如果仍为0则继续出栈直到不为0或栈空。
-</span><span style="color:#6272a4"></span>                q.pop();
-                j <span style="color:#ff79c6">=</span> q.size();
-                p[j].push_back(m[i]);<span style="color:#6272a4">//在第j层加入对应的元素
-</span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>q.empty()) {
-                    i <span style="color:#ff79c6">=</span> q.top();    a[i]<span style="color:#ff79c6">--</span>;
-                }
-                <span style="color:#ff79c6">else</span><span style="color:#6272a4">//栈空就跳出循环
-</span><span style="color:#6272a4"></span>                    <span style="color:#ff79c6">break</span>;
-            }
-        }
-        top<span style="color:#ff79c6">++</span>;<span style="color:#6272a4">//加入新元素
-</span><span style="color:#6272a4"></span>    }
-    printf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, p[<span style="color:#bd93f9">0</span>].front());<span style="color:#6272a4">//按照规定输出
-</span><span style="color:#6272a4"></span>    p[<span style="color:#bd93f9">0</span>].pop_front();
-    j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-    <span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;i <span style="color:#ff79c6">&lt;</span> n;<span style="color:#ff79c6">++</span>i) {
-        <span style="color:#ff79c6">if</span> (p[j].empty())
-            j<span style="color:#ff79c6">++</span>;
-        printf(<span style="color:#f1fa8c">&#34; %c&#34;</span>, p[j].front());p[j].pop_front();
-    }
-}
-</code></pre></div><h2 id="7-3-纸带切割-100-分">7-3 纸带切割 (100 分)</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;vector&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;stack&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;list&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;algorithm&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;map&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;iostream&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span>map <span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span>,list<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">char</span><span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&gt;</span>p;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">char</span> m[<span style="color:#bd93f9">100005</span>];<span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">100005</span>];
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> top<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> n, i, j, k, l;
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>n);
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">char</span> c;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;i <span style="color:#ff79c6">&lt;</span> n;<span style="color:#ff79c6">++</span>i) {
+</span></span><span style="display:flex;"><span>        scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, <span style="color:#ff79c6">&amp;</span>c);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">while</span> (<span style="color:#bd93f9">1</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">if</span>((c <span style="color:#ff79c6">&gt;=</span> <span style="color:#f1fa8c">&#39;0&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> c<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;9&#39;</span>) <span style="color:#ff79c6">||</span> (c <span style="color:#ff79c6">&gt;=</span> <span style="color:#f1fa8c">&#39;a&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> c<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;z&#39;</span>) <span style="color:#ff79c6">||</span> (c <span style="color:#ff79c6">&gt;=</span> <span style="color:#f1fa8c">&#39;A&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> c<span style="color:#ff79c6">&lt;=</span><span style="color:#f1fa8c">&#39;Z&#39;</span>))
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">break</span>;     <span style="color:#6272a4">//读取字符的时候可能有换行或者空格
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            scanf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, <span style="color:#ff79c6">&amp;</span>c);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        m[i] <span style="color:#ff79c6">=</span> c;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;i <span style="color:#ff79c6">&lt;</span> n;<span style="color:#ff79c6">++</span>i) {
+</span></span><span style="display:flex;"><span>        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>a[i]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    stack<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span><span style="color:#ff79c6">&gt;</span>q;<span style="color:#6272a4">//存储其下标
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    top <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (top <span style="color:#ff79c6">&lt;</span> n) {<span style="color:#6272a4">//使每一个元素都入栈一次
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        q.push(top);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>q.empty()) {<span style="color:#6272a4">//由于是多棵树所以我们要判栈空
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            i <span style="color:#ff79c6">=</span> q.top();<span style="color:#6272a4">//取出第一个元素
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">while</span> (<span style="color:#ff79c6">!</span>a[i]) {<span style="color:#6272a4">//度为0则出栈然后使其父结点度-1如果仍为0则继续出栈直到不为0或栈空。
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                q.pop();
+</span></span><span style="display:flex;"><span>                j <span style="color:#ff79c6">=</span> q.size();
+</span></span><span style="display:flex;"><span>                p[j].push_back(m[i]);<span style="color:#6272a4">//在第j层加入对应的元素
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>q.empty()) {
+</span></span><span style="display:flex;"><span>                    i <span style="color:#ff79c6">=</span> q.top();    a[i]<span style="color:#ff79c6">--</span>;
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#ff79c6">else</span><span style="color:#6272a4">//栈空就跳出循环
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>                    <span style="color:#ff79c6">break</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        top<span style="color:#ff79c6">++</span>;<span style="color:#6272a4">//加入新元素
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    }
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, p[<span style="color:#bd93f9">0</span>].front());<span style="color:#6272a4">//按照规定输出
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    p[<span style="color:#bd93f9">0</span>].pop_front();
+</span></span><span style="display:flex;"><span>    j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;i <span style="color:#ff79c6">&lt;</span> n;<span style="color:#ff79c6">++</span>i) {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (p[j].empty())
+</span></span><span style="display:flex;"><span>            j<span style="color:#ff79c6">++</span>;
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34; %c&#34;</span>, p[j].front());p[j].pop_front();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="7-3-纸带切割-100-分">7-3 纸带切割 (100 分)</h2>
 <p>有一条细长的纸带,长度为 L 个单位，宽度为一个单位。现在要将纸带切割成 n 段。每次切割把当前纸带分成两段，切割位置都在整数单位上，切割代价是当前切割纸带的总长度。每次切割都选择未达最终要求的最长纸带切割，若这样的纸带有多条，则任选一条切割。如何切割，才能完成任务，并且总代价最小。</p>
 <h3 id="输入格式-2">输入格式:</h3>
 <p>第1行，1个整数n，表示切割成的段数，<code>1≤n≤100000</code>.</p>
@@ -645,55 +691,55 @@ map <span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">int</span
 <p>第2行，若干个整数，用空格分隔，表示总代价最小时每次切割的代价。</p>
 <h3 id="输入样例-2">输入样例:</h3>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">5</span>
-<span style="color:#bd93f9">5</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">7</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span>
-</code></pre></div><h3 id="输出样例-2">输出样例:</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">5</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">7</span> <span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span>
+</span></span></code></pre></div><h3 id="输出样例-2">输出样例:</h3>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">54</span>
-<span style="color:#bd93f9">24</span> <span style="color:#bd93f9">13</span> <span style="color:#bd93f9">11</span> <span style="color:#bd93f9">6</span>
-</code></pre></div><p>思路：通过题目得知为哈夫曼树。所以直接使用哈夫曼树进行处理，题目隐性要求就是输出每次创建的 结点。 方法：采用堆优化，使用优先队列。 代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;vector&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> num <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span><span style="color:#ff79c6">&gt;</span>ans;
-<span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ll;
-priority_queue<span style="color:#ff79c6">&lt;</span>ll, vector<span style="color:#ff79c6">&lt;</span>ll<span style="color:#ff79c6">&gt;</span> ,greater<span style="color:#ff79c6">&lt;</span>ll<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&gt;</span>Q;
-<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">CreateTree</span>()
-{
-    <span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-    ll sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-    <span style="color:#ff79c6">while</span> (Q.size()<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">1</span>)
-    {
-        <span style="color:#8be9fd">int</span> num1 <span style="color:#ff79c6">=</span> Q.top();
-        Q.pop();
-        <span style="color:#8be9fd">int</span> num2 <span style="color:#ff79c6">=</span> Q.top();
-        Q.pop();
-        sum <span style="color:#ff79c6">+=</span> (num1 <span style="color:#ff79c6">+</span> num2);
-        Q.push(num1 <span style="color:#ff79c6">+</span> num2);
-        ans.push_back(num1<span style="color:#ff79c6">+</span>num2);
-    }<span style="color:#6272a4">//创立结点后，将结点送入ans中，便于下面的遍历输出
-</span><span style="color:#6272a4"></span>    printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, sum);
-    <span style="color:#ff79c6">for</span> (<span style="color:#ff79c6">auto</span> i <span style="color:#ff79c6">=</span> ans.rbegin(); i <span style="color:#ff79c6">!=</span> ans.rend(); i<span style="color:#ff79c6">++</span>)
-    {
-        printf(<span style="color:#f1fa8c">&#34;%lld&#34;</span>, <span style="color:#ff79c6">*</span>i);
-        printf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, i <span style="color:#ff79c6">==</span> ans.rend() <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">?</span> <span style="color:#f1fa8c">&#39;\n&#39;</span> <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39; &#39;</span>);
-    }
-}
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
-    <span style="color:#8be9fd">int</span> size1;
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> num; i<span style="color:#ff79c6">++</span>)
-    {
-        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>size1);
-        Q.push(size1);
-    }
-        CreateTree();
-    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><p>反思：如果用的数组模拟，注意1的特判，输出应该统一为”0\n”</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">54</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">24</span> <span style="color:#bd93f9">13</span> <span style="color:#bd93f9">11</span> <span style="color:#bd93f9">6</span>
+</span></span></code></pre></div><p>思路：通过题目得知为哈夫曼树。所以直接使用哈夫曼树进行处理，题目隐性要求就是输出每次创建的 结点。 方法：采用堆优化，使用优先队列。 代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;vector&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;queue&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> num <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>vector<span style="color:#ff79c6">&lt;</span><span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span><span style="color:#ff79c6">&gt;</span>ans;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ll;
+</span></span><span style="display:flex;"><span>priority_queue<span style="color:#ff79c6">&lt;</span>ll, vector<span style="color:#ff79c6">&lt;</span>ll<span style="color:#ff79c6">&gt;</span> ,greater<span style="color:#ff79c6">&lt;</span>ll<span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">&gt;</span>Q;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">CreateTree</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> k <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    ll sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">while</span> (Q.size()<span style="color:#ff79c6">!=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> num1 <span style="color:#ff79c6">=</span> Q.top();
+</span></span><span style="display:flex;"><span>        Q.pop();
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd">int</span> num2 <span style="color:#ff79c6">=</span> Q.top();
+</span></span><span style="display:flex;"><span>        Q.pop();
+</span></span><span style="display:flex;"><span>        sum <span style="color:#ff79c6">+=</span> (num1 <span style="color:#ff79c6">+</span> num2);
+</span></span><span style="display:flex;"><span>        Q.push(num1 <span style="color:#ff79c6">+</span> num2);
+</span></span><span style="display:flex;"><span>        ans.push_back(num1<span style="color:#ff79c6">+</span>num2);
+</span></span><span style="display:flex;"><span>    }<span style="color:#6272a4">//创立结点后，将结点送入ans中，便于下面的遍历输出
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    printf(<span style="color:#f1fa8c">&#34;%lld</span><span style="color:#f1fa8c">\n</span><span style="color:#f1fa8c">&#34;</span>, sum);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#ff79c6">auto</span> i <span style="color:#ff79c6">=</span> ans.rbegin(); i <span style="color:#ff79c6">!=</span> ans.rend(); i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34;%lld&#34;</span>, <span style="color:#ff79c6">*</span>i);
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, i <span style="color:#ff79c6">==</span> ans.rend() <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">?</span> <span style="color:#f1fa8c">&#39;\n&#39;</span> <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39; &#39;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> size1;
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> num; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>size1);
+</span></span><span style="display:flex;"><span>        Q.push(size1);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>        CreateTree();
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>反思：如果用的数组模拟，注意1的特判，输出应该统一为”0\n”</p>
 <h2 id="7-4-序列乘积-100-分">7-4 序列乘积 (100 分)</h2>
 <p>两个递增序列A和B,长度都是n。令 Ai 和 Bj 做乘积，1≤i,j≤n.请输出n*n个乘积中从小到大的前n个。</p>
 <h3 id="输入格式-3">输入格式:</h3>
@@ -704,59 +750,59 @@ priority_queue<span style="color:#ff79c6">&lt;</span>ll, vector<span style="colo
 <p>1行，n个整数，用空格分隔，表示序列乘积中的从小到大前n个。</p>
 <h3 id="输入样例-3">输入样例:</h3>
 <p>在这里给出一组输入。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">5</span>
-<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">7</span> <span style="color:#bd93f9">9</span> 
-<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">8</span> <span style="color:#bd93f9">10</span>
-</code></pre></div><h3 id="输出样例-3">输出样例:</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">3</span> <span style="color:#bd93f9">5</span> <span style="color:#bd93f9">7</span> <span style="color:#bd93f9">9</span> 
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">8</span> <span style="color:#bd93f9">10</span>
+</span></span></code></pre></div><h3 id="输出样例-3">输出样例:</h3>
 <p>在这里给出相应的输出。例如：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">8</span>
-作者` `谷方明` `单位` `吉林大学` `代码长度限制` `16 KB` `时间限制` `100 ms` `内存限制` `5 MB
-</code></pre></div><p>思路:n*n的数据经过排列形成特殊矩阵，该矩阵的特点是：最左列对于每一行来说最小 所以先将最左列压入优先队列中，然后弹出第一小的数输出，取该数在矩阵中的位置，将该数 的坐标加一送到优先队列中，保持优先队列始终有且只有100个元素。 方法：涉及堆优化和对坐标的存储。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">4</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">6</span> <span style="color:#bd93f9">8</span>
+</span></span><span style="display:flex;"><span>作者` `谷方明` `单位` `吉林大学` `代码长度限制` `16 KB` `时间限制` `100 ms` `内存限制` `5 MB
+</span></span></code></pre></div><p>思路:n*n的数据经过排列形成特殊矩阵，该矩阵的特点是：最左列对于每一行来说最小 所以先将最左列压入优先队列中，然后弹出第一小的数输出，取该数在矩阵中的位置，将该数 的坐标加一送到优先队列中，保持优先队列始终有且只有100个元素。 方法：涉及堆优化和对坐标的存储。</p>
 <h4 id="代码如下-1">代码如下：</h4>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;cstdio&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;algorithm&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6">#include</span><span style="color:#ff79c6">&lt;queue&gt;</span><span style="color:#ff79c6">
-</span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
-<span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//A序列
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> b[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//B序列
-</span><span style="color:#6272a4"></span><span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ll;
-<span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">point</span>
-{
-    <span style="color:#8be9fd">int</span> x1, y1;
-    ll val;
-    <span style="color:#8be9fd">bool</span> <span style="color:#ff79c6">operator</span><span style="color:#ff79c6">&lt;</span>(<span style="color:#ff79c6">const</span> point<span style="color:#ff79c6">&amp;</span>r)<span style="color:#ff79c6">const</span>
-    {
-        <span style="color:#ff79c6">return</span> r.val <span style="color:#ff79c6">&lt;</span> val;
-    }
-    point(<span style="color:#8be9fd">int</span> x, <span style="color:#8be9fd">int</span> y, ll v) <span style="color:#ff79c6">:</span>x1(x), y1(y), val(v) {};
-};
-priority_queue<span style="color:#ff79c6">&lt;</span>point<span style="color:#ff79c6">&gt;</span>Q;
-<span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
-{
-    <span style="color:#8be9fd">int</span> num;
-    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> num; i<span style="color:#ff79c6">++</span>)
-        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>a[i]);
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> num; i<span style="color:#ff79c6">++</span>)
-    {
-        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>b[i]);
-        <span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span>)
-        {
-            <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; j <span style="color:#ff79c6">&lt;=</span> num; j<span style="color:#ff79c6">++</span>)
-                Q.push(point(j, <span style="color:#bd93f9">1</span>, a[j] <span style="color:#ff79c6">*</span> b[<span style="color:#bd93f9">1</span>]));<span style="color:#6272a4">//先将第一列放入堆中
-</span><span style="color:#6272a4"></span>        }
-    }
-    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> num; i<span style="color:#ff79c6">++</span>)
-    {
-        point p <span style="color:#ff79c6">=</span> Q.top();
-        printf(<span style="color:#f1fa8c">&#34;%lld&#34;</span>,p.val);
-        Q.pop();
-        <span style="color:#ff79c6">if</span> (p.y1 <span style="color:#ff79c6">&lt;</span> num)Q.push(point(p.x1, p.y1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, a[p.x1] <span style="color:#ff79c6">*</span> b[p.y1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>]));<span style="color:#6272a4">//行元素右移操作
-</span><span style="color:#6272a4"></span>        printf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, i <span style="color:#ff79c6">==</span> num <span style="color:#ff79c6">?</span> <span style="color:#f1fa8c">&#39;\n&#39;</span> <span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39; &#39;</span>);
-    }
-    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-}
-</code></pre></div><p>反思：大佬给的经验，用结构体来当结点，<code>定位方便</code>。注意移位的时候，可能超出范围列的界限。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;cstdio&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;algorithm&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">#include&lt;queue&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#ff79c6">using</span> <span style="color:#ff79c6">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> a[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//A序列
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd">int</span> b[<span style="color:#bd93f9">100001</span>];<span style="color:#6272a4">//B序列
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">typedef</span> <span style="color:#8be9fd">long</span> <span style="color:#8be9fd">long</span> ll;
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">struct</span> <span style="color:#50fa7b">point</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> x1, y1;
+</span></span><span style="display:flex;"><span>    ll val;
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">bool</span> <span style="color:#ff79c6">operator</span><span style="color:#ff79c6">&lt;</span>(<span style="color:#ff79c6">const</span> point<span style="color:#ff79c6">&amp;</span>r)<span style="color:#ff79c6">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> r.val <span style="color:#ff79c6">&lt;</span> val;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    point(<span style="color:#8be9fd">int</span> x, <span style="color:#8be9fd">int</span> y, ll v) <span style="color:#ff79c6">:</span>x1(x), y1(y), val(v) {};
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>priority_queue<span style="color:#ff79c6">&lt;</span>point<span style="color:#ff79c6">&gt;</span>Q;
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8be9fd">int</span> num;
+</span></span><span style="display:flex;"><span>    scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>num);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> num; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>, <span style="color:#ff79c6">&amp;</span>a[i]);
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i<span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> num; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        scanf(<span style="color:#f1fa8c">&#34;%d&#34;</span>,<span style="color:#ff79c6">&amp;</span>b[i]);
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; j <span style="color:#ff79c6">&lt;=</span> num; j<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>                Q.push(point(j, <span style="color:#bd93f9">1</span>, a[j] <span style="color:#ff79c6">*</span> b[<span style="color:#bd93f9">1</span>]));<span style="color:#6272a4">//先将第一列放入堆中
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>; i <span style="color:#ff79c6">&lt;=</span> num; i<span style="color:#ff79c6">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        point p <span style="color:#ff79c6">=</span> Q.top();
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#f1fa8c">&#34;%lld&#34;</span>,p.val);
+</span></span><span style="display:flex;"><span>        Q.pop();
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> (p.y1 <span style="color:#ff79c6">&lt;</span> num)Q.push(point(p.x1, p.y1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, a[p.x1] <span style="color:#ff79c6">*</span> b[p.y1 <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>]));<span style="color:#6272a4">//行元素右移操作
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        printf(<span style="color:#f1fa8c">&#34;%c&#34;</span>, i <span style="color:#ff79c6">==</span> num <span style="color:#ff79c6">?</span> <span style="color:#f1fa8c">&#39;\n&#39;</span> <span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39; &#39;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>反思：大佬给的经验，用结构体来当结点，<code>定位方便</code>。注意移位的时候，可能超出范围列的界限。</p>
 
 
                 
@@ -803,6 +849,8 @@ priority_queue<span style="color:#ff79c6">&lt;</span>point<span style="color:#ff
 </div>
 
 
+
+
             </div>
 
             
@@ -817,9 +865,7 @@ priority_queue<span style="color:#ff79c6">&lt;</span>point<span style="color:#ff
                     <h5>
                         <a class="catalog-toggle" href="#">CATALOG</a>
                     </h5>
-                    <ul class="catalog-body">
-
-                    </ul>
+                    <ul class="catalog-body"></ul>
                 </div>
             </div>
             
@@ -857,14 +903,14 @@ priority_queue<span style="color:#ff79c6">&lt;</span>point<span style="color:#ff
                         
                         
                         
-                        <a href="/tags/deep-learning" title="deep-learning">
-                            deep-learning
+                        <a href="/tags/deep-learning" title="deep learning">
+                            deep learning
                         </a>
                         
                         
                         
-                        <a href="/tags/hsi-classification" title="hsi-classification">
-                            hsi-classification
+                        <a href="/tags/hsi-classification" title="hsi classification">
+                            hsi classification
                         </a>
                         
                         
@@ -883,6 +929,12 @@ priority_queue<span style="color:#ff79c6">&lt;</span>point<span style="color:#ff
                         
                         <a href="/tags/oracle" title="oracle">
                             oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/rgb-t-detection" title="rgb-t detection">
+                            rgb-t detection
                         </a>
                         
                         
@@ -1038,7 +1090,7 @@ priority_queue<span style="color:#ff79c6">&lt;</span>point<span style="color:#ff
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Linexus blog 2023
+                    Copyright &copy; Linexus blog 2025
                     <br>
                     <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
                         href="https://hhhhlkf.github.io">Linexus</a> |
@@ -1194,12 +1246,10 @@ priority_queue<span style="color:#ff79c6">&lt;</span>point<span style="color:#ff
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
 <div id="sakana-widget-right"></div>
-<div id="sakana-widget-left"></div>
 <script>
     function initSakanaWidget() {
         new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
         
-        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
     }
 </script>
 <script async onload="initSakanaWidget()"

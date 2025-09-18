@@ -4,48 +4,37 @@
     <title>Tops on Linexus blog</title>
     <link>https://hhhhlkf.github.io/top/</link>
     <description>Recent content in Tops on Linexus blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 07 Jan 2023 09:28:55 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/top/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 07 Jan 2023 09:28:55 +0800</lastBuildDate>
+    <atom:link href="https://hhhhlkf.github.io/top/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Photos</title>
       <link>https://hhhhlkf.github.io/top/photos/</link>
       <pubDate>Sat, 07 Jan 2023 09:28:55 +0800</pubDate>
-      
       <guid>https://hhhhlkf.github.io/top/photos/</guid>
-      <description>精美图片 Green mon
-Fantasy
-Light tower
-Xingxuan
-</description>
+      <description>&lt;h2 id=&#34;精美图片&#34;&gt;精美图片&lt;/h2&gt;&#xA;&lt;p&gt;&#xD;&#xA;&lt;link rel=&#34;stylesheet&#34; href=&#34;https://hhhhlkf.github.io/css/hugo-easy-gallery.css&#34; /&gt;&#xD;&#xA;&#xD;&#xA;&lt;div class=&#34;gallery caption-position-bottom caption-effect-slide hover-effect-zoom hover-transition&#34; itemscope itemtype=&#34;http://schema.org/ImageGallery&#34;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;div class=&#34;box&#34;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;  &lt;figure itemprop=&#34;associatedMedia&#34; itemscope itemtype=&#34;http://schema.org/ImageObject&#34;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;div class=&#34;img&#34; style=&#34;background-image: url(&#39;https://hhhhlkf.github.io//img/wallpaper/GreenMon.jpg&#39;);&#34; &gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;      &lt;img itemprop=&#34;thumbnail&#34; src=&#34;https://hhhhlkf.github.io//img/wallpaper/GreenMon.jpg&#34; alt=&#34;Green mon&#34; /&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;/div&gt;&#xD;&#xA;&#x9;&#x9;&#x9;      &lt;figcaption&gt;&#xD;&#xA;&#x9;&#x9;          &lt;p&gt;Green mon&lt;/p&gt;&#xD;&#xA;&#x9;&#x9;&#x9;      &lt;/figcaption&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;a href=&#34;https://hhhhlkf.github.io//img/wallpaper/GreenMon.jpg&#34; itemprop=&#34;contentUrl&#34;&gt;&lt;/a&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;  &lt;/figure&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;/div&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;div class=&#34;box&#34;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;  &lt;figure itemprop=&#34;associatedMedia&#34; itemscope itemtype=&#34;http://schema.org/ImageObject&#34;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;div class=&#34;img&#34; style=&#34;background-image: url(&#39;https://hhhhlkf.github.io//img/wallpaper/fantasy.png&#39;);&#34; &gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;      &lt;img itemprop=&#34;thumbnail&#34; src=&#34;https://hhhhlkf.github.io//img/wallpaper/fantasy.png&#34; alt=&#34;Fantasy&#34; /&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;/div&gt;&#xD;&#xA;&#x9;&#x9;&#x9;      &lt;figcaption&gt;&#xD;&#xA;&#x9;&#x9;          &lt;p&gt;Fantasy&lt;/p&gt;&#xD;&#xA;&#x9;&#x9;&#x9;      &lt;/figcaption&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;a href=&#34;https://hhhhlkf.github.io//img/wallpaper/fantasy.png&#34; itemprop=&#34;contentUrl&#34;&gt;&lt;/a&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;  &lt;/figure&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;/div&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;div class=&#34;box&#34;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;  &lt;figure itemprop=&#34;associatedMedia&#34; itemscope itemtype=&#34;http://schema.org/ImageObject&#34;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;div class=&#34;img&#34; style=&#34;background-image: url(&#39;https://hhhhlkf.github.io//img/wallpaper/lightTower.jpg&#39;);&#34; &gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;      &lt;img itemprop=&#34;thumbnail&#34; src=&#34;https://hhhhlkf.github.io//img/wallpaper/lightTower.jpg&#34; alt=&#34;Light tower&#34; /&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;/div&gt;&#xD;&#xA;&#x9;&#x9;&#x9;      &lt;figcaption&gt;&#xD;&#xA;&#x9;&#x9;          &lt;p&gt;Light tower&lt;/p&gt;&#xD;&#xA;&#x9;&#x9;&#x9;      &lt;/figcaption&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;a href=&#34;https://hhhhlkf.github.io//img/wallpaper/lightTower.jpg&#34; itemprop=&#34;contentUrl&#34;&gt;&lt;/a&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;  &lt;/figure&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;/div&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;div class=&#34;box&#34;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;  &lt;figure itemprop=&#34;associatedMedia&#34; itemscope itemtype=&#34;http://schema.org/ImageObject&#34;&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;div class=&#34;img&#34; style=&#34;background-image: url(&#39;https://hhhhlkf.github.io//img/wallpaper/xingxuan.jpg&#39;);&#34; &gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;      &lt;img itemprop=&#34;thumbnail&#34; src=&#34;https://hhhhlkf.github.io//img/wallpaper/xingxuan.jpg&#34; alt=&#34;Xingxuan&#34; /&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;/div&gt;&#xD;&#xA;&#x9;&#x9;&#x9;      &lt;figcaption&gt;&#xD;&#xA;&#x9;&#x9;          &lt;p&gt;Xingxuan&lt;/p&gt;&#xD;&#xA;&#x9;&#x9;&#x9;      &lt;/figcaption&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;    &lt;a href=&#34;https://hhhhlkf.github.io//img/wallpaper/xingxuan.jpg&#34; itemprop=&#34;contentUrl&#34;&gt;&lt;/a&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;  &lt;/figure&gt;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;/div&gt;&#xD;&#xA;&lt;/div&gt;&#xD;&#xA; &#xD;&#xA; &#xD;&#xA; &#xD;&#xA; &#xD;&#xA;   &#xD;&#xA; &#xD;&#xA; &#xD;&#xA; &lt;script src=&#34;https://code.jquery.com/jquery-1.12.4.min.js&#34; integrity=&#34;sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=&#34; crossorigin=&#34;anonymous&#34;&gt;&lt;/script&gt;&#xD;&#xA; &lt;script src=&#34;https://hhhhlkf.github.io/js/load-photoswipe.js&#34;&gt;&lt;/script&gt;&#xD;&#xA; &#xD;&#xA; &#xD;&#xA; &lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css&#34; integrity=&#34;sha256-sCl5PUOGMLfFYctzDW3MtRib0ctyUvI9Qsmq2wXOeBY=&#34; crossorigin=&#34;anonymous&#34; /&gt;&#xD;&#xA; &lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css&#34; integrity=&#34;sha256-BFeI1V+Vh1Rk37wswuOYn5lsTcaU96hGaI7OUVCLjPc=&#34; crossorigin=&#34;anonymous&#34; /&gt;&#xD;&#xA; &lt;script src=&#34;https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js&#34; integrity=&#34;sha256-UplRCs9v4KXVJvVY+p+RSo5Q4ilAUXh7kpjyIP5odyc=&#34; crossorigin=&#34;anonymous&#34;&gt;&lt;/script&gt;&#xD;&#xA; &lt;script src=&#34;https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js&#34; integrity=&#34;sha256-PWHOlUzc96pMc8ThwRIXPn8yH4NOLu42RQ0b9SpnpFk=&#34; crossorigin=&#34;anonymous&#34;&gt;&lt;/script&gt;&#xD;&#xA; &#xD;&#xA; &#xD;&#xA; &lt;div class=&#34;pswp&#34; tabindex=&#34;-1&#34; role=&#34;dialog&#34; aria-hidden=&#34;true&#34;&gt;&#xD;&#xA; &#xD;&#xA; &lt;div class=&#34;pswp__bg&#34;&gt;&lt;/div&gt;&#xD;&#xA; &#xD;&#xA; &lt;div class=&#34;pswp__scroll-wrap&#34;&gt;&#xD;&#xA;     &#xD;&#xA;     &lt;div class=&#34;pswp__container&#34;&gt;&#xD;&#xA;       &lt;div class=&#34;pswp__item&#34;&gt;&lt;/div&gt;&#xD;&#xA;       &lt;div class=&#34;pswp__item&#34;&gt;&lt;/div&gt;&#xD;&#xA;       &lt;div class=&#34;pswp__item&#34;&gt;&lt;/div&gt;&#xD;&#xA;     &lt;/div&gt;&#xD;&#xA;     &#xD;&#xA;     &lt;div class=&#34;pswp__ui pswp__ui--hidden&#34;&gt;&#xD;&#xA;     &lt;div class=&#34;pswp__top-bar&#34;&gt;&#xD;&#xA;       &#xD;&#xA;       &lt;div class=&#34;pswp__counter&#34;&gt;&lt;/div&gt;&#xD;&#xA;       &lt;button class=&#34;pswp__button pswp__button--close&#34; title=&#34;Close (Esc)&#34;&gt;&lt;/button&gt;&#xD;&#xA;       &lt;button class=&#34;pswp__button pswp__button--share&#34; title=&#34;Share&#34;&gt;&lt;/button&gt;&#xD;&#xA;       &lt;button class=&#34;pswp__button pswp__button--fs&#34; title=&#34;Toggle fullscreen&#34;&gt;&lt;/button&gt;&#xD;&#xA;       &lt;button class=&#34;pswp__button pswp__button--zoom&#34; title=&#34;Zoom in/out&#34;&gt;&lt;/button&gt;&#xD;&#xA;       &#xD;&#xA;       &#xD;&#xA;       &lt;div class=&#34;pswp__preloader&#34;&gt;&#xD;&#xA;         &lt;div class=&#34;pswp__preloader__icn&#34;&gt;&#xD;&#xA;           &lt;div class=&#34;pswp__preloader__cut&#34;&gt;&#xD;&#xA;             &lt;div class=&#34;pswp__preloader__donut&#34;&gt;&lt;/div&gt;&#xD;&#xA;           &lt;/div&gt;&#xD;&#xA;         &lt;/div&gt;&#xD;&#xA;       &lt;/div&gt;&#xD;&#xA;     &lt;/div&gt;&#xD;&#xA;     &lt;div class=&#34;pswp__share-modal pswp__share-modal--hidden pswp__single-tap&#34;&gt;&#xD;&#xA;       &lt;div class=&#34;pswp__share-tooltip&#34;&gt;&lt;/div&gt;&#xD;&#xA;     &lt;/div&gt;&#xD;&#xA;     &lt;button class=&#34;pswp__button pswp__button--arrow--left&#34; title=&#34;Previous (arrow left)&#34;&gt;&#xD;&#xA;     &lt;/button&gt;&#xD;&#xA;     &lt;button class=&#34;pswp__button pswp__button--arrow--right&#34; title=&#34;Next (arrow right)&#34;&gt;&#xD;&#xA;     &lt;/button&gt;&#xD;&#xA;     &lt;div class=&#34;pswp__caption&#34;&gt;&#xD;&#xA;       &lt;div class=&#34;pswp__caption__center&#34;&gt;&lt;/div&gt;&#xD;&#xA;     &lt;/div&gt;&#xD;&#xA;     &lt;/div&gt;&#xD;&#xA;     &lt;/div&gt;&#xD;&#xA; &lt;/div&gt;&#xD;&#xA;&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Books</title>
       <link>https://hhhhlkf.github.io/top/books/</link>
       <pubDate>Mon, 20 Sep 2021 15:06:24 +0800</pubDate>
-      
       <guid>https://hhhhlkf.github.io/top/books/</guid>
       <description></description>
     </item>
-    
     <item>
       <title>Archive</title>
       <link>https://hhhhlkf.github.io/top/archive/</link>
       <pubDate>Mon, 20 Sep 2021 15:06:10 +0800</pubDate>
-      
       <guid>https://hhhhlkf.github.io/top/archive/</guid>
       <description></description>
     </item>
-    
     <item>
       <title></title>
       <link>https://hhhhlkf.github.io/top/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
       <guid>https://hhhhlkf.github.io/top/about/</guid>
-      <description>LiKefan is a JLUer,from software collage.</description>
+      <description>&lt;p&gt;&#xD;&#xA;  &lt;img src=&#34;https://hhhhlkf.github.io/img/nzk1.jpg&#34; alt=&#34;&#34;&gt;&#xD;&#xA;&#xD;&#xA;&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;LiKefan&lt;/strong&gt; is a JLUer,from software collage.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

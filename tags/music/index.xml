@@ -4,17 +4,16 @@
     <title>MUSIC on Linexus blog</title>
     <link>https://hhhhlkf.github.io/tags/music/</link>
     <description>Recent content in MUSIC on Linexus blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Sep 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://hhhhlkf.github.io/tags/music/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 Sep 2021 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://hhhhlkf.github.io/tags/music/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>nzk的音乐</title>
       <link>https://hhhhlkf.github.io/post/nzk/</link>
       <pubDate>Mon, 20 Sep 2021 00:00:00 +0000</pubDate>
-      
       <guid>https://hhhhlkf.github.io/post/nzk/</guid>
-      <description>1.Binary-Star ——by SawanoHiroyuki[nZk]2.Tranquility ——by SawanoHiroyuki[nZk]3.UNICORN ——by 澤野弘之4.ViEW ——by mizuki(瑞葵)/SawanoHiroyuki[nZk]5.ninelie&amp;lt;cry-v&amp;gt; ——by SawanoHiroyuki[nZk]6.EARth ——by 澤野弘之7.Tot Musica ——by Ado8.counter・attack-m’aenkaind ——by 澤野弘之9.Roads to Ride ——by 澤野弘之10.ətˈæk 0N tάɪtn&amp;lt;TFSv&amp;gt;——by 澤野弘之11.LEMONADE——by SawanoHiroyuki[nZk]/XAI</description>
+      <description>&lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css&#34;&gt;&#xD;&#xA;&lt;script src=&#34;https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js&#34;&gt;&lt;/script&gt;&#xD;&#xA;&#xD;&#xA;&lt;script src=&#34;https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js&#34;&gt;&lt;/script&gt;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&lt;meting-js&#xD;&#xA;&#x9;server=&#34;netease&#34;&#xD;&#xA;&#x9;type=&#34;playlist&#34;&#xD;&#xA;&#x9;id=&#34;5295912392&#34;&gt;&#xD;&#xA;&lt;/meting-js&gt;</description>
     </item>
-    
   </channel>
 </rss>

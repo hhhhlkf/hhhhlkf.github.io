@@ -66,6 +66,7 @@
     <script src="//unpkg.com/element-plus"></script>
     
     
+    
 
     
     
@@ -86,8 +87,21 @@
 
 <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},   // 块级公式
+                {left: '$', right: '$', display: false},    // 行内公式
+                {left: '\\(', right: '\\)', display: false} // 行内公式
+            ]
+        });">
+</script>
+
 
 </head>
 
@@ -200,19 +214,50 @@
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/algoliasearch.min.js"></script>
 <script src="https://res.cloudinary.com/jimmysong/raw/upload/rootsongjc-hugo/autocomplete.min.js"></script>
 <script>
-var client = algoliasearch("O89X7LVND4", "4b078f9b3aef67f5fdb9fd8b8b2543ef");
-var index = client.initIndex('blog');
-autocomplete('#aa-search-input',
-{ hint: false}, {
-  source: autocomplete.sources.hits(index, {hitsPerPage: 8}),
-  displayKey: 'name',
-  templates: {
-      suggestion: function(suggestion) {
-          console.log(suggestion);
-          return '<span>' + '<a href="' + suggestion.url + '">' +
-          suggestion._highlightResult.title.value + '</a></span>';
-      }
-  }
+var client = algoliasearch("601I7K6MCB", "2cec145d214a1ec8bbdfec33d0764bfc");
+var index = client.initIndex('linexus');
+
+
+
+function truncateContent(content, maxBytes = 9500) { 
+    let encoder = new TextEncoder();
+    let bytes = encoder.encode(content);
+    if (bytes.length <= maxBytes) return content;
+
+    let truncated = '';
+    for (let char of content) {
+        if (encoder.encode(truncated + char).length > maxBytes) break;
+        truncated += char;
+    }
+    return truncated + '...';
+}
+
+
+
+var records = posts.map(post => {
+    return {
+        objectID: post.url,
+        title: post.title,
+        url: post.url,
+        excerpt: truncateContent(post.content)
+    };
+});
+
+
+index.saveObjects(records)
+    .then(() => console.log('Algolia 索引上传完成 ✅'))
+    .catch(err => console.error('上传出错 ❌', err));
+
+
+autocomplete('#aa-search-input', { hint: false }, {
+    source: autocomplete.sources.hits(index, { hitsPerPage: 8 }),
+    displayKey: 'title',
+    templates: {
+        suggestion: function(suggestion) {
+            return '<span><a href="' + suggestion.url + '">' +
+                   suggestion._highlightResult.title.value + '</a></span>';
+        }
+    }
 });
 </script>
         </div>
@@ -231,6 +276,7 @@ autocomplete('#aa-search-input',
         background-image: url('https://i.loli.net/2021/09/30/3bSAB6Fru9xCdh8.jpg')
     }
 </style>
+
 
 <header class="intro-header" >
 
@@ -315,32 +361,32 @@ autocomplete('#aa-search-input',
 <li>Select：根据选择权重聚合大小不同的内核的特征图。(及相加操作)</li>
 </ul>
 <p>代码片段如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#6272a4"># 上层卷积</span>
-x_1x1 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv1x1(X)
-x_1x1 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm1x1(x_1x1)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-<span style="color:#6272a4"># 下层卷积</span>
-x_3x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv3x3(X)
-x_3x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm3x3(x_3x3)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-<span style="color:#6272a4"># concat操作</span>
-x1 <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat([x_3x3, x_1x1], dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-<span style="color:#6272a4"># 加和(初步融合特征)</span>
-U <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>sum(x1, dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-<span style="color:#6272a4"># 全局池化操作，为了将特征进行融合和便于之后的attention操作</span>
-S <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>pool(U)
-<span style="color:#6272a4"># 通过3D卷积进行特征融合</span>
-Z <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv_se(S)
-attention_vector <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat(
-    [
-        <span style="color:#6272a4"># 通过3D卷积进行扩张</span>
-        self<span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>),
-        self<span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-    ],
-    dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-<span style="color:#6272a4"># softmax是为了将空间和维度的比例进行统一划分</span>
-attention_vector <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>softmax(attention_vector)
-<span style="color:#6272a4"># 所谓乘上attention后的结果进行权重自适应调整</span>
-V <span style="color:#ff79c6">=</span> (x1 <span style="color:#ff79c6">*</span> attention_vector)<span style="color:#ff79c6">.</span>sum(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-</code></pre></div><h4 id="efr-module">EFR Module</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#6272a4"># 上层卷积</span>
+</span></span><span style="display:flex;"><span>x_1x1 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv1x1(X)
+</span></span><span style="display:flex;"><span>x_1x1 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>batch_norm1x1(x_1x1)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 下层卷积</span>
+</span></span><span style="display:flex;"><span>x_3x3 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv3x3(X)
+</span></span><span style="display:flex;"><span>x_3x3 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>batch_norm3x3(x_3x3)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># concat操作</span>
+</span></span><span style="display:flex;"><span>x1 <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat([x_3x3, x_1x1], dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 加和(初步融合特征)</span>
+</span></span><span style="display:flex;"><span>U <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>sum(x1, dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 全局池化操作，为了将特征进行融合和便于之后的attention操作</span>
+</span></span><span style="display:flex;"><span>S <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>pool(U)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 通过3D卷积进行特征融合</span>
+</span></span><span style="display:flex;"><span>Z <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv_se(S)
+</span></span><span style="display:flex;"><span>attention_vector <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat(
+</span></span><span style="display:flex;"><span>    [
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 通过3D卷积进行扩张</span>
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>),
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># softmax是为了将空间和维度的比例进行统一划分</span>
+</span></span><span style="display:flex;"><span>attention_vector <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>softmax(attention_vector)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 所谓乘上attention后的结果进行权重自适应调整</span>
+</span></span><span style="display:flex;"><span>V <span style="color:#ff79c6">=</span> (x1 <span style="color:#ff79c6">*</span> attention_vector)<span style="color:#ff79c6">.</span>sum(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span></code></pre></div><h4 id="efr-module">EFR Module</h4>
 <p>
   <img src="/img/A2S2KResNet%e2%80%94%e2%80%94%e8%ae%ba%e6%96%87%e6%a6%82%e8%bf%b0%e4%b8%8e%e4%bb%a3%e7%a0%81%e5%88%86%e6%9e%90/image-20230122231258793.png" alt="image-20230122231258793">
 
@@ -354,128 +400,128 @@ V <span style="color:#ff79c6">=</span> (x1 <span style="color:#ff79c6">*</span> 
 <p>原论文没有提及为什么这么改，我觉得就是为了让3D卷积后面接一个BN和激活函数，让层之间保持这样跨层关系？</p>
 <h2 id="代码">代码</h2>
 <h3 id="网络代码">网络代码</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">A2S2K<span style="color:#ff79c6">-</span>blockclass S3KAIResNet(nn<span style="color:#ff79c6">.</span>Module):
-    <span style="color:#ff79c6">def</span> __init__(self, band, classes, reduction):
-        <span style="color:#8be9fd;font-style:italic">super</span>(S3KAIResNet, self)<span style="color:#ff79c6">.</span>__init__()
-        self<span style="color:#ff79c6">.</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;SSRN&#39;</span>
-        self<span style="color:#ff79c6">.</span>conv1x1 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
-            in_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
-            out_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
-            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>),
-            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>),
-            padding<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>)
-        self<span style="color:#ff79c6">.</span>conv3x3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
-            in_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
-            out_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
-            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">7</span>),
-            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>),
-            padding<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>))
-
-        self<span style="color:#ff79c6">.</span>batch_norm1x1 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
-            nn<span style="color:#ff79c6">.</span>BatchNorm3d(
-                PARAM_KERNEL_SIZE, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>,
-                affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
-            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
-        self<span style="color:#ff79c6">.</span>batch_norm3x3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
-            nn<span style="color:#ff79c6">.</span>BatchNorm3d(
-                PARAM_KERNEL_SIZE, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>,
-                affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
-            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
-
-        self<span style="color:#ff79c6">.</span>pool <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>AdaptiveAvgPool3d(<span style="color:#bd93f9">1</span>)
-        self<span style="color:#ff79c6">.</span>conv_se <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
-            nn<span style="color:#ff79c6">.</span>Conv3d(
-                PARAM_KERNEL_SIZE, band <span style="color:#ff79c6">//</span> reduction, <span style="color:#bd93f9">1</span>, padding<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>, bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),
-            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
-        self<span style="color:#ff79c6">.</span>conv_ex <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
-            band <span style="color:#ff79c6">//</span> reduction, PARAM_KERNEL_SIZE, <span style="color:#bd93f9">1</span>, padding<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>, bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
-        self<span style="color:#ff79c6">.</span>softmax <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Softmax(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-
-        self<span style="color:#ff79c6">.</span>res_net1 <span style="color:#ff79c6">=</span> Residual(
-            PARAM_KERNEL_SIZE,
-            PARAM_KERNEL_SIZE, (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>), (<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">3</span>),
-            start_block<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
-        self<span style="color:#ff79c6">.</span>res_net2 <span style="color:#ff79c6">=</span> Residual(PARAM_KERNEL_SIZE, PARAM_KERNEL_SIZE,
-                                 (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>), (<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">3</span>))
-        self<span style="color:#ff79c6">.</span>res_net3 <span style="color:#ff79c6">=</span> Residual(PARAM_KERNEL_SIZE, PARAM_KERNEL_SIZE,
-                                 (<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>), (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>))
-        self<span style="color:#ff79c6">.</span>res_net4 <span style="color:#ff79c6">=</span> Residual(
-            PARAM_KERNEL_SIZE,
-            PARAM_KERNEL_SIZE, (<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>), (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>),
-            end_block<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
-
-        kernel_3d <span style="color:#ff79c6">=</span> math<span style="color:#ff79c6">.</span>ceil((band <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">6</span>) <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">2</span>)
-        <span style="color:#6272a4"># print(kernel_3d)</span>
-
-        self<span style="color:#ff79c6">.</span>conv2 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
-            in_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
-            out_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">128</span>,
-            padding<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>),
-            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, kernel_3d),
-            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>))
-        self<span style="color:#ff79c6">.</span>batch_norm2 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
-            nn<span style="color:#ff79c6">.</span>BatchNorm3d(<span style="color:#bd93f9">128</span>, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>, affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
-            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
-        self<span style="color:#ff79c6">.</span>conv3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
-            in_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
-            out_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
-            padding<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>),
-            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">128</span>),
-            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>))
-        self<span style="color:#ff79c6">.</span>batch_norm3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
-            nn<span style="color:#ff79c6">.</span>BatchNorm3d(
-                PARAM_KERNEL_SIZE, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>,
-                affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
-            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
-
-        self<span style="color:#ff79c6">.</span>avg_pooling <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>AvgPool3d(kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">1</span>))
-        self<span style="color:#ff79c6">.</span>full_connection <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
-            nn<span style="color:#ff79c6">.</span>Linear(PARAM_KERNEL_SIZE, classes)
-            <span style="color:#6272a4"># nn.Softmax()</span>
-        )
-
-    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">forward</span>(self, X):
-        <span style="color:#6272a4"># A2S2K-block</span>
-        x_1x1 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv1x1(X)
-        x_1x1 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm1x1(x_1x1)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-        x_3x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv3x3(X)
-        x_3x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm3x3(x_3x3)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-
-        x1 <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat([x_3x3, x_1x1], dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-        U <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>sum(x1, dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-        S <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>pool(U)
-        Z <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>conv_se(S)
-        attention_vector <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat(
-            [
-                self<span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>),
-                self<span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-            ],
-            dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-        attention_vector <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>softmax(attention_vector)
-        V <span style="color:#ff79c6">=</span> (x1 <span style="color:#ff79c6">*</span> attention_vector)<span style="color:#ff79c6">.</span>sum(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-		
-        <span style="color:#6272a4"># res-net block</span>
-        <span style="color:#6272a4"># start block</span>
-        x2 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>res_net1(V)
-        <span style="color:#6272a4"># middle block</span>
-        x2 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>res_net2(x2)
-        <span style="color:#6272a4"># 防止过拟合</span>
-        x2 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm2(self<span style="color:#ff79c6">.</span>conv2(x2))
-        x2 <span style="color:#ff79c6">=</span> x2<span style="color:#ff79c6">.</span>permute(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>)
-        x2 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>batch_norm3(self<span style="color:#ff79c6">.</span>conv3(x2))
-		<span style="color:#6272a4"># middle block</span>
-        x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>res_net3(x2)
-        <span style="color:#6272a4"># last block</span>
-        x3 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>res_net4(x3)
-        x4 <span style="color:#ff79c6">=</span> self<span style="color:#ff79c6">.</span>avg_pooling(x3)
-        x4 <span style="color:#ff79c6">=</span> x4<span style="color:#ff79c6">.</span>view(x4<span style="color:#ff79c6">.</span>size(<span style="color:#bd93f9">0</span>), <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
-        <span style="color:#ff79c6">return</span> self<span style="color:#ff79c6">.</span>full_connection(x4)
-
-
-model <span style="color:#ff79c6">=</span> S3KAIResNet(BAND, CLASSES_NUM, <span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">.</span>cuda()
-
-summary(model, input_data<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, img_rows, img_cols, BAND), verbose<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
-</code></pre></div><p>剩下的代码太多了，详情前往<a href="https://colab.research.google.com/drive/1x2CYfaUXNjX4yDMLCvoVFqAMZXZwwVgS">代码处</a>查看。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>A2S2K<span style="color:#ff79c6">-</span>blockclass S3KAIResNet(nn<span style="color:#ff79c6">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">__init__</span>(<span style="font-style:italic">self</span>, band, classes, reduction):
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">super</span>(S3KAIResNet, <span style="font-style:italic">self</span>)<span style="color:#ff79c6">.</span><span style="color:#50fa7b">__init__</span>()
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;SSRN&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv1x1 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
+</span></span><span style="display:flex;"><span>            in_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
+</span></span><span style="display:flex;"><span>            out_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
+</span></span><span style="display:flex;"><span>            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>),
+</span></span><span style="display:flex;"><span>            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>),
+</span></span><span style="display:flex;"><span>            padding<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv3x3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
+</span></span><span style="display:flex;"><span>            in_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
+</span></span><span style="display:flex;"><span>            out_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
+</span></span><span style="display:flex;"><span>            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">7</span>),
+</span></span><span style="display:flex;"><span>            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>),
+</span></span><span style="display:flex;"><span>            padding<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>batch_norm1x1 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>BatchNorm3d(
+</span></span><span style="display:flex;"><span>                PARAM_KERNEL_SIZE, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>,
+</span></span><span style="display:flex;"><span>                affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>batch_norm3x3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>BatchNorm3d(
+</span></span><span style="display:flex;"><span>                PARAM_KERNEL_SIZE, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>,
+</span></span><span style="display:flex;"><span>                affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>pool <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>AdaptiveAvgPool3d(<span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv_se <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>Conv3d(
+</span></span><span style="display:flex;"><span>                PARAM_KERNEL_SIZE, band <span style="color:#ff79c6">//</span> reduction, <span style="color:#bd93f9">1</span>, padding<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>, bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv_ex <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
+</span></span><span style="display:flex;"><span>            band <span style="color:#ff79c6">//</span> reduction, PARAM_KERNEL_SIZE, <span style="color:#bd93f9">1</span>, padding<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>, bias<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>softmax <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Softmax(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>res_net1 <span style="color:#ff79c6">=</span> Residual(
+</span></span><span style="display:flex;"><span>            PARAM_KERNEL_SIZE,
+</span></span><span style="display:flex;"><span>            PARAM_KERNEL_SIZE, (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>), (<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">3</span>),
+</span></span><span style="display:flex;"><span>            start_block<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>res_net2 <span style="color:#ff79c6">=</span> Residual(PARAM_KERNEL_SIZE, PARAM_KERNEL_SIZE,
+</span></span><span style="display:flex;"><span>                                 (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>), (<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">3</span>))
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>res_net3 <span style="color:#ff79c6">=</span> Residual(PARAM_KERNEL_SIZE, PARAM_KERNEL_SIZE,
+</span></span><span style="display:flex;"><span>                                 (<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>), (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>))
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>res_net4 <span style="color:#ff79c6">=</span> Residual(
+</span></span><span style="display:flex;"><span>            PARAM_KERNEL_SIZE,
+</span></span><span style="display:flex;"><span>            PARAM_KERNEL_SIZE, (<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>), (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">0</span>),
+</span></span><span style="display:flex;"><span>            end_block<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        kernel_3d <span style="color:#ff79c6">=</span> math<span style="color:#ff79c6">.</span>ceil((band <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">6</span>) <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">2</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># print(kernel_3d)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv2 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
+</span></span><span style="display:flex;"><span>            in_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
+</span></span><span style="display:flex;"><span>            out_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">128</span>,
+</span></span><span style="display:flex;"><span>            padding<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>),
+</span></span><span style="display:flex;"><span>            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, kernel_3d),
+</span></span><span style="display:flex;"><span>            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>))
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>batch_norm2 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>BatchNorm3d(<span style="color:#bd93f9">128</span>, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>, affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Conv3d(
+</span></span><span style="display:flex;"><span>            in_channels<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>,
+</span></span><span style="display:flex;"><span>            out_channels<span style="color:#ff79c6">=</span>PARAM_KERNEL_SIZE,
+</span></span><span style="display:flex;"><span>            padding<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>),
+</span></span><span style="display:flex;"><span>            kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">128</span>),
+</span></span><span style="display:flex;"><span>            stride<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">1</span>))
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>batch_norm3 <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>BatchNorm3d(
+</span></span><span style="display:flex;"><span>                PARAM_KERNEL_SIZE, eps<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.001</span>, momentum<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0.1</span>,
+</span></span><span style="display:flex;"><span>                affine<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>),  <span style="color:#6272a4"># 0.1</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>ReLU(inplace<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>avg_pooling <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>AvgPool3d(kernel_size<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">1</span>))
+</span></span><span style="display:flex;"><span>        <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>full_connection <span style="color:#ff79c6">=</span> nn<span style="color:#ff79c6">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#ff79c6">.</span>Linear(PARAM_KERNEL_SIZE, classes)
+</span></span><span style="display:flex;"><span>            <span style="color:#6272a4"># nn.Softmax()</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">forward</span>(<span style="font-style:italic">self</span>, X):
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># A2S2K-block</span>
+</span></span><span style="display:flex;"><span>        x_1x1 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv1x1(X)
+</span></span><span style="display:flex;"><span>        x_1x1 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>batch_norm1x1(x_1x1)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>        x_3x3 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv3x3(X)
+</span></span><span style="display:flex;"><span>        x_3x3 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>batch_norm3x3(x_3x3)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        x1 <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat([x_3x3, x_1x1], dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>        U <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>sum(x1, dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>        S <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>pool(U)
+</span></span><span style="display:flex;"><span>        Z <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv_se(S)
+</span></span><span style="display:flex;"><span>        attention_vector <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>cat(
+</span></span><span style="display:flex;"><span>            [
+</span></span><span style="display:flex;"><span>                <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>),
+</span></span><span style="display:flex;"><span>                <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv_ex(Z)<span style="color:#ff79c6">.</span>unsqueeze(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>            ],
+</span></span><span style="display:flex;"><span>            dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>        attention_vector <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>softmax(attention_vector)
+</span></span><span style="display:flex;"><span>        V <span style="color:#ff79c6">=</span> (x1 <span style="color:#ff79c6">*</span> attention_vector)<span style="color:#ff79c6">.</span>sum(dim<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># res-net block</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># start block</span>
+</span></span><span style="display:flex;"><span>        x2 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>res_net1(V)
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># middle block</span>
+</span></span><span style="display:flex;"><span>        x2 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>res_net2(x2)
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 防止过拟合</span>
+</span></span><span style="display:flex;"><span>        x2 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>batch_norm2(<span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv2(x2))
+</span></span><span style="display:flex;"><span>        x2 <span style="color:#ff79c6">=</span> x2<span style="color:#ff79c6">.</span>permute(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>        x2 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>batch_norm3(<span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>conv3(x2))
+</span></span><span style="display:flex;"><span>		<span style="color:#6272a4"># middle block</span>
+</span></span><span style="display:flex;"><span>        x3 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>res_net3(x2)
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># last block</span>
+</span></span><span style="display:flex;"><span>        x3 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>res_net4(x3)
+</span></span><span style="display:flex;"><span>        x4 <span style="color:#ff79c6">=</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>avg_pooling(x3)
+</span></span><span style="display:flex;"><span>        x4 <span style="color:#ff79c6">=</span> x4<span style="color:#ff79c6">.</span>view(x4<span style="color:#ff79c6">.</span>size(<span style="color:#bd93f9">0</span>), <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> <span style="font-style:italic">self</span><span style="color:#ff79c6">.</span>full_connection(x4)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model <span style="color:#ff79c6">=</span> S3KAIResNet(BAND, CLASSES_NUM, <span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">.</span>cuda()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>summary(model, input_data<span style="color:#ff79c6">=</span>(<span style="color:#bd93f9">1</span>, img_rows, img_cols, BAND), verbose<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>)
+</span></span></code></pre></div><p>剩下的代码太多了，详情前往<a href="https://colab.research.google.com/drive/1x2CYfaUXNjX4yDMLCvoVFqAMZXZwwVgS">代码处</a>查看。</p>
 
 
                 
@@ -522,6 +568,8 @@ summary(model, input_data<span style="color:#ff79c6">=</span>(<span style="color
 </div>
 
 
+
+
             </div>
 
             
@@ -536,9 +584,7 @@ summary(model, input_data<span style="color:#ff79c6">=</span>(<span style="color
                     <h5>
                         <a class="catalog-toggle" href="#">CATALOG</a>
                     </h5>
-                    <ul class="catalog-body">
-
-                    </ul>
+                    <ul class="catalog-body"></ul>
                 </div>
             </div>
             
@@ -576,14 +622,14 @@ summary(model, input_data<span style="color:#ff79c6">=</span>(<span style="color
                         
                         
                         
-                        <a href="/tags/deep-learning" title="deep-learning">
-                            deep-learning
+                        <a href="/tags/deep-learning" title="deep learning">
+                            deep learning
                         </a>
                         
                         
                         
-                        <a href="/tags/hsi-classification" title="hsi-classification">
-                            hsi-classification
+                        <a href="/tags/hsi-classification" title="hsi classification">
+                            hsi classification
                         </a>
                         
                         
@@ -602,6 +648,12 @@ summary(model, input_data<span style="color:#ff79c6">=</span>(<span style="color
                         
                         <a href="/tags/oracle" title="oracle">
                             oracle
+                        </a>
+                        
+                        
+                        
+                        <a href="/tags/rgb-t-detection" title="rgb-t detection">
+                            rgb-t detection
                         </a>
                         
                         
@@ -757,7 +809,7 @@ summary(model, input_data<span style="color:#ff79c6">=</span>(<span style="color
                     
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; Linexus blog 2023
+                    Copyright &copy; Linexus blog 2025
                     <br>
                     <a href="https://themes.gohugo.io/hugo-theme-cleanwhite">CleanWhite Hugo Theme</a> used by <a
                         href="https://hhhhlkf.github.io">Linexus</a> |
@@ -913,12 +965,10 @@ summary(model, input_data<span style="color:#ff79c6">=</span>(<span style="color
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakana-widget@2.4.1/lib/sakana.min.css" />
 <div id="sakana-widget-right"></div>
-<div id="sakana-widget-left"></div>
 <script>
     function initSakanaWidget() {
         new SakanaWidget({ character: 'takina', size: 250 }).mount('#sakana-widget-right');
         
-        new SakanaWidget({ size: 250 }).mount('#sakana-widget-left');
     }
 </script>
 <script async onload="initSakanaWidget()"

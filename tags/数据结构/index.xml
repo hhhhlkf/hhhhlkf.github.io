@@ -4,24 +4,16 @@
     <title>数据结构 on Linexus blog</title>
     <link>https://hhhhlkf.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
     <description>Recent content in 数据结构 on Linexus blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 06 Mar 2023 19:54:19 +0800</lastBuildDate><atom:link href="https://hhhhlkf.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 Mar 2023 19:54:19 +0800</lastBuildDate>
+    <atom:link href="https://hhhhlkf.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>SCP认证复习——线段树与树状数组</title>
       <link>https://hhhhlkf.github.io/post/scp%E8%AE%A4%E8%AF%81%E5%A4%8D%E4%B9%A0%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%B8%8E%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/</link>
       <pubDate>Mon, 06 Mar 2023 19:54:19 +0800</pubDate>
-      
       <guid>https://hhhhlkf.github.io/post/scp%E8%AE%A4%E8%AF%81%E5%A4%8D%E4%B9%A0%E7%BA%BF%E6%AE%B5%E6%A0%91%E4%B8%8E%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84/</guid>
-      <description>线段树与树状数组 线段树 题目描述 如题，已知一个数列，你需要进行下面两种操作：
- 将某区间每一个数加上 k。 求出某区间每一个数的和。  输入格式 第一行包含两个整数n*,*m，分别表示该数列数字的个数和操作的总个数。
-第二行包含 nn 个用空格分隔的整数，其中第 ii 个数字表示数列第 ii 项的初始值。
-接下来 mm 行每行包含 33 或 44 个整数，表示一个操作，具体如下：
- 1 x y k：将区间[x,y]内每个数加上 k。 2 x y：输出区间[x,y]内每个数的和。  输出格式 输出包含若干行整数，即为所有操作 2 的结果。
-输入输出样例 输入 #1
-5 51 5 4 2 32 2 41 2 3 22 3 41 1 5 12 1 4输出 #1
-11820线段树的关键数据结构： num[MAX] ans[MAX &amp;lt;&amp;lt; 2] lazy[MAX &amp;lt;&amp;lt; 2] 其中num作为输入的数字集合，ans作为线段树的集合，lazy作为懒标记，懒记录了当前区间的更新值。</description>
+      <description>&lt;h1 id=&#34;线段树与树状数组&#34;&gt;线段树与树状数组&lt;/h1&gt;&#xA;&lt;h2 id=&#34;线段树&#34;&gt;线段树&lt;/h2&gt;&#xA;&lt;h3 id=&#34;题目描述&#34;&gt;题目描述&lt;/h3&gt;&#xA;&lt;p&gt;如题，已知一个数列，你需要进行下面两种操作：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;将某区间每一个数加上 k。&lt;/li&gt;&#xA;&lt;li&gt;求出某区间每一个数的和。&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h3 id=&#34;输入格式&#34;&gt;输入格式&lt;/h3&gt;&#xA;&lt;p&gt;第一行包含两个整数n*,*m，分别表示该数列数字的个数和操作的总个数。&lt;/p&gt;&#xA;&lt;p&gt;第二行包含 n&lt;em&gt;n&lt;/em&gt; 个用空格分隔的整数，其中第 i&lt;em&gt;i&lt;/em&gt; 个数字表示数列第 i&lt;em&gt;i&lt;/em&gt; 项的初始值。&lt;/p&gt;&#xA;&lt;p&gt;接下来 m&lt;em&gt;m&lt;/em&gt; 行每行包含 33 或 44 个整数，表示一个操作，具体如下：&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;code&gt;1 x y k&lt;/code&gt;：将区间[&lt;em&gt;x&lt;/em&gt;,&lt;em&gt;y&lt;/em&gt;]内每个数加上 &lt;em&gt;k&lt;/em&gt;。&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;2 x y&lt;/code&gt;：输出区间[&lt;em&gt;x&lt;/em&gt;,&lt;em&gt;y&lt;/em&gt;]内每个数的和。&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;h3 id=&#34;输出格式&#34;&gt;输出格式&lt;/h3&gt;&#xA;&lt;p&gt;输出包含若干行整数，即为所有操作 2 的结果。&lt;/p&gt;&#xA;&lt;h3 id=&#34;输入输出样例&#34;&gt;输入输出样例&lt;/h3&gt;&#xA;&lt;p&gt;&lt;strong&gt;输入 #1&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;5 5&#xD;&#xA;1 5 4 2 3&#xD;&#xA;2 2 4&#xD;&#xA;1 2 3 2&#xD;&#xA;2 3 4&#xD;&#xA;1 1 5 1&#xD;&#xA;2 1 4&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;输出 #1&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;11&#xD;&#xA;8&#xD;&#xA;20&#xA;&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;线段树的关键数据结构&#34;&gt;线段树的关键数据结构：&lt;/h3&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;num[MAX]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ans[MAX &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lazy[MAX &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其中num作为输入的数字集合，ans作为线段树的集合，lazy作为懒标记，懒记录了当前区间的更新值。&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>
